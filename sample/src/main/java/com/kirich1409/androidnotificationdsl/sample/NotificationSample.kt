@@ -6,7 +6,7 @@ import android.content.Intent
 import com.kirich1409.androidnotificationdsl.notification
 
 fun buildNotification(context: Context) =
-    context.notification(NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
+    notification(context, NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
         contentTitle("Notification title")
         actions {
             action(
