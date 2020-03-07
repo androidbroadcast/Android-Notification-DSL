@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.kirich1409.androidnotificationdsl.notification
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         findViewById<View>(R.id.show_notification).setOnClickListener { view: View ->
             val context = view.context
-            val notification = context.notification(NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp)
+            val notification = buildNotification(context)
 
             val notificationManager =
                 requireNotNull(ContextCompat.getSystemService(context, NotificationManager::class.java))
