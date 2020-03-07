@@ -15,6 +15,26 @@ inline class Actions(private val builder: NotificationCompat.Builder) {
         title: CharSequence?,
         intent: PendingIntent?,
         icon: IconCompat? = null,
+        invisible: Boolean = false
+    ) {
+        val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
+        action(actionBuilder, invisible)
+    }
+
+    fun action(
+        title: CharSequence?,
+        intent: PendingIntent?,
+        @DrawableRes icon: Int,
+        invisible: Boolean = false
+    ) {
+        val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
+        action(actionBuilder, invisible)
+    }
+
+    fun action(
+        title: CharSequence?,
+        intent: PendingIntent?,
+        icon: IconCompat? = null,
         invisible: Boolean = false,
         body: @NotificationActionsMarker NotificationAction.() -> Unit
     ) {
@@ -33,13 +53,19 @@ inline class Actions(private val builder: NotificationCompat.Builder) {
         action(actionBuilder, invisible, body)
     }
 
+    private fun action(actionBuilder: NotificationCompat.Action.Builder, invisible: Boolean) {
+        val action = actionBuilder.build()
+        addAction(action, invisible)
+    }
+
     private fun action(
         actionBuilder: NotificationCompat.Action.Builder,
         invisible: Boolean,
         body: @NotificationActionsMarker NotificationAction.() -> Unit
     ) {
         NotificationAction(actionBuilder).body()
-        addAction(actionBuilder.build(), invisible)
+        val action = actionBuilder.build()
+        addAction(action, invisible)
     }
 
     fun addAction(action: NotificationCompat.Action, invisible: Boolean = false) {

@@ -38,9 +38,8 @@ inline class WearableExtenderActions(private val extender: NotificationCompat.We
         notificationActionBuilder: NotificationCompat.Action.Builder,
         body: @NotificationWearableExtenderActionsMarker NotificationAction.() -> Unit
     ) {
-        val actionBuilder = NotificationAction(notificationActionBuilder)
-        actionBuilder.body()
-        extender.addAction(actionBuilder.build())
+        NotificationAction(notificationActionBuilder).body()
+        extender.addAction(notificationActionBuilder.build())
     }
 
     operator fun plus(action: NotificationCompat.Action) {

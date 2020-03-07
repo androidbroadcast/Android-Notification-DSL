@@ -44,6 +44,4 @@ inline class NotificationAction(private val builder: NotificationCompat.Action.B
         WearableActionExtender(wearableExtender).body()
         extend(wearableExtender)
     }
-
-    internal fun build(): NotificationCompat.Action = builder.build()
 }
