@@ -1,4 +1,4 @@
-package com.kirich1409.androidnotificationdsl
+package com.kirich1409.androidnotificationdsl.sample
 
 import android.content.Context
 import com.kirich1409.androidnotificationdsl.channels.createChannelsAndGroups
