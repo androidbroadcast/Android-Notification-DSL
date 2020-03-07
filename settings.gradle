@@ -1,2 +1,2 @@
 rootProject.name='Android Notification DSL'
-include ':app', ':core', ':media'
+include ':sample', ':core', ':media'
