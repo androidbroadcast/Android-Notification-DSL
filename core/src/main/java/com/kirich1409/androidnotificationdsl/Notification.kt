@@ -31,9 +31,10 @@ import kotlin.time.ExperimentalTime
 import android.app.Notification as AndroidNotification
 
 @NotificationMarker
-class Notification(internal val builder: NotificationCompat.Builder) {
+inline class Notification(internal val builder: NotificationCompat.Builder) {
 
-    val actions = Actions(builder)
+    val actions: Actions
+        get() = Actions(builder)
 
     fun actions(body: @NotificationMarker Actions.() -> Unit) {
         actions.body()
@@ -234,10 +235,6 @@ class Notification(internal val builder: NotificationCompat.Builder) {
         builder.setShowWhen(show)
     }
 
-    fun smallIcon(@DrawableRes icon: Int) {
-        builder.setSmallIcon(icon)
-    }
-
     fun smallIcon(@DrawableRes icon: Int, @IntRange(from = 0) level: Int) {
         builder.setSmallIcon(icon, level)
     }
@@ -286,10 +283,6 @@ class Notification(internal val builder: NotificationCompat.Builder) {
 
     fun whenTime(@IntRange(from = 0) time: Long) {
         builder.setWhen(time)
-    }
-
-    internal fun build(): AndroidNotification {
-        return builder.build()
     }
 }
 
