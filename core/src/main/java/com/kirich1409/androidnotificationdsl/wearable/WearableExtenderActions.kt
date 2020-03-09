@@ -10,36 +10,36 @@ import com.kirich1409.androidnotificationdsl.NotificationAction
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationWearableExtenderActionsMarker
 
 @NotificationWearableExtenderActionsMarker
-inline class WearableExtenderActions(private val extender: NotificationCompat.WearableExtender) {
+inline class WearableExtenderActions(
+    @PublishedApi internal val wearableExtender: NotificationCompat.WearableExtender
+) {
 
     fun addAction(action: NotificationCompat.Action) {
-        extender.addAction(action)
+        wearableExtender.addAction(action)
     }
 
-    fun action(
+    inline fun action(
         title: CharSequence,
         intent: PendingIntent,
         icon: IconCompat? = null,
         body: @NotificationWearableExtenderActionsMarker NotificationAction.() -> Unit
     ) {
-        action(NotificationCompat.Action.Builder(icon, title, intent), body)
+        val action = NotificationCompat.Action.Builder(icon, title, intent)
+            .also { NotificationAction(it).body() }
+            .build()
+        wearableExtender.addAction(action)
     }
 
-    fun action(
+    inline fun action(
         title: CharSequence,
         intent: PendingIntent,
         @DrawableRes icon: Int,
         body: @NotificationWearableExtenderActionsMarker NotificationAction.() -> Unit
     ) {
-        action(NotificationCompat.Action.Builder(icon, title, intent), body)
-    }
-
-    private fun action(
-        notificationActionBuilder: NotificationCompat.Action.Builder,
-        body: @NotificationWearableExtenderActionsMarker NotificationAction.() -> Unit
-    ) {
-        NotificationAction(notificationActionBuilder).body()
-        extender.addAction(notificationActionBuilder.build())
+        val action = NotificationCompat.Action.Builder(icon, title, intent)
+            .also { NotificationAction(it).body() }
+            .build()
+        wearableExtender.addAction(action)
     }
 
     operator fun plus(action: NotificationCompat.Action) {

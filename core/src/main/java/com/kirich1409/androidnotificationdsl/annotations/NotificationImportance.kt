@@ -13,5 +13,4 @@ import androidx.core.app.NotificationManagerCompat
     NotificationManagerCompat.IMPORTANCE_UNSPECIFIED
 )
 @Retention(AnnotationRetention.SOURCE)
-@Target(AnnotationTarget.VALUE_PARAMETER)
 annotation class NotificationImportance

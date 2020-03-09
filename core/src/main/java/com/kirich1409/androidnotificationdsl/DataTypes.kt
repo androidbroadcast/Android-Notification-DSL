@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.kirich1409.androidnotificationdsl
 
@@ -17,26 +17,26 @@ inline class DataTypes(private val remoteInput: RemoteInput.Builder) {
     }
 }
 
-fun DataTypes.allow(vararg mimeTypes: String) {
+inline fun DataTypes.allow(vararg mimeTypes: String) {
     mimeTypes.forEach(::allow)
 }
 
-fun DataTypes.disallow(vararg mimeTypes: String) {
+inline fun DataTypes.disallow(vararg mimeTypes: String) {
     mimeTypes.forEach(::disallow)
 }
 
-fun DataTypes.allow(mimeTypes: Iterable<String>) {
+inline fun DataTypes.allow(mimeTypes: Iterable<String>) {
     mimeTypes.forEach(::allow)
 }
 
-fun DataTypes.disallow(mimeTypes: Iterable<String>) {
+inline fun DataTypes.disallow(mimeTypes: Iterable<String>) {
     mimeTypes.forEach(::disallow)
 }
 
-operator fun DataTypes.minus(mimeType: String) {
+inline operator fun DataTypes.minus(mimeType: String) {
     disallow(mimeType)
 }
 
-operator fun DataTypes.plus(mimeType: String) {
+inline operator fun DataTypes.plus(mimeType: String) {
     allow(mimeType)
 }

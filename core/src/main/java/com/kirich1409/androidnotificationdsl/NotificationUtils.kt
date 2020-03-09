@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl
 
 import android.content.Context
@@ -5,7 +7,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationManagerCompat
 import com.kirich1409.androidnotificationdsl.internal.areNotificationsEnabled
 
-fun notify(
+inline fun notify(
     context: Context,
     notificationId: Int,
     channelId: String,

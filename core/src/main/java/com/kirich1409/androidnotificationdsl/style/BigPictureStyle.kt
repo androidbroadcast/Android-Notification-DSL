@@ -9,21 +9,23 @@ import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationBigPictureStyleMarker
 
 @NotificationBigPictureStyleMarker
-inline class BigPictureStyle(private val style: NotificationCompat.BigPictureStyle) {
+inline class BigPictureStyle(
+    private val bigPictureStyle: NotificationCompat.BigPictureStyle
+) {
 
     fun bigLargeIcon(icon: Bitmap?) {
-        style.bigLargeIcon(icon)
+        bigPictureStyle.bigLargeIcon(icon)
     }
 
     fun bigPicture(icon: Bitmap?) {
-        style.bigPicture(icon)
+        bigPictureStyle.bigPicture(icon)
     }
 
     fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
-        style.setBigContentTitle(title)
+        bigPictureStyle.setBigContentTitle(title)
     }
 
     fun summaryText(@Size(max = MAX_CHARSEQUENCE_LENGTH) summaryText: CharSequence?) {
-        style.setSummaryText(summaryText)
+        bigPictureStyle.setSummaryText(summaryText)
     }
 }

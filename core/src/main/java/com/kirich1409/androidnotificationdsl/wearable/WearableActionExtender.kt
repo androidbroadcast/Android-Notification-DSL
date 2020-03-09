@@ -6,23 +6,23 @@ import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationWearableActionExtenderMarker
 
 @NotificationWearableActionExtenderMarker
-inline class WearableActionExtender(private val extender: NotificationCompat.Action.WearableExtender) {
+inline class WearableActionExtender(private val wearableExtender: NotificationCompat.Action.WearableExtender) {
 
     var availableOffline: Boolean
-        get() = extender.isAvailableOffline
+        get() = wearableExtender.isAvailableOffline
         set(value) {
-            extender.isAvailableOffline = value
+            wearableExtender.isAvailableOffline = value
         }
 
     var hintLaunchesActivity: Boolean
-        get() = extender.hintLaunchesActivity
+        get() = wearableExtender.hintLaunchesActivity
         set(value) {
-            extender.hintLaunchesActivity = value
+            wearableExtender.hintLaunchesActivity = value
         }
 
     var hintDisplayActionInline: Boolean
-        get() = extender.hintDisplayActionInline
+        get() = wearableExtender.hintDisplayActionInline
         set(value) {
-            extender.hintDisplayActionInline = value
+            wearableExtender.hintDisplayActionInline = value
         }
 }

@@ -12,26 +12,26 @@ import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationChannelsMa
 import android.app.NotificationChannel as AndroidNotificationChannel
 import android.app.NotificationChannelGroup as AndroidNotificationChannelGroup
 
-fun createChannelsAndGroups(context: Context, build: NotificationChannels.() -> Unit) {
+inline fun createChannelsAndGroups(context: Context, build: NotificationChannels.() -> Unit) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
         // Notification Channels aren't supported before Android 8.0 Oreo
         return
     }
 
-    val builder = NotificationChannels().apply(build)
+    val channels = NotificationChannels().apply(build)
 
     NotificationManagerCompat.from(context).apply {
-        createNotificationChannels(builder.channels)
-        builder.groups.forEach { group -> createNotificationChannels(group.channels) }
-        createNotificationChannelGroups(builder.groups)
+        createNotificationChannels(channels.channels)
+        channels.groups.forEach { group -> createNotificationChannels(group.channels) }
+        createNotificationChannelGroups(channels.groups)
     }
 }
 
 @TargetApi(Build.VERSION_CODES.O)
 @NotificationChannelsMarker
-class NotificationChannels internal constructor(
-    internal val groups: MutableList<AndroidNotificationChannelGroup> = mutableListOf(),
-    internal val channels: MutableList<AndroidNotificationChannel> = mutableListOf()
+class NotificationChannels @PublishedApi internal constructor(
+    @PublishedApi internal val groups: MutableList<AndroidNotificationChannelGroup> = mutableListOf(),
+    @PublishedApi internal val channels: MutableList<AndroidNotificationChannel> = mutableListOf()
 ) {
 
     fun channel(

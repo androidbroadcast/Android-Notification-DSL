@@ -6,48 +6,48 @@ import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationWearableExtenderMarker
 
 @NotificationWearableExtenderMarker
-inline class WearableExtender(private val extender: NotificationCompat.WearableExtender) {
+inline class WearableExtender(@PublishedApi internal val wearableExtender: NotificationCompat.WearableExtender) {
 
     var bridgeTag: String?
-        get() = extender.bridgeTag
+        get() = wearableExtender.bridgeTag
         set(value) {
-            extender.bridgeTag = value
+            wearableExtender.bridgeTag = value
         }
 
     val actions: List<NotificationCompat.Action>
-        get() = extender.actions
+        get() = wearableExtender.actions
 
     var contentActions: Int
-        get() = extender.contentAction
+        get() = wearableExtender.contentAction
         set(value) {
-            extender.contentAction = value
+            wearableExtender.contentAction = value
         }
 
     var contentIntentAvailableOffline: Boolean
-        get() = extender.contentIntentAvailableOffline
+        get() = wearableExtender.contentIntentAvailableOffline
         set(value) {
-            extender.contentIntentAvailableOffline = value
+            wearableExtender.contentIntentAvailableOffline = value
         }
 
     var dismissalId: String?
-        get() = extender.dismissalId
+        get() = wearableExtender.dismissalId
         set(value) {
-            extender.dismissalId = value
+            wearableExtender.dismissalId = value
         }
 
     var hintContentIntentLaunchesActivity: Boolean
-        get() = extender.hintContentIntentLaunchesActivity
+        get() = wearableExtender.hintContentIntentLaunchesActivity
         set(value) {
-            extender.hintContentIntentLaunchesActivity = value
+            wearableExtender.hintContentIntentLaunchesActivity = value
         }
 
     var startScrollBottom: Boolean
-        get() = extender.startScrollBottom
+        get() = wearableExtender.startScrollBottom
         set(value) {
-            extender.startScrollBottom = value
+            wearableExtender.startScrollBottom = value
         }
 
-    fun actions(body: WearableExtenderActions.() -> Unit) {
-        WearableExtenderActions(extender).body()
+    inline fun actions(body: WearableExtenderActions.() -> Unit) {
+        WearableExtenderActions(wearableExtender).body()
     }
 }

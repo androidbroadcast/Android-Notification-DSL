@@ -11,33 +11,33 @@ import androidx.core.graphics.drawable.IconCompat
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationBubbleMetadataMarker
 
 @NotificationBubbleMetadataMarker
-inline class BubbleMetadata(private val builder: NotificationCompat.BubbleMetadata.Builder) {
+inline class BubbleMetadata(private val bubbleMetadata: NotificationCompat.BubbleMetadata.Builder) {
 
     fun autoExpandBubble(shouldExpand: Boolean) {
-        builder.setAutoExpandBubble(shouldExpand)
+        bubbleMetadata.setAutoExpandBubble(shouldExpand)
     }
 
     fun deleteIntent(deleteIntent: PendingIntent?) {
-        builder.setDeleteIntent(deleteIntent)
+        bubbleMetadata.setDeleteIntent(deleteIntent)
     }
 
     fun desiredHeight(@Dimension(unit = Dimension.DP) @IntRange(from = 0) height: Int) {
-        builder.setDesiredHeight(height)
+        bubbleMetadata.setDesiredHeight(height)
     }
 
     fun desiredHeightResId(@DimenRes heightResId: Int) {
-        builder.setDesiredHeightResId(heightResId)
+        bubbleMetadata.setDesiredHeightResId(heightResId)
     }
 
     fun icon(icon: IconCompat) {
-        builder.setIcon(icon)
+        bubbleMetadata.setIcon(icon)
     }
 
     fun intent(intent: PendingIntent) {
-        builder.setIntent(intent)
+        bubbleMetadata.setIntent(intent)
     }
 
     fun suppressNotification(shouldSuppressNotification: Boolean) {
-        builder.setSuppressNotification(shouldSuppressNotification)
+        bubbleMetadata.setSuppressNotification(shouldSuppressNotification)
     }
 }

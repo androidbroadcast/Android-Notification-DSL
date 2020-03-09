@@ -8,17 +8,19 @@ import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationBigTextStyleMarker
 
 @NotificationBigTextStyleMarker
-inline class BigTextStyle(private val style: NotificationCompat.BigTextStyle) {
+inline class BigTextStyle(
+    private val bigTextStyle: NotificationCompat.BigTextStyle
+) {
 
     fun bigText(@Size(max = MAX_CHARSEQUENCE_LENGTH) text: CharSequence?) {
-        style.bigText(text)
+        bigTextStyle.bigText(text)
     }
 
     fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
-        style.setBigContentTitle(title)
+        bigTextStyle.setBigContentTitle(title)
     }
 
     fun summaryText(@Size(max = MAX_CHARSEQUENCE_LENGTH) text: CharSequence) {
-        style.setSummaryText(text)
+        bigTextStyle.setSummaryText(text)
     }
 }

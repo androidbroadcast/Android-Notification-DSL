@@ -9,21 +9,23 @@ import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationInboxStyle
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationInboxStyleMarker
 
 @NotificationInboxStyleMarker
-inline class InboxStyle(private val style: NotificationCompat.InboxStyle) {
+inline class InboxStyle(
+    private val inboxStyle: NotificationCompat.InboxStyle
+) {
 
     fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
-        style.setBigContentTitle(title)
+        inboxStyle.setBigContentTitle(title)
     }
 
     val lines: Lines
-        get() = Lines(style)
+        get() = Lines(inboxStyle)
 
-    fun lines(body: @NotificationInboxStyleMarker Lines.() -> Unit) {
+    inline fun lines(body: @NotificationInboxStyleMarker Lines.() -> Unit) {
         lines.body()
     }
 
     fun summaryText(@Size(max = MAX_CHARSEQUENCE_LENGTH) summaryText: CharSequence?) {
-        style.setSummaryText(summaryText)
+        inboxStyle.setSummaryText(summaryText)
     }
 
     @NotificationInboxStyleLinesMarker

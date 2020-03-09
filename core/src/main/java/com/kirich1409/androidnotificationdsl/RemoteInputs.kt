@@ -8,7 +8,7 @@ import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationRemoteInpu
 import androidx.core.app.RemoteInput as AndroidRemoteInput
 
 @NotificationRemoteInputMarker
-inline class RemoteInput(private val remoteInput: AndroidRemoteInput.Builder) {
+inline class RemoteInput(@PublishedApi internal val remoteInput: AndroidRemoteInput.Builder) {
 
     fun allowFreeFormInput(allowFreeFormTextInput: Boolean) {
         remoteInput.setAllowFreeFormInput(allowFreeFormTextInput)
@@ -24,7 +24,7 @@ inline class RemoteInput(private val remoteInput: AndroidRemoteInput.Builder) {
     val dataTypes: DataTypes
         get() = DataTypes(remoteInput)
 
-    fun dataTypes(body: DataTypes.() -> Unit) {
+    inline fun dataTypes(body: DataTypes.() -> Unit) {
         dataTypes.body()
     }
 
@@ -35,11 +35,4 @@ inline class RemoteInput(private val remoteInput: AndroidRemoteInput.Builder) {
     fun label(label: CharSequence?) {
         remoteInput.setLabel(label)
     }
-}
-
-@Suppress("FunctionName")
-internal fun RemoteInput(resultKey: String, body: RemoteInput.() -> Unit): AndroidRemoteInput {
-    val builder = AndroidRemoteInput.Builder(resultKey)
-    RemoteInput(builder).body()
-    return builder.build()
 }

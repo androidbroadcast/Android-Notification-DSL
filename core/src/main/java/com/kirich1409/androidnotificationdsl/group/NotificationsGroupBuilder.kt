@@ -14,7 +14,7 @@ import com.kirich1409.androidnotificationdsl.internal.asMap
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationsGroupMarker
 import android.app.Notification as AndroidNotification
 
-fun NotificationManagerCompat.notificationsGroup(
+inline fun NotificationManagerCompat.notificationsGroup(
     context: Context,
     groupKey: String,
     channelId: String,
@@ -30,7 +30,7 @@ fun NotificationManagerCompat.notificationsGroup(
 }
 
 @NotificationsGroupMarker
-class NotificationsGroupBuilder internal constructor(
+class NotificationsGroupBuilder @PublishedApi internal constructor(
     context: Context,
     private val groupKey: String,
     private val channelId: String,
@@ -40,8 +40,13 @@ class NotificationsGroupBuilder internal constructor(
     private val context: Context = context.applicationContext
     private val notificationManager = NotificationManagerCompat.from(context)
 
+    @PublishedApi
     internal val notifications = SparseArrayCompat<AndroidNotification>()
+
+    @PublishedApi
     internal var summary: AndroidNotification? = null
+
+    @PublishedApi
     internal var summaryId: Int = 0
 
     fun summary(

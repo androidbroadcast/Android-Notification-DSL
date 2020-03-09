@@ -1,4 +1,4 @@
-@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE")
 
 package com.kirich1409.androidnotificationdsl.car
 
@@ -12,35 +12,39 @@ import androidx.core.app.RemoteInput as AndroidRemoteInput
 
 @NotificationCarExtenderUnreadConversationMarker
 inline class CarExtenderUnreadConversation(
-    private val builder: NotificationCompat.CarExtender.UnreadConversation.Builder
+    private val unreadConversation: NotificationCompat.CarExtender.UnreadConversation.Builder
 ) {
 
     fun latestTimestamp(timestamp: Long) {
-        builder.setLatestTimestamp(timestamp)
+        unreadConversation.setLatestTimestamp(timestamp)
     }
 
     fun readPendingIntent(pendingIntent: PendingIntent) {
-        builder.setReadPendingIntent(pendingIntent)
+        unreadConversation.setReadPendingIntent(pendingIntent)
     }
 
-    fun remoteInput(
+    inline fun remoteInput(
         pendingIntent: PendingIntent,
         resultKey: String,
         body: @NotificationCarExtenderUnreadConversationMarker RemoteInput.() -> Unit
     ) {
-        remoteInput(pendingIntent, RemoteInput(resultKey, body))
+        val remoteInput = AndroidRemoteInput.Builder(resultKey)
+            .also { builder -> RemoteInput(builder).body() }
+            .build()
+        remoteInput(pendingIntent, remoteInput)
     }
 
     fun remoteInput(pendingIntent: PendingIntent, remoteInput: AndroidRemoteInput) {
-        builder.setReplyAction(pendingIntent, remoteInput)
+        unreadConversation.setReplyAction(pendingIntent, remoteInput)
     }
 
+    @PublishedApi
     internal fun build(): NotificationCompat.CarExtender.UnreadConversation {
-        return builder.build()
+        return unreadConversation.build()
     }
 }
 
 @ExperimentalTime
-fun CarExtenderUnreadConversation.latestTimestamp(timestamp: Duration) {
+inline fun CarExtenderUnreadConversation.latestTimestamp(timestamp: Duration) {
     return latestTimestamp(timestamp.toLongMilliseconds())
 }

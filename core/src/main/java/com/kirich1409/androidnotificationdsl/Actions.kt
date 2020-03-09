@@ -1,4 +1,4 @@
-@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE")
 
 package com.kirich1409.androidnotificationdsl
 
@@ -9,7 +9,7 @@ import androidx.core.graphics.drawable.IconCompat
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationActionsMarker
 
 @NotificationActionsMarker
-inline class Actions(private val builder: NotificationCompat.Builder) {
+class Actions(private val builder: NotificationCompat.Builder) {
 
     fun action(
         title: CharSequence?,
@@ -17,21 +17,19 @@ inline class Actions(private val builder: NotificationCompat.Builder) {
         icon: IconCompat? = null,
         invisible: Boolean = false
     ) {
-        val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
-        action(actionBuilder, invisible)
+        addAction(NotificationCompat.Action.Builder(icon, title, intent).build(), invisible)
     }
 
-    fun action(
+    inline fun action(
         title: CharSequence?,
         intent: PendingIntent?,
         @DrawableRes icon: Int,
         invisible: Boolean = false
     ) {
-        val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
-        action(actionBuilder, invisible)
+        addAction(NotificationCompat.Action.Builder(icon, title, intent).build(), invisible)
     }
 
-    fun action(
+    inline fun action(
         title: CharSequence?,
         intent: PendingIntent?,
         icon: IconCompat? = null,
@@ -39,33 +37,20 @@ inline class Actions(private val builder: NotificationCompat.Builder) {
         body: @NotificationActionsMarker NotificationAction.() -> Unit
     ) {
         val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
-        action(actionBuilder, invisible, body)
-    }
-
-    fun action(
-        title: CharSequence?,
-        intent: PendingIntent?,
-        @DrawableRes icon: Int,
-        invisible: Boolean = false,
-        body: @NotificationActionsMarker NotificationAction.() -> Unit
-    ) {
-        val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
-        action(actionBuilder, invisible, body)
-    }
-
-    private fun action(actionBuilder: NotificationCompat.Action.Builder, invisible: Boolean) {
-        val action = actionBuilder.build()
-        addAction(action, invisible)
-    }
-
-    private fun action(
-        actionBuilder: NotificationCompat.Action.Builder,
-        invisible: Boolean,
-        body: @NotificationActionsMarker NotificationAction.() -> Unit
-    ) {
         NotificationAction(actionBuilder).body()
-        val action = actionBuilder.build()
-        addAction(action, invisible)
+        addAction(actionBuilder.build(), invisible)
+    }
+
+    inline fun action(
+        title: CharSequence?,
+        intent: PendingIntent?,
+        @DrawableRes icon: Int,
+        invisible: Boolean = false,
+        body: @NotificationActionsMarker NotificationAction.() -> Unit
+    ) {
+        val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
+        NotificationAction(actionBuilder).body()
+        addAction(actionBuilder.build(), invisible)
     }
 
     fun addAction(action: NotificationCompat.Action, invisible: Boolean = false) {

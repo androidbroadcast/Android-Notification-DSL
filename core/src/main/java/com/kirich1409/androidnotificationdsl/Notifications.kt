@@ -1,4 +1,4 @@
-@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE")
 
 package com.kirich1409.androidnotificationdsl
 
@@ -38,7 +38,7 @@ import android.app.Notification as AndroidNotification
  *
  * @return A new [Notification] object.
  */
-fun notification(
+inline fun notification(
     context: Context,
     channelId: String,
     @DrawableRes smallIcon: Int,
@@ -51,7 +51,7 @@ fun notification(
     }
 }
 
-fun notification(context: Context, channelId: String, @DrawableRes smallIcon: Int): AndroidNotification {
+inline fun notification(context: Context, channelId: String, @DrawableRes smallIcon: Int): AndroidNotification {
     NotificationCompat.Builder(context, channelId).apply {
         setSmallIcon(smallIcon)
         return@notification build()
@@ -59,293 +59,282 @@ fun notification(context: Context, channelId: String, @DrawableRes smallIcon: In
 }
 
 @NotificationMarker
-inline class Notification(internal val builder: NotificationCompat.Builder) {
+inline class Notification(@PublishedApi internal val notification: NotificationCompat.Builder) {
 
     val actions: Actions
-        get() = Actions(builder)
+        get() = Actions(notification)
 
-    fun actions(body: @NotificationMarker Actions.() -> Unit) {
+    inline fun actions(body: @NotificationMarker Actions.() -> Unit) {
         actions.body()
     }
 
     fun allowSystemGeneratedContextualActions(allowed: Boolean) {
-        builder.setAllowSystemGeneratedContextualActions(allowed)
+        notification.setAllowSystemGeneratedContextualActions(allowed)
     }
 
     fun autoCancel(autoCancel: Boolean) {
-        builder.setAutoCancel(autoCancel)
+        notification.setAutoCancel(autoCancel)
     }
 
     fun badgeIconType(@NotificationCompat.BadgeIconType value: Int) {
-        builder.setBadgeIconType(value)
+        notification.setBadgeIconType(value)
     }
 
-    fun bigPictureStyle(body: @NotificationMarker BigPictureStyle.() -> Unit) {
+    inline fun bigPictureStyle(body: @NotificationMarker BigPictureStyle.() -> Unit) {
         val bigPictureStyle = NotificationCompat.BigPictureStyle()
         BigPictureStyle(bigPictureStyle).body()
-        builder.setStyle(bigPictureStyle)
+        notification.setStyle(bigPictureStyle)
     }
 
-    fun bigTextStyle(body: @NotificationMarker BigTextStyle.() -> Unit) {
+    inline fun bigTextStyle(body: @NotificationMarker BigTextStyle.() -> Unit) {
         val bigTextStyle = NotificationCompat.BigTextStyle()
         BigTextStyle(bigTextStyle).body()
-        builder.setStyle(bigTextStyle)
+        notification.setStyle(bigTextStyle)
     }
 
-    fun bubbleMetadata(body: @NotificationMarker BubbleMetadata.() -> Unit) {
+    inline fun bubbleMetadata(body: @NotificationMarker BubbleMetadata.() -> Unit) {
         val bubbleMetadataBuilder = NotificationCompat.BubbleMetadata.Builder()
         BubbleMetadata(bubbleMetadataBuilder).body()
-        builder.bubbleMetadata = bubbleMetadataBuilder.build()
+        notification.bubbleMetadata = bubbleMetadataBuilder.build()
     }
 
     fun category(@NotificationCategory category: String) {
-        builder.setCategory(category)
+        notification.setCategory(category)
     }
 
-    fun car(body: @NotificationMarker CarExtender.() -> Unit) {
+    inline fun car(body: @NotificationMarker CarExtender.() -> Unit) {
         val carExtender = NotificationCompat.CarExtender()
         CarExtender(carExtender).body()
         extend(carExtender)
     }
 
     fun color(@ColorInt color: Int) {
-        builder.color = color
+        notification.color = color
     }
 
     fun colorized(colorize: Boolean) {
-        builder.setColorized(colorize)
+        notification.setColorized(colorize)
     }
 
     fun content(views: RemoteViews) {
-        builder.setContent(views)
+        notification.setContent(views)
     }
 
     fun contentIntent(intent: PendingIntent) {
-        builder.setContentIntent(intent)
+        notification.setContentIntent(intent)
     }
 
     fun contentInfo(info: CharSequence) {
-        builder.setContentInfo(info)
+        notification.setContentInfo(info)
     }
 
     fun contentText(text: CharSequence) {
-        builder.setContentText(text)
+        notification.setContentText(text)
     }
 
     fun contentTitle(title: CharSequence) {
-        builder.setContentTitle(title)
+        notification.setContentTitle(title)
     }
 
     fun chronometerCountDown(countsDown: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setChronometerCountDown(countsDown)
+            notification.setChronometerCountDown(countsDown)
         }
     }
 
     fun customBigContentView(contentView: RemoteViews) {
-        builder.setCustomBigContentView(contentView)
+        notification.setCustomBigContentView(contentView)
     }
 
     fun customContentView(contentView: RemoteViews) {
-        builder.setCustomContentView(contentView)
+        notification.setCustomContentView(contentView)
     }
 
     fun customHeadsUpContentView(contentView: RemoteViews) {
-        builder.setCustomHeadsUpContentView(contentView)
+        notification.setCustomHeadsUpContentView(contentView)
     }
 
     fun decoratedCustomViewStyle() {
-        builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+        notification.setStyle(NotificationCompat.DecoratedCustomViewStyle())
     }
 
     fun defaults(@NotificationDefaults defaults: Int) {
-        builder.setDefaults(defaults)
+        notification.setDefaults(defaults)
     }
 
     var extras: Bundle
-        get() = builder.extras
+        get() = notification.extras
         set(value) {
-            builder.extras = value
+            notification.extras = value
         }
 
+    @PublishedApi
     internal fun extend(extender: NotificationCompat.Extender) {
-        builder.extend(extender)
+        notification.extend(extender)
     }
 
     fun fullScreenIntent(intent: PendingIntent, isHighPriority: Boolean = false) {
-        builder.setFullScreenIntent(intent, isHighPriority)
+        notification.setFullScreenIntent(intent, isHighPriority)
     }
 
     fun group(groupKey: String) {
-        builder.setGroup(groupKey)
+        notification.setGroup(groupKey)
     }
 
     fun groupAlertBehavior(@NotificationCompat.GroupAlertBehavior groupAlertBehavior: Int) {
-        builder.setGroupAlertBehavior(groupAlertBehavior)
+        notification.setGroupAlertBehavior(groupAlertBehavior)
     }
 
     fun groupSummary(isGroupSummary: Boolean) {
-        builder.setGroupSummary(isGroupSummary)
+        notification.setGroupSummary(isGroupSummary)
     }
 
-    fun inboxStyle(body: @NotificationMarker InboxStyle.() -> Unit) {
+    inline fun inboxStyle(body: @NotificationMarker InboxStyle.() -> Unit) {
         val inboxStyle = NotificationCompat.InboxStyle()
         InboxStyle(inboxStyle).body()
-        builder.setStyle(inboxStyle)
+        notification.setStyle(inboxStyle)
     }
 
     fun largeIcon(icon: Bitmap) {
-        builder.setLargeIcon(icon)
+        notification.setLargeIcon(icon)
     }
 
-    fun lights(
-        @ColorInt color: Int,
-        @IntRange(from = 0) onMs: Int,
-        @IntRange(from = 0) offMs: Int
-    ) {
-        builder.setLights(color, onMs, offMs)
+    fun lights(@ColorInt color: Int, @IntRange(from = 0) onMs: Int, @IntRange(from = 0) offMs: Int) {
+        notification.setLights(color, onMs, offMs)
     }
 
     fun localOnly(localOnly: Boolean) {
-        builder.setLocalOnly(localOnly)
+        notification.setLocalOnly(localOnly)
     }
 
-    fun messagingStyle(person: Person, body: @NotificationMarker MessagingStyle.() -> Unit) {
+    inline fun messagingStyle(person: Person, body: @NotificationMarker MessagingStyle.() -> Unit) {
         val messagingStyle = NotificationCompat.MessagingStyle(person)
         MessagingStyle(messagingStyle).body()
-        builder.setStyle(messagingStyle)
+        notification.setStyle(messagingStyle)
     }
 
     fun number(number: Int) {
-        builder.setNumber(number)
+        notification.setNumber(number)
     }
 
     fun ongoing(ongoing: Boolean) {
-        builder.setOngoing(ongoing)
+        notification.setOngoing(ongoing)
     }
 
     fun onlyAlertOnce(onlyAlertOnce: Boolean) {
-        builder.setOnlyAlertOnce(onlyAlertOnce)
+        notification.setOnlyAlertOnce(onlyAlertOnce)
     }
 
     val persons: Persons
-        get() = Persons(builder)
+        get() = Persons(notification)
 
-    fun persons(body: @NotificationMarker Persons.() -> Unit) {
+    inline fun persons(body: @NotificationMarker Persons.() -> Unit) {
         persons.body()
     }
 
     fun priority(@NotificationPriority priority: Int) {
-        builder.priority = priority
+        notification.priority = priority
     }
 
-    fun progress(
-        @IntRange(from = 0) max: Int,
-        @IntRange(from = 0) progress: Int,
-        indeterminate: Boolean = false
-    ) {
-        builder.setProgress(max, progress, indeterminate)
+    fun progress(@IntRange(from = 0) max: Int, @IntRange(from = 0) progress: Int, indeterminate: Boolean = false) {
+        notification.setProgress(max, progress, indeterminate)
     }
 
     infix fun publicVersion(value: AndroidNotification) {
-        builder.setPublicVersion(value)
+        notification.setPublicVersion(value)
     }
 
     fun remoteInputHistory(text: Array<CharSequence>) {
-        builder.setRemoteInputHistory(text)
+        notification.setRemoteInputHistory(text)
     }
 
     fun shortcutId(shortcutId: String) {
-        builder.setShortcutId(shortcutId)
+        notification.setShortcutId(shortcutId)
     }
 
     fun showWhen(show: Boolean) {
-        builder.setShowWhen(show)
+        notification.setShowWhen(show)
     }
 
     fun smallIcon(@DrawableRes icon: Int) {
-        builder.setSmallIcon(icon)
+        notification.setSmallIcon(icon)
     }
 
     fun smallIcon(@DrawableRes icon: Int, @IntRange(from = 0) level: Int) {
-        builder.setSmallIcon(icon, level)
+        notification.setSmallIcon(icon, level)
     }
 
     fun sortKey(sortKey: String) {
-        builder.setSortKey(sortKey)
+        notification.setSortKey(sortKey)
     }
 
     fun sound(sound: Uri) {
-        builder.setSound(sound)
+        notification.setSound(sound)
     }
 
     fun sound(sound: Uri, @NotificationCompat.StreamType streamType: Int) {
-        builder.setSound(sound, streamType)
+        notification.setSound(sound, streamType)
     }
 
     fun subText(text: CharSequence) {
-        builder.setSubText(text)
+        notification.setSubText(text)
     }
 
     fun ticker(tickerText: CharSequence, views: RemoteViews? = null) {
-        builder.setTicker(tickerText, views)
+        notification.setTicker(tickerText, views)
     }
 
     fun timeoutAfter(@IntRange(from = 0) durationMs: Long) {
-        builder.setTimeoutAfter(durationMs)
+        notification.setTimeoutAfter(durationMs)
     }
 
     fun usesChronometer(value: Boolean) {
-        builder.setUsesChronometer(value)
+        notification.setUsesChronometer(value)
     }
 
     fun vibrate(pattern: LongArray) {
-        builder.setVibrate(pattern)
+        notification.setVibrate(pattern)
     }
 
     fun visibility(@NotificationVisibility value: Int) {
-        builder.setVisibility(value)
+        notification.setVisibility(value)
     }
 
-    fun wearable(body: @NotificationMarker WearableExtender.() -> Unit) {
+    inline fun wearable(body: @NotificationMarker WearableExtender.() -> Unit) {
         val wearableExtender: NotificationCompat.WearableExtender = NotificationCompat.WearableExtender()
         WearableExtender(wearableExtender).body()
         extend(wearableExtender)
     }
 
     fun whenTime(@IntRange(from = 0) time: Long) {
-        builder.setWhen(time)
+        notification.setWhen(time)
     }
 }
 
 @ExperimentalTime
-fun Notification.lights(
-    @ColorInt color: Int,
-    on: Duration,
-    off: Duration
-) {
+inline fun Notification.lights(@ColorInt color: Int, on: Duration, off: Duration) {
     require(on.isPositive() && on.isFinite()) { "`on` must be greater or equals than zero and finite" }
     require(off.isPositive() && off.isFinite()) { "`off` must be greater or equals than zero and finite" }
     lights(color, on.toInt(DurationUnit.MILLISECONDS), off.toInt(DurationUnit.MILLISECONDS))
 }
 
-fun Notification.remoteInputHistory(vararg text: CharSequence) {
-    builder.setRemoteInputHistory(text)
+inline fun Notification.remoteInputHistory(vararg text: CharSequence) {
+    notification.setRemoteInputHistory(text)
 }
 
-fun Notification.remoteInputHistory(text: Iterable<CharSequence>) {
-    builder.setRemoteInputHistory(text.toArray())
+inline fun Notification.remoteInputHistory(text: Iterable<CharSequence>) {
+    notification.setRemoteInputHistory(text.toArray())
 }
 
 @ExperimentalTime
-fun Notification.timeoutAfter(duration: Duration) {
-    builder.setTimeoutAfter(duration.toLongMilliseconds())
+inline fun Notification.timeoutAfter(duration: Duration) {
+    notification.setTimeoutAfter(duration.toLongMilliseconds())
 }
 
-fun Notification.vibrate(vararg pattern: Long) {
-    builder.setVibrate(pattern)
+inline fun Notification.vibrate(vararg pattern: Long) {
+    notification.setVibrate(pattern)
 }
 
-fun Notification.style(style: NotificationCompat.Style) {
-    builder.setStyle(style)
+inline fun Notification.style(style: NotificationCompat.Style) {
+    notification.setStyle(style)
 }

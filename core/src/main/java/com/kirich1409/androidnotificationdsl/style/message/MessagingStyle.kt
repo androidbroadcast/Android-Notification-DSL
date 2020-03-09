@@ -7,27 +7,27 @@ import androidx.core.app.Person
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMessagingStyleMarker
 
 @NotificationMessagingStyleMarker
-class MessagingStyle internal constructor(private val style: NotificationCompat.MessagingStyle) {
+inline class MessagingStyle(@PublishedApi internal val messagingStyle: NotificationCompat.MessagingStyle) {
 
     var conversationTitle: CharSequence?
-        get() = style.conversationTitle
+        get() = messagingStyle.conversationTitle
         set(value) {
-            style.conversationTitle = value
+            messagingStyle.conversationTitle = value
         }
 
     var groupConversation: Boolean
-        get() = style.isGroupConversation
+        get() = messagingStyle.isGroupConversation
         set(value) {
-            style.isGroupConversation = value
+            messagingStyle.isGroupConversation = value
         }
 
     val messages: List<NotificationCompat.MessagingStyle.Message>
-        get() = style.messages
+        get() = messagingStyle.messages
 
-    fun messages(body: Messages.() -> Unit) {
-        Messages(style).body()
+    inline fun messages(body: Messages.() -> Unit) {
+        Messages(messagingStyle).body()
     }
 
-    val user: Person get() = style.user
+    val user: Person get() = messagingStyle.user
 }
 

@@ -8,33 +8,33 @@ import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationCarExtenderMarker
 
 @NotificationCarExtenderMarker
-inline class CarExtender(private val extender: NotificationCompat.CarExtender) {
+inline class CarExtender(@PublishedApi internal val carExtender: NotificationCompat.CarExtender) {
 
     var color: Int
-        @ColorInt get() = extender.color
+        @ColorInt get() = carExtender.color
         set(@ColorInt value) {
-            extender.color = value
+            carExtender.color = value
         }
 
     var largeIcon: Bitmap?
-        get() = extender.largeIcon
+        get() = carExtender.largeIcon
         set(value) {
-            extender.largeIcon = value
+            carExtender.largeIcon = value
         }
 
     var unreadConversation: NotificationCompat.CarExtender.UnreadConversation?
-        get() = extender.unreadConversation
+        get() = carExtender.unreadConversation
         set(unreadConversation) {
-            extender.unreadConversation = unreadConversation
+            carExtender.unreadConversation = unreadConversation
         }
 
-    fun unreadConversation(
+    inline fun unreadConversation(
         name: String,
         body: @NotificationCarExtenderMarker CarExtenderUnreadConversation.() -> Unit
     ) {
         val builder = NotificationCompat.CarExtender.UnreadConversation.Builder(name)
         CarExtenderUnreadConversation(builder).apply(body)
-        extender.unreadConversation = builder.build()
+        carExtender.unreadConversation = builder.build()
     }
 }
 

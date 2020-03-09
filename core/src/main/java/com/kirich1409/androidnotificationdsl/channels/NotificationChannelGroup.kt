@@ -12,21 +12,19 @@ import android.app.NotificationChannel as AndroidNotificationChannel
 
 @NotificationChannelGroupMarker
 @RequiresApi(Build.VERSION_CODES.O)
-inline class NotificationChannelGroup(private val channels: MutableList<AndroidNotificationChannel>) {
+inline class NotificationChannelGroup(@PublishedApi internal val channels: MutableList<AndroidNotificationChannel>) {
 
-    fun channel(
+    inline fun channel(
         id: String,
         name: CharSequence,
         @NotificationImportance importance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT,
         build: @NotificationChannelGroupMarker NotificationChannel.() -> Unit
     ) {
         @SuppressLint("WrongConstant")
-        val channel = AndroidNotificationChannel(id, name, importance)
-        NotificationChannel(channel).build()
-        channels += channel
+        channels += AndroidNotificationChannel(id, name, importance).also { NotificationChannel(it).build() }
     }
 
-    fun channel(
+    inline fun channel(
         id: String,
         name: CharSequence,
         @NotificationImportance importance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT
