@@ -3,6 +3,8 @@
 package com.kirich1409.androidnotificationdsl.wearable
 
 import androidx.core.app.NotificationCompat
+import com.kirich1409.androidnotificationdsl.Notification
+import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationWearableExtenderMarker
 
 @NotificationWearableExtenderMarker
@@ -50,4 +52,10 @@ inline class WearableExtender(@PublishedApi internal val wearableExtender: Notif
     inline fun actions(body: WearableExtenderActions.() -> Unit) {
         WearableExtenderActions(wearableExtender).body()
     }
+}
+
+inline fun Notification.wearable(body: @NotificationMarker WearableExtender.() -> Unit) {
+    val wearableExtender: NotificationCompat.WearableExtender = NotificationCompat.WearableExtender()
+    WearableExtender(wearableExtender).body()
+    extend(wearableExtender)
 }
