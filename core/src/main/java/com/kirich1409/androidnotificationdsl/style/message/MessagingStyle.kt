@@ -4,7 +4,10 @@ package com.kirich1409.androidnotificationdsl.style.message
 
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import com.kirich1409.androidnotificationdsl.Notification
+import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMessagingStyleMarker
+import com.kirich1409.androidnotificationdsl.style
 
 @NotificationMessagingStyleMarker
 inline class MessagingStyle(@PublishedApi internal val messagingStyle: NotificationCompat.MessagingStyle) {
@@ -29,5 +32,12 @@ inline class MessagingStyle(@PublishedApi internal val messagingStyle: Notificat
     }
 
     val user: Person get() = messagingStyle.user
+}
+
+inline fun Notification.messagingStyle(
+    person: Person,
+    body: @NotificationMarker MessagingStyle.() -> Unit
+) {
+    style(NotificationCompat.MessagingStyle(person).also { MessagingStyle(it).body() })
 }
 

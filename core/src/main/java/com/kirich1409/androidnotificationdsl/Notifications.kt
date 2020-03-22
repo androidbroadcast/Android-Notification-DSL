@@ -80,18 +80,6 @@ inline class Notification(@PublishedApi internal val notification: NotificationC
         notification.setBadgeIconType(value)
     }
 
-    inline fun bigPictureStyle(body: @NotificationMarker BigPictureStyle.() -> Unit) {
-        val bigPictureStyle = NotificationCompat.BigPictureStyle()
-        BigPictureStyle(bigPictureStyle).body()
-        notification.setStyle(bigPictureStyle)
-    }
-
-    inline fun bigTextStyle(body: @NotificationMarker BigTextStyle.() -> Unit) {
-        val bigTextStyle = NotificationCompat.BigTextStyle()
-        BigTextStyle(bigTextStyle).body()
-        notification.setStyle(bigTextStyle)
-    }
-
     inline fun bubbleMetadata(body: @NotificationMarker BubbleMetadata.() -> Unit) {
         val bubbleMetadataBuilder = NotificationCompat.BubbleMetadata.Builder()
         BubbleMetadata(bubbleMetadataBuilder).body()
@@ -100,12 +88,6 @@ inline class Notification(@PublishedApi internal val notification: NotificationC
 
     fun category(@NotificationCategory category: String) {
         notification.setCategory(category)
-    }
-
-    inline fun car(body: @NotificationMarker CarExtender.() -> Unit) {
-        val carExtender = NotificationCompat.CarExtender()
-        CarExtender(carExtender).body()
-        extend(carExtender)
     }
 
     fun color(@ColorInt color: Int) {
@@ -168,8 +150,7 @@ inline class Notification(@PublishedApi internal val notification: NotificationC
             notification.extras = value
         }
 
-    @PublishedApi
-    internal fun extend(extender: NotificationCompat.Extender) {
+    fun extend(extender: NotificationCompat.Extender) {
         notification.extend(extender)
     }
 
@@ -189,12 +170,6 @@ inline class Notification(@PublishedApi internal val notification: NotificationC
         notification.setGroupSummary(isGroupSummary)
     }
 
-    inline fun inboxStyle(body: @NotificationMarker InboxStyle.() -> Unit) {
-        val inboxStyle = NotificationCompat.InboxStyle()
-        InboxStyle(inboxStyle).body()
-        notification.setStyle(inboxStyle)
-    }
-
     fun largeIcon(icon: Bitmap) {
         notification.setLargeIcon(icon)
     }
@@ -205,12 +180,6 @@ inline class Notification(@PublishedApi internal val notification: NotificationC
 
     fun localOnly(localOnly: Boolean) {
         notification.setLocalOnly(localOnly)
-    }
-
-    inline fun messagingStyle(person: Person, body: @NotificationMarker MessagingStyle.() -> Unit) {
-        val messagingStyle = NotificationCompat.MessagingStyle(person)
-        MessagingStyle(messagingStyle).body()
-        notification.setStyle(messagingStyle)
     }
 
     fun number(number: Int) {
@@ -298,12 +267,6 @@ inline class Notification(@PublishedApi internal val notification: NotificationC
 
     fun visibility(@NotificationVisibility value: Int) {
         notification.setVisibility(value)
-    }
-
-    inline fun wearable(body: @NotificationMarker WearableExtender.() -> Unit) {
-        val wearableExtender: NotificationCompat.WearableExtender = NotificationCompat.WearableExtender()
-        WearableExtender(wearableExtender).body()
-        extend(wearableExtender)
     }
 
     fun whenTime(@IntRange(from = 0) time: Long) {

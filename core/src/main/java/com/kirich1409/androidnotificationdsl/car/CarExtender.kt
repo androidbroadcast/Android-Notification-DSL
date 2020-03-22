@@ -5,7 +5,9 @@ package com.kirich1409.androidnotificationdsl.car
 import android.graphics.Bitmap
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
+import com.kirich1409.androidnotificationdsl.Notification
 import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationCarExtenderMarker
+import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMarker
 
 @NotificationCarExtenderMarker
 inline class CarExtender(@PublishedApi internal val carExtender: NotificationCompat.CarExtender) {
@@ -36,5 +38,11 @@ inline class CarExtender(@PublishedApi internal val carExtender: NotificationCom
         CarExtenderUnreadConversation(builder).apply(body)
         carExtender.unreadConversation = builder.build()
     }
+}
+
+inline fun Notification.car(body: @NotificationMarker CarExtender.() -> Unit) {
+    val carExtender = NotificationCompat.CarExtender()
+    CarExtender(carExtender).body()
+    extend(carExtender)
 }
 
