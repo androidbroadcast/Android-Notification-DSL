@@ -6,6 +6,14 @@ import android.os.Build
 import android.text.TextUtils
 import androidx.core.app.NotificationManagerCompat
 
+/**
+ * Check that notifications for the app and in channel with [channelId] are available.
+ * For Pre-O (8.0) devices check only [NotificationManagerCompat.areNotificationsEnabled]
+ *
+ * @param channelId Id of the channel
+ *
+ * return If notifications for the app and the channel are available.
+ */
 fun NotificationManagerCompat.areNotificationsEnabled(channelId: String): Boolean {
     if (!areNotificationsEnabled()) {
         return false

@@ -14,25 +14,20 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.NotificationVisibility
-import androidx.core.app.Person
+import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.annotations.NotificationCategory
 import com.kirich1409.androidnotificationdsl.annotations.NotificationDefaults
 import com.kirich1409.androidnotificationdsl.annotations.NotificationPriority
-import com.kirich1409.androidnotificationdsl.car.CarExtender
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMarker
+import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadata
 import com.kirich1409.androidnotificationdsl.internal.toArray
-import com.kirich1409.androidnotificationdsl.style.BigPictureStyle
-import com.kirich1409.androidnotificationdsl.style.BigTextStyle
-import com.kirich1409.androidnotificationdsl.style.InboxStyle
-import com.kirich1409.androidnotificationdsl.style.message.MessagingStyle
-import com.kirich1409.androidnotificationdsl.wearable.WearableExtender
+import com.kirich1409.androidnotificationdsl.person.Persons
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import android.app.Notification as AndroidNotification
 
 /**
- * Create new notification for specified [channelId]
+ * Create new otification for specified [channelId]
  *
  * @param channelId The constructed Notification will be posted on this NotificationChannel
  *
@@ -44,13 +39,21 @@ inline fun notification(
     @DrawableRes smallIcon: Int,
     body: Notification.() -> Unit
 ): AndroidNotification {
-    NotificationCompat.Builder(context, channelId).apply {
+    val builder = NotificationCompat.Builder(context, channelId).apply {
         setSmallIcon(smallIcon)
-        Notification(this).apply(body)
-        return@notification build()
     }
+
+    Notification(builder).apply(body)
+    return builder.build()
 }
 
+/**
+ * Create new notification for specified [channelId]
+ *
+ * @param channelId The constructed Notification will be posted on this NotificationChannel
+ *
+ * @return A new [Notification] object.
+ */
 inline fun notification(context: Context, channelId: String, @DrawableRes smallIcon: Int): AndroidNotification {
     NotificationCompat.Builder(context, channelId).apply {
         setSmallIcon(smallIcon)
@@ -58,8 +61,13 @@ inline fun notification(context: Context, channelId: String, @DrawableRes smallI
     }
 }
 
+/**
+ * Notification builder
+ */
 @NotificationMarker
-inline class Notification(@PublishedApi internal val notification: NotificationCompat.Builder) {
+class Notification @PublishedApi internal constructor(
+    @PublishedApi internal val notification: NotificationCompat.Builder
+) {
 
     val actions: Actions
         get() = Actions(notification)

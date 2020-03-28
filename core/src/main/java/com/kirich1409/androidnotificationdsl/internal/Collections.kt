@@ -1,3 +1,4 @@
+@file:JvmMultifileClass
 package com.kirich1409.androidnotificationdsl.internal
 
 import androidx.collection.SparseArrayCompat
@@ -36,8 +37,7 @@ internal inline fun <E> SparseArrayCompat<E>.values(): List<E> = when (val size 
     }
 }
 
-@PublishedApi
-internal fun <E> SparseArrayCompat<E>.asMap():Map<Int, E> {
+fun <E> SparseArrayCompat<E>.asMap():Map<Int, E> {
     val map = HashMap<Int, E>()
     forEach { key, value ->
         map[key] = value

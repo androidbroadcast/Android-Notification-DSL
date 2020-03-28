@@ -5,13 +5,17 @@ package com.kirich1409.androidnotificationdsl.style.message
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMarker
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMessagingStyleMarker
+import com.kirich1409.androidnotificationdsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.style
 
 @NotificationMessagingStyleMarker
-inline class MessagingStyle(@PublishedApi internal val messagingStyle: NotificationCompat.MessagingStyle) {
+class MessagingStyle @PublishedApi internal constructor(
+    @PublishedApi internal val messagingStyle: NotificationCompat.MessagingStyle
+) {
 
+    /**
+     * The title to be displayed on this conversation.
+     */
     var conversationTitle: CharSequence?
         get() = messagingStyle.conversationTitle
         set(value) {
@@ -24,6 +28,9 @@ inline class MessagingStyle(@PublishedApi internal val messagingStyle: Notificat
             messagingStyle.isGroupConversation = value
         }
 
+    /**
+     * Gets the list of [Message][NotificationCompat.MessagingStyle.Message] objects that represent the notification
+     */
     val messages: List<NotificationCompat.MessagingStyle.Message>
         get() = messagingStyle.messages
 
@@ -31,13 +38,18 @@ inline class MessagingStyle(@PublishedApi internal val messagingStyle: Notificat
         Messages(messagingStyle).body()
     }
 
+    /**
+     * Returns the person to be used for any replies sent by the user.
+     */
     val user: Person get() = messagingStyle.user
 }
 
 inline fun Notification.messagingStyle(
     person: Person,
     body: @NotificationMarker MessagingStyle.() -> Unit
-) {
-    style(NotificationCompat.MessagingStyle(person).also { MessagingStyle(it).body() })
+): NotificationCompat.MessagingStyle {
+    val messagingStyle = NotificationCompat.MessagingStyle(person)
+    style(messagingStyle.also { MessagingStyle(it).body() })
+    return messagingStyle
 }
 

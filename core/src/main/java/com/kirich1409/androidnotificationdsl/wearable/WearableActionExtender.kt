@@ -3,12 +3,13 @@
 package com.kirich1409.androidnotificationdsl.wearable
 
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.NotificationAction
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationActionMarker
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationWearableActionExtenderMarker
+import com.kirich1409.androidnotificationdsl.action.Action
+import com.kirich1409.androidnotificationdsl.action.NotificationActionMarker
 
 @NotificationWearableActionExtenderMarker
-inline class WearableActionExtender(private val wearableExtender: NotificationCompat.Action.WearableExtender) {
+class WearableActionExtender @PublishedApi internal constructor(
+    private val wearableExtender: NotificationCompat.Action.WearableExtender
+) {
 
     var availableOffline: Boolean
         get() = wearableExtender.isAvailableOffline
@@ -29,7 +30,7 @@ inline class WearableActionExtender(private val wearableExtender: NotificationCo
         }
 }
 
-inline fun NotificationAction.wearable(body: @NotificationActionMarker WearableActionExtender.() -> Unit) {
+inline fun Action.wearable(body: @NotificationActionMarker WearableActionExtender.() -> Unit) {
     val wearableExtender = NotificationCompat.Action.WearableExtender()
     WearableActionExtender(wearableExtender).body()
     extend(wearableExtender)

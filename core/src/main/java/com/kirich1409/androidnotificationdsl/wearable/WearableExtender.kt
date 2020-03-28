@@ -4,11 +4,12 @@ package com.kirich1409.androidnotificationdsl.wearable
 
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMarker
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationWearableExtenderMarker
+import com.kirich1409.androidnotificationdsl.NotificationMarker
 
 @NotificationWearableExtenderMarker
-inline class WearableExtender(@PublishedApi internal val wearableExtender: NotificationCompat.WearableExtender) {
+class WearableExtender @PublishedApi internal constructor(
+    @PublishedApi internal val wearableExtender: NotificationCompat.WearableExtender
+) {
 
     var bridgeTag: String?
         get() = wearableExtender.bridgeTag

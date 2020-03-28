@@ -6,11 +6,12 @@ import android.graphics.Bitmap
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationCarExtenderMarker
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationMarker
 
 @NotificationCarExtenderMarker
-inline class CarExtender(@PublishedApi internal val carExtender: NotificationCompat.CarExtender) {
+class CarExtender @PublishedApi internal constructor(
+    @PublishedApi internal val carExtender: NotificationCompat.CarExtender
+) {
 
     var color: Int
         @ColorInt get() = carExtender.color

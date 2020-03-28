@@ -6,11 +6,10 @@ import android.app.PendingIntent
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.kirich1409.androidnotificationdsl.NotificationAction
-import com.kirich1409.androidnotificationdsl.internal.dsl.NotificationWearableExtenderActionsMarker
+import com.kirich1409.androidnotificationdsl.action.Action
 
 @NotificationWearableExtenderActionsMarker
-inline class WearableExtenderActions(
+class WearableExtenderActions @PublishedApi internal constructor(
     @PublishedApi internal val wearableExtender: NotificationCompat.WearableExtender
 ) {
 
@@ -22,10 +21,10 @@ inline class WearableExtenderActions(
         title: CharSequence,
         intent: PendingIntent,
         icon: IconCompat? = null,
-        body: @NotificationWearableExtenderActionsMarker NotificationAction.() -> Unit
+        body: @NotificationWearableExtenderActionsMarker Action.() -> Unit
     ) {
         val action = NotificationCompat.Action.Builder(icon, title, intent)
-            .also { NotificationAction(it).body() }
+            .also { Action(it).body() }
             .build()
         wearableExtender.addAction(action)
     }
@@ -34,10 +33,10 @@ inline class WearableExtenderActions(
         title: CharSequence,
         intent: PendingIntent,
         @DrawableRes icon: Int,
-        body: @NotificationWearableExtenderActionsMarker NotificationAction.() -> Unit
+        body: @NotificationWearableExtenderActionsMarker Action.() -> Unit
     ) {
         val action = NotificationCompat.Action.Builder(icon, title, intent)
-            .also { NotificationAction(it).body() }
+            .also { Action(it).body() }
             .build()
         wearableExtender.addAction(action)
     }
