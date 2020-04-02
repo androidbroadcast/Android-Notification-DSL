@@ -3,6 +3,7 @@
 package com.kirich1409.androidnotificationdsl.channels
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
@@ -10,7 +11,7 @@ import com.kirich1409.androidnotificationdsl.annotations.NotificationImportance
 import android.app.NotificationChannel as AndroidNotificationChannel
 
 @NotificationChannelGroupMarker
-@RequiresApi(Build.VERSION_CODES.O)
+@TargetApi(Build.VERSION_CODES.O)
 class NotificationChannelGroup @PublishedApi internal constructor(
     internal val channels: MutableList<AndroidNotificationChannel>
 ) {

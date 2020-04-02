@@ -12,7 +12,7 @@ import com.kirich1409.androidnotificationdsl.internal.areNotificationsEnabled
 import com.kirich1409.androidnotificationdsl.internal.asMap
 import android.app.Notification as AndroidNotification
 
-inline fun NotificationManagerCompat.notificationsGroup(
+inline fun notificationsGroup(
     context: Context,
     groupKey: String,
     channelId: String,
@@ -23,7 +23,7 @@ inline fun NotificationManagerCompat.notificationsGroup(
     val group = NotificationsGroupBuilder(context, groupKey, channelId, skipDisabledNotification, groupAlertBehavior)
         .apply(body)
     val summaryNotification = requireNotNull(group.summary) { "Summary notification isn't set" }
-    return NotificationsGroup(group.notifications.asMap(), group.summaryId to summaryNotification)
+    return NotificationsGroup(group.notifications.toMap(), group.summaryId to summaryNotification)
 }
 
 @NotificationsGroupMarker
@@ -36,8 +36,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
 ) {
     private val notificationManager = NotificationManagerCompat.from(context)
 
-    @PublishedApi
-    internal val notifications = SparseArrayCompat<AndroidNotification>()
+    val notifications = Notifications()
 
     @PublishedApi
     internal var summary: AndroidNotification? = null
@@ -66,22 +65,63 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
         }
     }
 
-    /**
-     * Create a notification and add it to the group. If notification channel is disabled than the notification
-     * will be added only if [NotificationsGroupBuilder.skipDisabledNotification] is `false`.
-     */
-    fun notification(
-        notificationId: Int,
-        @DrawableRes smallIcon: Int,
-        channelId: String = this.channelId,
-        body: @NotificationsGroupMarker Notification.() -> Unit
-    ) {
+    fun summary(notificationId: Int, notification: AndroidNotification) {
         if (needToBuildNotification(channelId)) {
-            val notification = com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
-                body()
-                group(groupKey)
-            }
+            this.summaryId = notificationId
+            summary = notification
+        }
+    }
+
+    fun notifications(body: @NotificationsGroupMarker Notifications.() -> Unit) {
+        this.notifications.body()
+    }
+
+    inner class Notifications internal constructor() {
+
+        private val notifications = SparseArrayCompat<AndroidNotification>()
+
+        operator fun set(notificationId: Int, notification: AndroidNotification) {
             notifications.put(notificationId, notification)
+        }
+
+        /**
+         * Create a notification and add it to the group. If notification channel is disabled than the notification
+         * will be added only if [NotificationsGroupBuilder.skipDisabledNotification] is `false`.
+         */
+        fun notification(
+            notificationId: Int,
+            @DrawableRes smallIcon: Int,
+            channelId: String = this@NotificationsGroupBuilder.channelId,
+            body: @NotificationsGroupMarker Notification.() -> Unit
+        ) {
+            if (needToBuildNotification(channelId)) {
+                this[notificationId] =
+                    com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
+                        body()
+                        group(groupKey)
+                    }
+            }
+        }
+
+        /**
+         * Create a notification and add it to the group. If notification channel is disabled than the notification
+         * will be added only if [NotificationsGroupBuilder.skipDisabledNotification] is `false`.
+         */
+        fun notification(
+            notificationId: Int,
+            @DrawableRes smallIcon: Int,
+            channelId: String = this@NotificationsGroupBuilder.channelId
+        ) {
+            if (needToBuildNotification(channelId)) {
+                this[notificationId] =
+                    com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
+                        group(groupKey)
+                    }
+            }
+        }
+
+        fun toMap(): Map<Int, AndroidNotification> {
+            return notifications.asMap()
         }
     }
 
