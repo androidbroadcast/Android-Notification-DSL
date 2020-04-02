@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Android Notification DSL</string>
+
+    <string name="notification_summary_title">Notification Summary</string>
+    <string name="notification_summary_text">Multiple Notification</string>
+    <string name="notification_1_title">Notification 1</string>
+    <string name="notification_2_title">Notification 2</string>
 </resources>

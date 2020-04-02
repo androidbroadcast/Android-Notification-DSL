@@ -4,13 +4,25 @@ import android.content.Context
 import com.kirich1409.androidnotificationdsl.channels.createChannelsAndGroups
 
 fun buildChannels(context: Context) = createChannelsAndGroups(context) {
-    group("01_group1", "Group 1") {
+    channel(CHANNEL_1_ID, CHANNEL_1_NAME)
+
+    group(CHANNEL_GROUP_1_ID, CHANNEL_GROUP_1_NAME) {
         // Empty group
     }
 
-    group("02_group2", "Group 2") {
-        channel("02_01_channel1", "Channel 1")
+    group(CHANNEL_GROUP_2_ID, CHANNEL_GROUP_2_NAME) {
+        channel(CHANNEL_2_ID, CHANNEL_2_NAME)
     }
-
-    channel("00_01_channel2", "Channel 2")
 }
+
+private const val CHANNEL_GROUP_1_ID = "01_group1"
+private const val CHANNEL_GROUP_1_NAME = "Group 1"
+
+private const val CHANNEL_GROUP_2_ID = "02_group1"
+private const val CHANNEL_GROUP_2_NAME = "Group 2"
+
+private const val CHANNEL_1_ID = "00_01_channel1"
+private const val CHANNEL_1_NAME = "Channel 1"
+
+private const val CHANNEL_2_ID = "01_02_channel1"
+private const val CHANNEL_2_NAME = "Channel 2"
