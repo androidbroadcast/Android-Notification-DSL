@@ -12,6 +12,7 @@ import android.widget.RemoteViews
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntRange
+import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.NotificationVisibility
 import com.kirich1409.androidnotificationdsl.action.Actions
@@ -43,7 +44,7 @@ inline fun notification(
         setSmallIcon(smallIcon)
     }
 
-    Notification(builder).apply(body)
+    Notification(builder, context).apply(body)
     return builder.build()
 }
 
@@ -66,7 +67,8 @@ inline fun notification(context: Context, channelId: String, @DrawableRes smallI
  */
 @NotificationMarker
 class Notification @PublishedApi internal constructor(
-    @PublishedApi internal val notification: NotificationCompat.Builder
+    @PublishedApi internal val notification: NotificationCompat.Builder,
+    internal val context: Context
 ) {
 
     val actions: Actions
@@ -308,4 +310,20 @@ inline fun Notification.vibrate(vararg pattern: Long) {
 
 inline fun Notification.style(style: NotificationCompat.Style) {
     notification.setStyle(style)
+}
+
+fun Notification.contentInfo(@StringRes infoRes: Int) {
+    contentInfo(context.getText(infoRes))
+}
+
+fun Notification.contentText(@StringRes contentRes: Int) {
+    contentText(context.getText(contentRes))
+}
+
+fun Notification.contentTitle(@StringRes titleRes: Int) {
+    contentTitle(context.getText(titleRes))
+}
+
+fun Notification.subText(@StringRes textRes: Int) {
+    subText(context.getText(textRes))
 }
