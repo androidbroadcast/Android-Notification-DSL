@@ -16,11 +16,30 @@ buildscript {
     }
 }
 
+plugins {
+    id("io.gitlab.arturbosch.detekt").version("1.8.0")
+}
+
 allprojects {
     repositories {
         google()
         jcenter()
-        
+    }
+}
+
+subprojects {
+    apply plugin: "io.gitlab.arturbosch.detekt"
+
+    detekt {
+        failFast = true
+        buildUponDefaultConfig = true
+        config = files("$rootDir/config/detekt.yml")
+
+        reports {
+            html.enabled = true // observe findings in your browser with structure and code snippets
+            xml.enabled = false
+            txt.enabled = false
+        }
     }
 }
 
