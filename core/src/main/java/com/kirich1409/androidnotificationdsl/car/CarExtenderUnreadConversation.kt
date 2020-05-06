@@ -10,6 +10,7 @@ import kotlin.time.ExperimentalTime
 import androidx.core.app.RemoteInput as AndroidRemoteInput
 
 @NotificationCarExtenderUnreadConversationMarker
+@Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
 class CarExtenderUnreadConversation @PublishedApi internal constructor(
     private val unreadConversation: NotificationCompat.CarExtender.UnreadConversation.Builder
 ) {

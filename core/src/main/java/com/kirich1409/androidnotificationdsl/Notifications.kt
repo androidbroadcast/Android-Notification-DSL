@@ -255,6 +255,14 @@ class Notification @PublishedApi internal constructor(
         notification.setSound(sound, streamType)
     }
 
+    /**
+     * Silences this instance of the notification, regardless of the sounds or vibrations set
+     * on the notification or notification channel.
+     */
+    fun silent() {
+        notification.setNotificationSilent()
+    }
+
     fun subText(text: CharSequence) {
         notification.setSubText(text)
     }

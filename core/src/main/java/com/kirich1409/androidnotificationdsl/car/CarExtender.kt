@@ -25,12 +25,14 @@ class CarExtender @PublishedApi internal constructor(
             carExtender.largeIcon = value
         }
 
+    @Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
     var unreadConversation: NotificationCompat.CarExtender.UnreadConversation?
         get() = carExtender.unreadConversation
         set(unreadConversation) {
             carExtender.unreadConversation = unreadConversation
         }
 
+    @Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
     inline fun unreadConversation(
         name: String,
         body: @NotificationCarExtenderMarker CarExtenderUnreadConversation.() -> Unit
