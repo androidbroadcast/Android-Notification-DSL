@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.kirich1409.androidnotificationdsl.channels
 
@@ -14,7 +14,9 @@ import android.app.NotificationChannel as AndroidNotificationChannel
 
 @TargetApi(Build.VERSION_CODES.O)
 @NotificationChannelMarker
-class NotificationChannel @PublishedApi internal constructor(private val channel: AndroidNotificationChannel) {
+class NotificationChannel @PublishedApi internal constructor(
+    @PublishedApi internal val channel: AndroidNotificationChannel
+) {
 
     /**
      * Returns whether notifications posted to this channel can display outside of the notification
@@ -22,7 +24,7 @@ class NotificationChannel @PublishedApi internal constructor(private val channel
      *
      * Has no effect on pre Q (Android 10) devices
      */
-    var bubbleEnabled: Boolean
+    inline var bubbleEnabled: Boolean
         get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && channel.canBubble()
         set(value) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -34,7 +36,7 @@ class NotificationChannel @PublishedApi internal constructor(private val channel
      * Whether or not notifications posted to this channel can bypass the Do Not Disturb
      * [NotificationManager.INTERRUPTION_FILTER_PRIORITY] mode.
      */
-    var bypassDndEnabled: Boolean
+    inline var bypassDndEnabled: Boolean
         get() = channel.canBypassDnd()
         set(value) = channel.setBypassDnd(value)
 
@@ -44,21 +46,21 @@ class NotificationChannel @PublishedApi internal constructor(private val channel
      *
      * Note that badging may be disabled for other reasons.
      */
-    var showBadgeEnabled: Boolean
+    inline var showBadgeEnabled: Boolean
         get() = channel.canShowBadge()
         set(value) = channel.setShowBadge(value)
 
     /**
      * The user visible description of this channel.
      */
-    var description: String?
+    inline var description: String?
         get() = channel.description
         set(value) {
             channel.description = value
         }
 
     @NotificationImportance
-    var importance: Int
+    inline var importance: Int
         get() = channel.importance
         set(value) {
             channel.importance = value
@@ -68,7 +70,7 @@ class NotificationChannel @PublishedApi internal constructor(private val channel
      * Returns the notification light color for notifications posted to this channel.
      * Irrelevant unless NotificationChannel.lightsEnabled].
      */
-    var lightColor: Int
+    inline var lightColor: Int
         @ColorInt get() = channel.lightColor
         set(@ColorInt value) {
             channel.lightColor = value
@@ -77,7 +79,7 @@ class NotificationChannel @PublishedApi internal constructor(private val channel
     /**
      * Whether or not notifications posted to this channel are shown on the lockscreen in full or redacted form.
      */
-    var lockscreenVisibility: Int
+    inline var lockscreenVisibility: Int
         @NotificationVisibility get() = channel.lockscreenVisibility
         set(@NotificationVisibility value) {
             channel.lockscreenVisibility = value
@@ -86,9 +88,26 @@ class NotificationChannel @PublishedApi internal constructor(private val channel
     /**
      * Whether notifications posted to this channel trigger notification lights.
      */
-    var lightsEnabled: Boolean
+    inline var lightsEnabled: Boolean
         get() = channel.shouldShowLights()
         set(value) = channel.enableLights(value)
+
+    /**
+     * The vibration pattern for notifications posted to this channel. Will be ignored if
+     * vibration is not enabled ([NotificationChannel.vibrationEnabled]).
+     */
+    inline var vibrationPattern: LongArray?
+        get() = channel.vibrationPattern
+        set(value) {
+            channel.vibrationPattern = value
+        }
+
+    /**
+     * Whether notifications posted to this channel always vibrate.
+     */
+    inline var vibrationEnabled: Boolean
+        get() = channel.shouldVibrate()
+        set(value) = channel.enableVibration(value)
 
     /**
      * Sets the sound that should be played for notifications posted to this channel and its
@@ -100,21 +119,4 @@ class NotificationChannel @PublishedApi internal constructor(private val channel
     fun sound(sound: Uri, audioAttributes: AudioAttributes) {
         channel.setSound(sound, audioAttributes)
     }
-
-    /**
-     * The vibration pattern for notifications posted to this channel. Will be ignored if
-     * vibration is not enabled ([NotificationChannel.vibrationEnabled]).
-     */
-    var vibrationPattern: LongArray?
-        get() = channel.vibrationPattern
-        set(value) {
-            channel.vibrationPattern = value
-        }
-
-    /**
-     * Whether notifications posted to this channel always vibrate.
-     */
-    var vibrationEnabled: Boolean
-        get() = channel.shouldVibrate()
-        set(value) = channel.enableVibration(value)
 }

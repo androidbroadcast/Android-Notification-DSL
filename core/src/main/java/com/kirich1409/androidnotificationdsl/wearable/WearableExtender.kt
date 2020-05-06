@@ -11,40 +11,40 @@ class WearableExtender @PublishedApi internal constructor(
     @PublishedApi internal val wearableExtender: NotificationCompat.WearableExtender
 ) {
 
-    var bridgeTag: String?
+    inline var bridgeTag: String?
         get() = wearableExtender.bridgeTag
         set(value) {
             wearableExtender.bridgeTag = value
         }
 
-    val actions: List<NotificationCompat.Action>
+    inline val actions: List<NotificationCompat.Action>
         get() = wearableExtender.actions
 
-    var contentActions: Int
+    inline var contentActions: Int
         get() = wearableExtender.contentAction
         set(value) {
             wearableExtender.contentAction = value
         }
 
-    var contentIntentAvailableOffline: Boolean
+    inline var contentIntentAvailableOffline: Boolean
         get() = wearableExtender.contentIntentAvailableOffline
         set(value) {
             wearableExtender.contentIntentAvailableOffline = value
         }
 
-    var dismissalId: String?
+    inline var dismissalId: String?
         get() = wearableExtender.dismissalId
         set(value) {
             wearableExtender.dismissalId = value
         }
 
-    var hintContentIntentLaunchesActivity: Boolean
+    inline var hintContentIntentLaunchesActivity: Boolean
         get() = wearableExtender.hintContentIntentLaunchesActivity
         set(value) {
             wearableExtender.hintContentIntentLaunchesActivity = value
         }
 
-    var startScrollBottom: Boolean
+    inline var startScrollBottom: Boolean
         get() = wearableExtender.startScrollBottom
         set(value) {
             wearableExtender.startScrollBottom = value

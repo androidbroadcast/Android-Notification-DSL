@@ -16,13 +16,13 @@ class MessagingStyle @PublishedApi internal constructor(
     /**
      * The title to be displayed on this conversation.
      */
-    var conversationTitle: CharSequence?
+    inline var conversationTitle: CharSequence?
         get() = messagingStyle.conversationTitle
         set(value) {
             messagingStyle.conversationTitle = value
         }
 
-    var groupConversation: Boolean
+    inline var groupConversation: Boolean
         get() = messagingStyle.isGroupConversation
         set(value) {
             messagingStyle.isGroupConversation = value
@@ -31,17 +31,17 @@ class MessagingStyle @PublishedApi internal constructor(
     /**
      * Gets the list of [Message][NotificationCompat.MessagingStyle.Message] objects that represent the notification
      */
-    val messages: List<NotificationCompat.MessagingStyle.Message>
+    inline val messages: List<NotificationCompat.MessagingStyle.Message>
         get() = messagingStyle.messages
-
-    inline fun messages(body: Messages.() -> Unit) {
-        Messages(messagingStyle).body()
-    }
 
     /**
      * Returns the person to be used for any replies sent by the user.
      */
-    val user: Person get() = messagingStyle.user
+    inline val user: Person get() = messagingStyle.user
+
+    inline fun messages(body: Messages.() -> Unit) {
+        Messages(messagingStyle).body()
+    }
 }
 
 inline fun Notification.messagingStyle(

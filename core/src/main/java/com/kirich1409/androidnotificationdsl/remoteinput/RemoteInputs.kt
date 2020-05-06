@@ -13,6 +13,20 @@ class RemoteInput @PublishedApi internal constructor(
 ) {
 
     /**
+     * The metadata Bundle used by this builder.
+     */
+    inline val extras: Bundle
+        get() = remoteInput.extras
+
+    /**
+     * Specifies whether the user can provide arbitrary values.
+     *
+     * @see AndroidRemoteInput.Builder.setAllowDataType
+     */
+    inline val dataTypes: DataTypes
+        get() = DataTypes(remoteInput)
+
+    /**
      * Specifies whether the user can provide arbitrary text values.
      *
      * @param allowFreeFormTextInput The default is `true`. If you specify `false`, you must either provide a non-null
@@ -24,12 +38,6 @@ class RemoteInput @PublishedApi internal constructor(
     fun allowFreeFormInput(allowFreeFormTextInput: Boolean) {
         remoteInput.setAllowFreeFormInput(allowFreeFormTextInput)
     }
-
-    /**
-     * The metadata Bundle used by this builder.
-     */
-    val extras: Bundle
-        get() = remoteInput.extras
 
     /**
      * Specifies choices available to the user to satisfy this input.
@@ -45,14 +53,6 @@ class RemoteInput @PublishedApi internal constructor(
     fun choices(choices: Array<CharSequence>?) {
         remoteInput.setChoices(choices)
     }
-
-    /**
-     * Specifies whether the user can provide arbitrary values.
-     *
-     * @see AndroidRemoteInput.Builder.setAllowDataType
-     */
-    val dataTypes: DataTypes
-        get() = DataTypes(remoteInput)
 
     inline fun dataTypes(body: DataTypes.() -> Unit) {
         dataTypes.body()

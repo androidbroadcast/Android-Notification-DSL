@@ -11,8 +11,14 @@ import com.kirich1409.androidnotificationdsl.style
 
 @NotificationInboxStyleMarker
 class InboxStyle @PublishedApi internal constructor(
-    private val inboxStyle: NotificationCompat.InboxStyle
+    @PublishedApi internal val inboxStyle: NotificationCompat.InboxStyle
 ) {
+
+    /**
+     * Lines of the digest section of the Inbox notification.
+     */
+    inline val lines: Lines
+        get() = Lines(inboxStyle)
 
     /**
      * Overrides ContentTitle in the big form of the template.
@@ -21,13 +27,6 @@ class InboxStyle @PublishedApi internal constructor(
     fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
         inboxStyle.setBigContentTitle(title)
     }
-
-
-    /**
-     * Lines of the digest section of the Inbox notification.
-     */
-    val lines: Lines
-        get() = Lines(inboxStyle)
 
     inline fun lines(body: @NotificationInboxStyleMarker Lines.() -> Unit) {
         lines.body()

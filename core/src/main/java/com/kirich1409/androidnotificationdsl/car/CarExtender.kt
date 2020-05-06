@@ -13,20 +13,20 @@ class CarExtender @PublishedApi internal constructor(
     @PublishedApi internal val carExtender: NotificationCompat.CarExtender
 ) {
 
-    var color: Int
+    inline var color: Int
         @ColorInt get() = carExtender.color
         set(@ColorInt value) {
             carExtender.color = value
         }
 
-    var largeIcon: Bitmap?
+    inline var largeIcon: Bitmap?
         get() = carExtender.largeIcon
         set(value) {
             carExtender.largeIcon = value
         }
 
     @Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
-    var unreadConversation: NotificationCompat.CarExtender.UnreadConversation?
+    inline var unreadConversation: NotificationCompat.CarExtender.UnreadConversation?
         get() = carExtender.unreadConversation
         set(unreadConversation) {
             carExtender.unreadConversation = unreadConversation

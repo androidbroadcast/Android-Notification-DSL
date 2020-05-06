@@ -42,7 +42,7 @@ class NotificationChannels @PublishedApi internal constructor(
         channels += AndroidNotificationChannel(id, name, importance)
     }
 
-    fun channel(
+    inline fun channel(
         id: String,
         name: CharSequence,
         @NotificationImportance importance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT,
@@ -58,7 +58,7 @@ class NotificationChannels @PublishedApi internal constructor(
         groups += AndroidNotificationChannelGroup(id, name)
     }
 
-    fun group(
+    inline fun group(
         id: String,
         name: CharSequence,
         build: @NotificationChannelsMarker NotificationChannelGroup.() -> Unit

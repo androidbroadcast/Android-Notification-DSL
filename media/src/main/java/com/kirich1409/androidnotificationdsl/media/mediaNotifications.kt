@@ -7,7 +7,7 @@ import com.kirich1409.androidnotificationdsl.Notification
 import com.kirich1409.androidnotificationdsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.style
 
-fun Notification.mediaStyle(body: @NotificationMarker MediaStyle.() -> Unit) {
+inline fun Notification.mediaStyle(body: @NotificationMarker MediaStyle.() -> Unit) {
     val mediaStyle = NotificationCompat.MediaStyle()
     MediaStyle(mediaStyle).body()
     style(mediaStyle)

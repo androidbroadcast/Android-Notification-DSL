@@ -7,7 +7,7 @@ import androidx.media.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.media.internal.dsl.NotificationMediaStyleMarker
 
 @NotificationMediaStyleMarker
-class MediaStyle internal constructor(private val style: NotificationCompat.MediaStyle) {
+class MediaStyle @PublishedApi internal constructor(private val style: NotificationCompat.MediaStyle) {
 
     fun mediaSession(token: MediaSessionCompat.Token) {
         style.setMediaSession(token)

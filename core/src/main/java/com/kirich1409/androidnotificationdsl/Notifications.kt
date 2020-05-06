@@ -71,7 +71,7 @@ class Notification @PublishedApi internal constructor(
     internal val context: Context
 ) {
 
-    val actions: Actions
+    inline val actions: Actions
         get() = Actions(notification)
 
     inline fun actions(body: @NotificationMarker Actions.() -> Unit) {
@@ -154,7 +154,7 @@ class Notification @PublishedApi internal constructor(
         notification.setDefaults(defaults)
     }
 
-    var extras: Bundle
+    inline var extras: Bundle
         get() = notification.extras
         set(value) {
             notification.extras = value
@@ -204,7 +204,7 @@ class Notification @PublishedApi internal constructor(
         notification.setOnlyAlertOnce(onlyAlertOnce)
     }
 
-    val persons: Persons
+    inline val persons: Persons
         get() = Persons(notification)
 
     inline fun persons(body: @NotificationMarker Persons.() -> Unit) {

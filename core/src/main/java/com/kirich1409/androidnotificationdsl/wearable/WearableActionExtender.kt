@@ -8,22 +8,22 @@ import com.kirich1409.androidnotificationdsl.action.NotificationActionMarker
 
 @NotificationWearableActionExtenderMarker
 class WearableActionExtender @PublishedApi internal constructor(
-    private val wearableExtender: NotificationCompat.Action.WearableExtender
+    @PublishedApi internal val wearableExtender: NotificationCompat.Action.WearableExtender
 ) {
 
-    var availableOffline: Boolean
+    inline var availableOffline: Boolean
         get() = wearableExtender.isAvailableOffline
         set(value) {
             wearableExtender.isAvailableOffline = value
         }
 
-    var hintLaunchesActivity: Boolean
+    inline var hintLaunchesActivity: Boolean
         get() = wearableExtender.hintLaunchesActivity
         set(value) {
             wearableExtender.hintLaunchesActivity = value
         }
 
-    var hintDisplayActionInline: Boolean
+    inline var hintDisplayActionInline: Boolean
         get() = wearableExtender.hintDisplayActionInline
         set(value) {
             wearableExtender.hintDisplayActionInline = value
