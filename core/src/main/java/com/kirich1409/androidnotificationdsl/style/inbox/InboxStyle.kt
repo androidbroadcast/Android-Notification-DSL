@@ -65,7 +65,7 @@ operator fun InboxStyle.Lines.plus(@Size(max = MAX_CHARSEQUENCE_LENGTH) line: Ch
  * Append a line to the digest section of the Inbox notification.
  */
 operator fun InboxStyle.Lines.plus(lines: Iterable<CharSequence>) {
-    lines.forEach(inboxStyle::addLine)
+    lines.forEach { inboxStyle.addLine(it) }
 }
 
 /**
