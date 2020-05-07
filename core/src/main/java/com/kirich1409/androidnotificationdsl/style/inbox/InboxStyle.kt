@@ -7,9 +7,11 @@ import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.Notification
 import com.kirich1409.androidnotificationdsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
-import com.kirich1409.androidnotificationdsl.style
+import com.kirich1409.androidnotificationdsl.style.inbox.annotations.NotificationInboxStyleLinesMarker
+import com.kirich1409.androidnotificationdsl.style.inbox.annotations.NotificationInboxStyleMarker
 
 @NotificationInboxStyleMarker
+@Suppress("UndocumentedPublicClass")
 class InboxStyle @PublishedApi internal constructor(
     @PublishedApi internal val inboxStyle: NotificationCompat.InboxStyle
 ) {
@@ -28,6 +30,9 @@ class InboxStyle @PublishedApi internal constructor(
         inboxStyle.setBigContentTitle(title)
     }
 
+    /**
+     * Append lines to the digest section of the Inbox notification.
+     */
     inline fun lines(body: @NotificationInboxStyleMarker Lines.() -> Unit) {
         lines.body()
     }

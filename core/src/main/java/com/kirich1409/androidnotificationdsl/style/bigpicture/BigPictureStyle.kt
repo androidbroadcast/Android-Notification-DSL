@@ -8,9 +8,10 @@ import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.Notification
 import com.kirich1409.androidnotificationdsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
-import com.kirich1409.androidnotificationdsl.style
+import com.kirich1409.androidnotificationdsl.style.bigpicture.annotations.NotificationBigPictureStyleMarker
 
 @NotificationBigPictureStyleMarker
+@Suppress("UndocumentedPublicClass")
 class BigPictureStyle @PublishedApi internal constructor(
     private val bigPictureStyle: NotificationCompat.BigPictureStyle
 ) {
@@ -18,14 +19,14 @@ class BigPictureStyle @PublishedApi internal constructor(
     /**
      * Override the large icon when the big notification is shown.
      */
-    fun bigLargeIcon(icon: Bitmap?) {
+    fun bigLargeIcon(icon: Bitmap) {
         bigPictureStyle.bigLargeIcon(icon)
     }
 
     /**
      * Provide the bitmap to be used as the payload for the BigPicture notification.
      */
-    fun bigPicture(icon: Bitmap?) {
+    fun bigPicture(icon: Bitmap) {
         bigPictureStyle.bigPicture(icon)
     }
 

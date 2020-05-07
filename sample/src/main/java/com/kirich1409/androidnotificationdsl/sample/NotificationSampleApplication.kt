@@ -2,7 +2,7 @@ package com.kirich1409.androidnotificationdsl.sample
 
 import android.app.Application
 import androidx.core.app.NotificationManagerCompat
-import com.kirich1409.androidnotificationdsl.channels.createChannelsAndGroups
+import com.kirich1409.androidnotificationdsl.channels.createNotificationChannels
 
 class NotificationSampleApplication : Application() {
 
@@ -12,7 +12,7 @@ class NotificationSampleApplication : Application() {
     }
 
     private fun createNotificationChannels() {
-        createChannelsAndGroups(this) {
+        createNotificationChannels(this) {
             channel(NOTIFICATION_CHANNEL_DEFAULT, "Default", importance = NotificationManagerCompat.IMPORTANCE_HIGH)
         }
     }

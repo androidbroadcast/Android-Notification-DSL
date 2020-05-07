@@ -3,6 +3,7 @@ package com.kirich1409.androidnotificationdsl.annotations
 import androidx.annotation.IntDef
 import androidx.core.app.NotificationManagerCompat
 
+@Suppress("UndocumentedPublicClass")
 @IntDef(
     NotificationManagerCompat.IMPORTANCE_DEFAULT,
     NotificationManagerCompat.IMPORTANCE_HIGH,

@@ -5,8 +5,12 @@ package com.kirich1409.androidnotificationdsl.remoteinput
 import android.os.Bundle
 import androidx.core.app.RemoteInput.EditChoicesBeforeSending
 import com.kirich1409.androidnotificationdsl.DataTypes
+import com.kirich1409.androidnotificationdsl.remoteinput.annotations.NotificationRemoteInputMarker
 import androidx.core.app.RemoteInput as AndroidRemoteInput
 
+/**
+ * DSL Builder of [RemoteInput]
+ */
 @NotificationRemoteInputMarker
 class RemoteInput @PublishedApi internal constructor(
     @PublishedApi internal val remoteInput: AndroidRemoteInput.Builder
@@ -54,6 +58,9 @@ class RemoteInput @PublishedApi internal constructor(
         remoteInput.setChoices(choices)
     }
 
+    /**
+     * Specifies whether the user can provide arbitrary values
+     */
     inline fun dataTypes(body: DataTypes.() -> Unit) {
         dataTypes.body()
     }

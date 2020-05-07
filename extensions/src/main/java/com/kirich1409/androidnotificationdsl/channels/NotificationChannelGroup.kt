@@ -8,10 +8,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.kirich1409.androidnotificationdsl.annotations.NotificationImportance
+import com.kirich1409.androidnotificationdsl.channels.annotations.NotificationChannelGroupMarker
 import android.app.NotificationChannel as AndroidNotificationChannel
 
 @NotificationChannelGroupMarker
 @TargetApi(Build.VERSION_CODES.O)
+@Suppress("UndocumentedPublicClass")
 class NotificationChannelGroup @PublishedApi internal constructor(
     internal val channels: MutableList<AndroidNotificationChannel>
 ) {

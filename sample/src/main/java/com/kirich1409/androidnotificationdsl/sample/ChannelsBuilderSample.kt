@@ -1,9 +1,9 @@
 package com.kirich1409.androidnotificationdsl.sample
 
 import android.content.Context
-import com.kirich1409.androidnotificationdsl.channels.createChannelsAndGroups
+import com.kirich1409.androidnotificationdsl.channels.createNotificationChannels
 
-fun buildChannels(context: Context) = createChannelsAndGroups(context) {
+fun buildChannels(context: Context) = createNotificationChannels(context) {
     channel(CHANNEL_1_ID, CHANNEL_1_NAME)
 
     group(CHANNEL_GROUP_1_ID, CHANNEL_GROUP_1_NAME) {

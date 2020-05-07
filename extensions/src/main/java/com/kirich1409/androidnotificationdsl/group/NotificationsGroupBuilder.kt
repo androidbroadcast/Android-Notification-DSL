@@ -8,10 +8,15 @@ import androidx.collection.SparseArrayCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.internal.areNotificationsEnabled
+import com.kirich1409.androidnotificationdsl.areNotificationsEnabled
+import com.kirich1409.androidnotificationdsl.group.annotations.NotificationsGroupMarker
 import com.kirich1409.androidnotificationdsl.internal.asMap
 import android.app.Notification as AndroidNotification
 
+/**
+ * Create group of notifications
+ */
+@Suppress("LongParameterList")
 inline fun notificationsGroup(
     context: Context,
     groupKey: String,
@@ -27,6 +32,7 @@ inline fun notificationsGroup(
 }
 
 @NotificationsGroupMarker
+@Suppress("UndocumentedPublicClass")
 class NotificationsGroupBuilder @PublishedApi internal constructor(
     private val context: Context,
     private val groupKey: String,
@@ -36,7 +42,8 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
 ) {
     private val notificationManager = NotificationManagerCompat.from(context)
 
-    val notifications = Notifications()
+    @PublishedApi
+    internal val notifications = Notifications()
 
     @PublishedApi
     internal var summary: AndroidNotification? = null
@@ -45,8 +52,10 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
     internal var summaryId = 0
 
     /**
-     * Create a notification and set it as summary. If notification channel is disabled than the notification
-     * will be added only if [NotificationsGroupBuilder.skipDisabledNotification] is `false`.
+     * Create a notification and set it as notification groip summary.
+     *
+     * If notification channel is disabled than the notification will be added only
+     * if [NotificationsGroupBuilder.skipDisabledNotification] is `false`.
      */
     fun summary(
         notificationId: Int,
@@ -65,6 +74,12 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
         }
     }
 
+    /**
+     * Set [notification] as notifications group summary
+     *
+     * If notification channel is disabled than the notification will be added only
+     * if [NotificationsGroupBuilder.skipDisabledNotification] is `false`.
+     */
     fun summary(notificationId: Int, notification: AndroidNotification) {
         if (needToBuildNotification(channelId)) {
             this.summaryId = notificationId
@@ -72,14 +87,21 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
         }
     }
 
+    /**
+     * Add notification to the notification group
+     */
     fun notifications(body: @NotificationsGroupMarker Notifications.() -> Unit) {
         this.notifications.body()
     }
 
     inner class Notifications internal constructor() {
 
+        @Suppress("MemberNameEqualsClassName")
         private val notifications = SparseArrayCompat<AndroidNotification>()
 
+        /**
+         * Add [notification] with [id][notificationId] to the notification group
+         */
         operator fun set(notificationId: Int, notification: AndroidNotification) {
             notifications.put(notificationId, notification)
         }
@@ -120,7 +142,8 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
             }
         }
 
-        fun toMap(): Map<Int, AndroidNotification> {
+        @PublishedApi
+        internal fun toMap(): Map<Int, AndroidNotification> {
             return notifications.asMap()
         }
     }

@@ -3,6 +3,7 @@ package com.kirich1409.androidnotificationdsl.annotations
 import androidx.annotation.StringDef
 import androidx.core.app.NotificationCompat
 
+@Suppress("UndocumentedPublicClass")
 @StringDef(
     NotificationCompat.CATEGORY_ALARM,
     NotificationCompat.CATEGORY_CALL,

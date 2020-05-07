@@ -5,9 +5,13 @@ package com.kirich1409.androidnotificationdsl.action
 import android.app.PendingIntent
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
+import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionMarker
 import com.kirich1409.androidnotificationdsl.remoteinput.RemoteInput
 import androidx.core.app.RemoteInput as AndroidRemoteInput
 
+/**
+ * Builder of notification's action
+ */
 @NotificationActionMarker
 class Action @PublishedApi internal constructor(private val action: NotificationCompat.Action.Builder) {
 

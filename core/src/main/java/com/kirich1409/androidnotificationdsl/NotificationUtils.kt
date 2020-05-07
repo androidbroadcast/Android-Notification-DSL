@@ -1,12 +1,14 @@
 @file:Suppress("unused")
+@file:JvmName("NotificationUtils")
 
 package com.kirich1409.androidnotificationdsl
 
 import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationManagerCompat
-import com.kirich1409.androidnotificationdsl.internal.areNotificationsEnabled
 
 /**
  * Build new notification and post it. If notifications aren't enabled for the channel
@@ -105,4 +107,37 @@ fun NotificationManagerCompat.notify(
         return notification
     }
     return null
+}
+
+/**
+ * Check that notifications for the app and in channel with [channelId] are available.
+ * For Pre-O (8.0) devices check only [NotificationManagerCompat.areNotificationsEnabled]
+ *
+ * @param channelId Id of the channel
+ *
+ * return If notifications for the app and the channel are available.
+ */
+@Suppress("ReturnCount")
+fun NotificationManagerCompat.areNotificationsEnabled(channelId: String): Boolean {
+    // Check that notifications isn't disabled for the app
+    if (!areNotificationsEnabled()) return false
+
+    // Check notification channels
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        // Check that notification channel isn't disabled
+        val channel = getNotificationChannel(channelId)
+        if (channel == null || channel.importance == NotificationManager.IMPORTANCE_NONE) {
+            return false
+        }
+
+        // Check that notification channel group isn't blocked
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val channelGroup = channel.group?.let(::getNotificationChannelGroup)
+            if (channelGroup != null && channelGroup.isBlocked) {
+                return false
+            }
+        }
+    }
+
+    return true
 }

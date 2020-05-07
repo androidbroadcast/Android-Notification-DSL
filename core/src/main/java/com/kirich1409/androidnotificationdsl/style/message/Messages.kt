@@ -7,12 +7,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import com.kirich1409.androidnotificationdsl.style.message.annotations.NotificationMessagesMarker
 import java.time.Instant
 import java.util.*
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 @NotificationMessagesMarker
+@Suppress("UndocumentedPublicClass")
 class Messages @PublishedApi internal constructor(
     @PublishedApi internal val style: NotificationCompat.MessagingStyle
 ) {

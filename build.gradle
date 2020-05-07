@@ -27,26 +27,10 @@ allprojects {
     }
 }
 
-subprojects {
-    apply plugin: "io.gitlab.arturbosch.detekt"
-
-    detekt {
-        failFast = true
-        buildUponDefaultConfig = true
-        config = files("$rootDir/config/detekt.yml")
-
-        reports {
-            html.enabled = true // observe findings in your browser with structure and code snippets
-            xml.enabled = false
-            txt.enabled = false
-        }
-    }
-}
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-ext.minSdkVersion = 21
+ext.minSdkVersion = 14
 ext.targetSdkVersion = 28
 ext.androidXCore = "1.3.0-rc01"

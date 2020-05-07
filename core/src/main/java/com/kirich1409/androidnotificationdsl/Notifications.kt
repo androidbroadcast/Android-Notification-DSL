@@ -1,4 +1,4 @@
-@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE", "TooManyFunctions")
 
 package com.kirich1409.androidnotificationdsl
 
@@ -29,7 +29,7 @@ import kotlin.time.ExperimentalTime
 import android.app.Notification as AndroidNotification
 
 /**
- * Create new otification for specified [channelId]
+ * Create new notification for specified [channelId]
  *
  * @param channelId The constructed Notification will be posted on this NotificationChannel
  *
@@ -67,6 +67,7 @@ inline fun notification(context: Context, channelId: String, @DrawableRes smallI
  * Notification builder
  */
 @NotificationMarker
+@Suppress("TooManyFunctions")
 class Notification @PublishedApi internal constructor(
     @PublishedApi internal val notification: NotificationCompat.Builder,
     internal val context: Context
@@ -95,7 +96,8 @@ class Notification @PublishedApi internal constructor(
     }
 
     /**
-     * Setting this flag will make it so the notification is automatically canceled when the user clicks it in the panel.
+     * Setting this flag will make it so the notification is automatically canceled
+     * when the user clicks it in the panel.
      *
      * The PendingIntent set with [deleteIntent] will be broadcast when the notification is canceled.
      */
@@ -177,7 +179,8 @@ class Notification @PublishedApi internal constructor(
     /**
      * Supply a [PendingIntent] to send when the notification is clicked. If you do not supply an intent,
      * you can now add [PendingIntent]s to individual views to be launched when clicked by calling
-     * [RemoteViews.setOnClickPendingIntent]. Be sure to read [Notification.contentIntent] for how to correctly use this.
+     * [RemoteViews.setOnClickPendingIntent].
+     * Be sure to read [Notification.contentIntent] for how to correctly use this.
      */
     fun contentIntent(intent: PendingIntent) {
         notification.setContentIntent(intent)
@@ -254,8 +257,8 @@ class Notification @PublishedApi internal constructor(
     /**
      * Set the default notification options that will be used.
      *
-     * The value should be one or more of the following fields combined with
-     * bitwise-or: [NotificationCompat.DEFAULT_SOUND], [NotificationCompat.DEFAULT_VIBRATE], [NotificationCompat.DEFAULT_LIGHTS].
+     * The value should be one or more of the following fields combined with bitwise-or:
+     * [NotificationCompat.DEFAULT_SOUND], [NotificationCompat.DEFAULT_VIBRATE], [NotificationCompat.DEFAULT_LIGHTS].
      *
      * For all default values, use [NotificationCompat.DEFAULT_ALL].
      */
@@ -264,8 +267,8 @@ class Notification @PublishedApi internal constructor(
     }
 
     /**
-     * Supply a [PendingIntent] to send when the notification is cleared by the user directly from the notification panel.
-     * For example, this intent is sent when the user clicks the "Clear all" button,
+     * Supply a [PendingIntent] to send when the notification is cleared by the user directly from
+     * the notification panel. For example, this intent is sent when the user clicks the "Clear all" button,
      * or the individual "X" buttons on notifications. This intent is not sent when the application calls
      * [NotificationManager.cancel].
      */
@@ -292,12 +295,10 @@ class Notification @PublishedApi internal constructor(
 
     /**
      * An intent to launch instead of posting the notification to the status bar.
-     * Only for use with extremely high-priority notifications demanding the user's
-     * **immediate** attention, such as an incoming phone call or
-     * alarm clock that the user has explicitly set to a particular time.
+     * Only for use with extremely high-priority notifications demanding the user's **immediate** attention,
+     * such as an incoming phone call or alarm clock that the user has explicitly set to a particular time.
      * If this facility is used for something else, please give the user an option
-     * to turn it off and use a normal notification, as this can be extremely
-     * disruptive.
+     * to turn it off and use a normal notification, as this can be extremely disruptive.
      *
      * &nbsp;
      *
@@ -307,7 +308,8 @@ class Notification @PublishedApi internal constructor(
      * &nbsp;
      *
      * @param intent The pending intent to launch.
-     * @param highPriority Passing true will cause this notification to be sent even if other notifications are suppressed.
+     * @param highPriority Passing true will cause this notification to be sent even
+     * if other notifications are suppressed.
      */
     fun fullScreenIntent(intent: PendingIntent, highPriority: Boolean = false) {
         notification.setFullScreenIntent(intent, highPriority)
@@ -334,8 +336,9 @@ class Notification @PublishedApi internal constructor(
      * notification if alerts for this notification's group should be handled by a different
      * notification. This is only applicable for notifications that belong to a
      * [group]. This must be called on all notifications you want to mute.
-     * For example, if you want only the summary of your group to make noise, all
-     * children in the group should have the group alert behavior [GROUP_ALERT_SUMMARY][NotificationCompat.GROUP_ALERT_SUMMARY].
+     *
+     * For example, if you want only the summary of your group to make noise, all children in the group should have
+     * the group alert behavior [GROUP_ALERT_SUMMARY][NotificationCompat.GROUP_ALERT_SUMMARY].
      *
      * &nbsp;
      *

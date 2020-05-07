@@ -10,10 +10,12 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import com.kirich1409.androidnotificationdsl.annotations.NotificationImportance
 import com.kirich1409.androidnotificationdsl.annotations.NotificationVisibility
+import com.kirich1409.androidnotificationdsl.channels.annotations.NotificationChannelMarker
 import android.app.NotificationChannel as AndroidNotificationChannel
 
 @TargetApi(Build.VERSION_CODES.O)
 @NotificationChannelMarker
+@Suppress("UndocumentedPublicClass")
 class NotificationChannel @PublishedApi internal constructor(
     @PublishedApi internal val channel: AndroidNotificationChannel
 ) {
@@ -59,6 +61,14 @@ class NotificationChannel @PublishedApi internal constructor(
             channel.description = value
         }
 
+    /**
+     * The user specified importance e.g. [NotificationManager.IMPORTANCE_LOW] for notifications posted to this channel.
+     * Note: This value might be > [NotificationManager.IMPORTANCE_NONE], but notifications posted to this channel will
+     * not be shown to the user if the parent [NotificationChannelGroup] or app is blocked.
+     *
+     * @see android.app.NotificationChannelGroup.isBlocked
+     * @see android.app.NotificationManager.areNotificationsEnabled
+     */
     @NotificationImportance
     inline var importance: Int
         get() = channel.importance
