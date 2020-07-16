@@ -13,14 +13,12 @@ fun buildNotificationsGroup(context: Context): NotificationsGroup {
             contentText(R.string.notification_summary_text)
         }
 
-        notifications {
-            notification(NOTIFICATION_1_ID, smallIcon = R.drawable.ic_android_white_24dp) {
-                contentTitle(R.string.notification_1_title)
-            }
+        notification(NOTIFICATION_1_ID, smallIcon = R.drawable.ic_android_white_24dp) {
+            contentTitle(R.string.notification_1_title)
+        }
 
-            notification(NOTIFICATION_2_ID, smallIcon = R.drawable.ic_android_white_24dp) {
-                contentTitle(R.string.notification_2_title)
-            }
+        notification(NOTIFICATION_2_ID, smallIcon = R.drawable.ic_android_white_24dp) {
+            contentTitle(R.string.notification_2_title)
         }
     }
 }
