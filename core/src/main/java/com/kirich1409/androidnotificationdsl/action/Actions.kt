@@ -18,68 +18,70 @@ class Actions @PublishedApi internal constructor(private val builder: Notificati
     /**
      * Add an action to this notification. Actions are typically displayed by
      * the system as a button adjacent to the notification content.
+     *
+     * On pre-Lollpop devices invisible actions will be ignored
      */
     fun action(
         title: CharSequence?,
         intent: PendingIntent?,
         icon: IconCompat? = null,
-        visible: Boolean = false
+        visible: Boolean = true
     ) {
-        if (visible || isInvisibleActionsSupported()) {
-            val action = NotificationCompat.Action.Builder(icon, title, intent).build()
-            addAction(action, visible)
+        addAction(visible) {
+            NotificationCompat.Action.Builder(icon, title, intent)
         }
     }
 
     /**
      * Add an action to this notification. Actions are typically displayed by
      * the system as a button adjacent to the notification content.
+     *
+     * On pre-Lollpop devices invisible actions will be ignored
      */
     fun action(
         title: CharSequence?,
         intent: PendingIntent?,
         @DrawableRes icon: Int,
-        visible: Boolean = false
+        visible: Boolean = true
     ) {
-        if (visible || isInvisibleActionsSupported()) {
-            val action = NotificationCompat.Action.Builder(icon, title, intent).build()
-            addAction(action, visible)
+        addAction(visible) {
+            NotificationCompat.Action.Builder(icon, title, intent)
         }
     }
 
     /**
      * Add an action to this notification. Actions are typically displayed by
      * the system as a button adjacent to the notification content.
+     *
+     * On pre-Lollpop devices invisible actions will be ignored
      */
     inline fun action(
         title: CharSequence?,
         intent: PendingIntent?,
         icon: IconCompat? = null,
-        visible: Boolean = false,
-        body: @NotificationActionsMarker Action.() -> Unit
+        visible: Boolean = true,
+        crossinline body: @NotificationActionsMarker Action.() -> Unit
     ) {
-        if (visible || isInvisibleActionsSupported()) {
-            val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
-            Action(actionBuilder).body()
-            addAction(actionBuilder.build(), visible)
+        addAction(visible) {
+            NotificationCompat.Action.Builder(icon, title, intent).apply { Action(this).body() }
         }
     }
 
     /**
      * Add an action to this notification. Actions are typically displayed by
      * the system as a button adjacent to the notification content.
+     *
+     * On pre-Lollpop devices invisible actions will be ignored
      */
     inline fun action(
         title: CharSequence?,
         intent: PendingIntent?,
         @DrawableRes icon: Int,
-        visible: Boolean = false,
-        body: @NotificationActionsMarker Action.() -> Unit
+        visible: Boolean = true,
+        crossinline body: @NotificationActionsMarker Action.() -> Unit
     ) {
-        if (visible || isInvisibleActionsSupported()) {
-            val actionBuilder = NotificationCompat.Action.Builder(icon, title, intent)
-            Action(actionBuilder).body()
-            addAction(actionBuilder.build(), visible)
+        addAction(visible) {
+            NotificationCompat.Action.Builder(icon, title, intent).apply { Action(this).body() }
         }
     }
 
@@ -89,14 +91,23 @@ class Actions @PublishedApi internal constructor(private val builder: Notificati
      *
      * On pre-Lollpop devices invisible actions will be ignored
      *
-     * @param visible is actions are never displayed by the system,
-     * but can be retrieved and used by other application listening to system notifications
+     * @param visible is actions are never displayed by the system, but can be retrieved
+     *                and used by other application listening to system notifications
      */
-    fun addAction(action: NotificationCompat.Action, visible: Boolean = false) {
+    fun addAction(action: NotificationCompat.Action, visible: Boolean = true) {
         if (visible) {
             builder.addAction(action)
         } else if (isInvisibleActionsSupported()) {
             builder.addInvisibleAction(action)
+        }
+    }
+
+    @PublishedApi
+    internal fun addAction(visible: Boolean = true, action: () -> NotificationCompat.Action.Builder) {
+        if (visible) {
+            builder.addAction(action().build())
+        } else if (isInvisibleActionsSupported()) {
+            builder.addInvisibleAction(action().build())
         }
     }
 }

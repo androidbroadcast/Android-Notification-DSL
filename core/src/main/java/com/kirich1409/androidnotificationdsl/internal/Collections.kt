@@ -10,6 +10,7 @@ import androidx.collection.SparseArrayCompat
  */
 @PublishedApi
 @Suppress("RemoveExplicitTypeArguments", "UNCHECKED_CAST")
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 internal inline fun <reified T> Iterable<T>.toArray(): Array<T> {
     return when (this) {
         is List<T> -> toTypedArray<T>()
@@ -19,6 +20,7 @@ internal inline fun <reified T> Iterable<T>.toArray(): Array<T> {
 }
 
 @PublishedApi
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 internal inline fun <E> SparseArrayCompat<E>.forEach(body: (Int, E) -> Unit) {
     for (index in 0 until size()) {
         body(keyAt(index), valueAt(index))
