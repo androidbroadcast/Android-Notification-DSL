@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.kirich1409.androidnotificationdsl.style.bigpicture
 
@@ -19,14 +19,30 @@ class BigPictureStyle @PublishedApi internal constructor(
     /**
      * Override the large icon when the big notification is shown.
      */
+    @Deprecated("Use largeIcon() instead", ReplaceWith("largeIcon(icon)"))
     fun bigLargeIcon(icon: Bitmap) {
+        largeIcon(icon)
+    }
+
+    /**
+     * Override the large icon when the big notification is shown.
+     */
+    fun largeIcon(icon: Bitmap?) {
         bigPictureStyle.bigLargeIcon(icon)
     }
 
     /**
      * Provide the bitmap to be used as the payload for the BigPicture notification.
      */
+    @Deprecated("Use picture() instead", ReplaceWith("picture(icon)"))
     fun bigPicture(icon: Bitmap) {
+        picture(icon)
+    }
+
+    /**
+     * Provide the bitmap to be used as the payload for the BigPicture notification.
+     */
+    fun picture(icon: Bitmap) {
         bigPictureStyle.bigPicture(icon)
     }
 
@@ -34,7 +50,16 @@ class BigPictureStyle @PublishedApi internal constructor(
      * Overrides ContentTitle in the big form of the template.
      * This defaults to the value passed to setContentTitle().
      */
+    @Deprecated("Use contentTitle() instead", ReplaceWith("contentTitle(title)"))
     fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
+        contentTitle(title)
+    }
+
+    /**
+     * Overrides ContentTitle in the big form of the template.
+     * This defaults to the value passed to setContentTitle().
+     */
+    fun contentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
         bigPictureStyle.setBigContentTitle(title)
     }
 

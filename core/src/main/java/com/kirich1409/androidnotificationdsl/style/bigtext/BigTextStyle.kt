@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.kirich1409.androidnotificationdsl.style.bigtext
 
@@ -19,7 +19,16 @@ class BigTextStyle @PublishedApi internal constructor(
      * Provide the longer text to be displayed in the big form of the
      * template in place of the content text.
      */
+    @Deprecated("Use text() instead", ReplaceWith("text(text)"))
     fun bigText(@Size(max = MAX_CHARSEQUENCE_LENGTH) text: CharSequence?) {
+        text(text)
+    }
+
+    /**
+     * Provide the longer text to be displayed in the big form of the
+     * template in place of the content text.
+     */
+    fun text(@Size(max = MAX_CHARSEQUENCE_LENGTH) text: CharSequence?) {
         bigTextStyle.bigText(text)
     }
 
@@ -27,7 +36,16 @@ class BigTextStyle @PublishedApi internal constructor(
      * Overrides ContentTitle in the big form of the template.
      * This defaults to the value passed to setContentTitle().
      */
+    @Deprecated("Use contentTitle() instead", ReplaceWith("contentTitle(text)"))
     fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
+        contentTitle(title)
+    }
+
+    /**
+     * Overrides ContentTitle in the big form of the template.
+     * This defaults to the value passed to setContentTitle().
+     */
+    fun contentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
         bigTextStyle.setBigContentTitle(title)
     }
 
