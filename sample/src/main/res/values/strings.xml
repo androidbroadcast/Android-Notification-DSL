@@ -5,4 +5,10 @@
     <string name="notification_summary_text">Multiple Notification</string>
     <string name="notification_1_title">Notification 1</string>
     <string name="notification_2_title">Notification 2</string>
+    <string name="long_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Dignissim enim sit amet venenatis. Ac tortor dignissim convallis aenean et tortor at.
+        Enim ut sem viverra aliquet eget sit.
+        Donec ac odio tempor orci dapibus ultrices in iaculis nunc.
+    </string>
 </resources>
