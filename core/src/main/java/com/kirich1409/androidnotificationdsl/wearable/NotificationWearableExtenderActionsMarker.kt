@@ -1,7 +1,6 @@
-package com.kirich1409.androidnotificationdsl.wearable.annotations
+package com.kirich1409.androidnotificationdsl.wearable
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.wearable.WearableExtenderActions
 
 /**
  * @see WearableExtenderActions

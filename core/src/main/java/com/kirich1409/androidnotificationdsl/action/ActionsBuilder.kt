@@ -13,7 +13,7 @@ import com.kirich1409.androidnotificationdsl.internal.isInvisibleActionsSupporte
  * Builder of notification's actions
  */
 @NotificationActionsMarker
-class Actions @PublishedApi internal constructor(private val builder: NotificationCompat.Builder) {
+class ActionsBuilder @PublishedApi internal constructor(private val builder: NotificationCompat.Builder) {
 
     /**
      * Add an action to this notification. Actions are typically displayed by
@@ -60,10 +60,10 @@ class Actions @PublishedApi internal constructor(private val builder: Notificati
         intent: PendingIntent?,
         icon: IconCompat? = null,
         visible: Boolean = true,
-        crossinline body: @NotificationActionsMarker Action.() -> Unit
+        crossinline body: @NotificationActionsMarker ActionBuilder.() -> Unit
     ) {
         addAction(visible) {
-            NotificationCompat.Action.Builder(icon, title, intent).apply { Action(this).body() }
+            NotificationCompat.Action.Builder(icon, title, intent).apply { ActionBuilder(this).body() }
         }
     }
 
@@ -78,10 +78,10 @@ class Actions @PublishedApi internal constructor(private val builder: Notificati
         intent: PendingIntent?,
         @DrawableRes icon: Int,
         visible: Boolean = true,
-        crossinline body: @NotificationActionsMarker Action.() -> Unit
+        crossinline body: @NotificationActionsMarker ActionBuilder.() -> Unit
     ) {
         addAction(visible) {
-            NotificationCompat.Action.Builder(icon, title, intent).apply { Action(this).body() }
+            NotificationCompat.Action.Builder(icon, title, intent).apply { ActionBuilder(this).body() }
         }
     }
 

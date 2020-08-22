@@ -3,13 +3,13 @@
 package com.kirich1409.androidnotificationdsl.media
 
 import androidx.media.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 
 /**
  * Create an instance of [MediaStyle] and set it as style of the [notification][this]
  */
-inline fun Notification.mediaStyle(body: @NotificationMarker MediaStyle.() -> Unit) {
+inline fun NotificationBuilder.mediaStyle(body: @NotificationMarker MediaStyle.() -> Unit) {
     style(NotificationCompat.MediaStyle().also { style -> MediaStyle(style).body() })
 }
 
@@ -24,7 +24,7 @@ inline fun mediaStyle(body: @NotificationMarker MediaStyle.() -> Unit): Notifica
  * Create an instance of [DecoratedMediaCustomViewStyle][NotificationCompat.DecoratedMediaCustomViewStyle]
  * and set it as style of the [notification][this]
  */
-fun Notification.decoratedMediaCustomViewStyle() {
+fun NotificationBuilder.decoratedMediaCustomViewStyle() {
     style(NotificationCompat.DecoratedMediaCustomViewStyle())
 }
 

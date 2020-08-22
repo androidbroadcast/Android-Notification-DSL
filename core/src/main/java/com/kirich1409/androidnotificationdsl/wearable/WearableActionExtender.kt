@@ -3,9 +3,8 @@
 package com.kirich1409.androidnotificationdsl.wearable
 
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.action.Action
+import com.kirich1409.androidnotificationdsl.action.ActionBuilder
 import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionMarker
-import com.kirich1409.androidnotificationdsl.wearable.annotations.NotificationWearableActionExtenderMarker
 
 @NotificationWearableActionExtenderMarker
 @Suppress("UndocumentedPublicClass")
@@ -58,14 +57,14 @@ class WearableActionExtender @PublishedApi internal constructor(
  * Apply an [WearableExtender][NotificationCompat.Action.WearableExtender] to this action builder.
  * Extenders may be used to add metadata or change options on this builder.
  */
-inline fun Action.wearable(body: @NotificationActionMarker WearableActionExtender.() -> Unit) {
+inline fun ActionBuilder.wearable(body: @NotificationActionMarker WearableActionExtender.() -> Unit) {
     extend(wearableExtender(body))
 }
 
 /**
  * Create a [NotificationCompat.Action.WearableExtender].
  */
-inline fun Action.wearableExtender(
+inline fun ActionBuilder.wearableExtender(
     body: @NotificationActionMarker WearableActionExtender.() -> Unit
 ): NotificationCompat.Action.WearableExtender {
     val wearableExtender = NotificationCompat.Action.WearableExtender()

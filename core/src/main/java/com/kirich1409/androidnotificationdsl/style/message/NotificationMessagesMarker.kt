@@ -1,10 +1,9 @@
-package com.kirich1409.androidnotificationdsl.style.message.annotations
+package com.kirich1409.androidnotificationdsl.style.message
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.style.message.Messages
 
 /**
- * @see Messages
+ * @see MessagesBuilder
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS)

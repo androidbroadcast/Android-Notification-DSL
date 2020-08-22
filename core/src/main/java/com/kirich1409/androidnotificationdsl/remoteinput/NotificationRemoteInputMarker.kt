@@ -1,10 +1,9 @@
-package com.kirich1409.androidnotificationdsl.remoteinput.annotations
+package com.kirich1409.androidnotificationdsl.remoteinput
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.remoteinput.RemoteInput
 
 /**
- * @see RemoteInput
+ * @see RemoteInputBuilder
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS)

@@ -2,6 +2,7 @@
 
 package com.kirich1409.androidnotificationdsl
 
+import android.Manifest
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -10,19 +11,18 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.RemoteViews
-import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
+import androidx.annotation.*
 import androidx.annotation.IntRange
-import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.NotificationVisibility
-import com.kirich1409.androidnotificationdsl.action.Actions
+import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
 import com.kirich1409.androidnotificationdsl.annotations.NotificationCategory
 import com.kirich1409.androidnotificationdsl.annotations.NotificationDefaults
+import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.annotations.NotificationPriority
-import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadata
+import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadataBuilder
 import com.kirich1409.androidnotificationdsl.internal.toArray
-import com.kirich1409.androidnotificationdsl.person.Persons
+import com.kirich1409.androidnotificationdsl.person.PersonsBuilder
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
@@ -33,19 +33,19 @@ import android.app.Notification as AndroidNotification
  *
  * @param channelId The constructed Notification will be posted on this NotificationChannel
  *
- * @return A new [Notification] object.
+ * @return A new [NotificationBuilder] object.
  */
 inline fun notification(
     context: Context,
     channelId: String,
     @DrawableRes smallIcon: Int,
-    body: Notification.() -> Unit
+    body: NotificationBuilder.() -> Unit
 ): AndroidNotification {
     val builder = NotificationCompat.Builder(context, channelId).apply {
         setSmallIcon(smallIcon)
     }
 
-    Notification(builder, context).apply(body)
+    NotificationBuilder(builder, context).apply(body)
     return builder.build()
 }
 
@@ -54,7 +54,7 @@ inline fun notification(
  *
  * @param channelId The constructed Notification will be posted on this NotificationChannel
  *
- * @return A new [Notification] object.
+ * @return A new [NotificationBuilder] object.
  */
 inline fun notification(context: Context, channelId: String, @DrawableRes smallIcon: Int): AndroidNotification {
     NotificationCompat.Builder(context, channelId).apply {
@@ -68,7 +68,7 @@ inline fun notification(context: Context, channelId: String, @DrawableRes smallI
  */
 @NotificationMarker
 @Suppress("TooManyFunctions")
-class Notification @PublishedApi internal constructor(
+class NotificationBuilder @PublishedApi internal constructor(
     @PublishedApi internal val notification: NotificationCompat.Builder,
     internal val context: Context
 ) {
@@ -76,13 +76,13 @@ class Notification @PublishedApi internal constructor(
     /**
      * Notification's actions
      */
-    inline val actions: Actions
-        get() = Actions(notification)
+    inline val actions: ActionsBuilder
+        get() = ActionsBuilder(notification)
 
     /**
      * Notification's actions
      */
-    inline fun actions(body: @NotificationMarker Actions.() -> Unit) {
+    inline fun actions(body: @NotificationMarker ActionsBuilder.() -> Unit) {
         actions.body()
     }
 
@@ -120,9 +120,9 @@ class Notification @PublishedApi internal constructor(
     /**
      * Setup bubble metadata of the notification
      */
-    inline fun bubbleMetadata(body: @NotificationMarker BubbleMetadata.() -> Unit) {
+    inline fun bubbleMetadata(body: @NotificationMarker BubbleMetadataBuilder.() -> Unit) {
         val bubbleMetadataBuilder = NotificationCompat.BubbleMetadata.Builder()
-        BubbleMetadata(bubbleMetadataBuilder).body()
+        BubbleMetadataBuilder(bubbleMetadataBuilder).body()
         notification.bubbleMetadata = bubbleMetadataBuilder.build()
     }
 
@@ -139,7 +139,7 @@ class Notification @PublishedApi internal constructor(
     }
 
     /**
-     * Sets [Notification.color].
+     * Sets [NotificationBuilder.color].
      *
      * @param color The accent color to use
      */
@@ -180,7 +180,7 @@ class Notification @PublishedApi internal constructor(
      * Supply a [PendingIntent] to send when the notification is clicked. If you do not supply an intent,
      * you can now add [PendingIntent]s to individual views to be launched when clicked by calling
      * [RemoteViews.setOnClickPendingIntent].
-     * Be sure to read [Notification.contentIntent] for how to correctly use this.
+     * Be sure to read [NotificationBuilder.contentIntent] for how to correctly use this.
      */
     fun contentIntent(intent: PendingIntent) {
         notification.setContentIntent(intent)
@@ -311,6 +311,7 @@ class Notification @PublishedApi internal constructor(
      * @param highPriority Passing true will cause this notification to be sent even
      * if other notifications are suppressed.
      */
+    @RequiresPermission(Manifest.permission.USE_FULL_SCREEN_INTENT)
     fun fullScreenIntent(intent: PendingIntent, highPriority: Boolean = false) {
         notification.setFullScreenIntent(intent, highPriority)
     }
@@ -417,13 +418,13 @@ class Notification @PublishedApi internal constructor(
     /**
      * Persons associated with the notification
      */
-    inline val persons: Persons
-        get() = Persons(notification)
+    inline val persons: PersonsBuilder
+        get() = PersonsBuilder(notification)
 
     /**
      * Managing persons associated with the notification
      */
-    inline fun persons(body: @NotificationMarker Persons.() -> Unit) {
+    inline fun persons(body: @NotificationMarker PersonsBuilder.() -> Unit) {
         persons.body()
     }
     /**
@@ -453,7 +454,7 @@ class Notification @PublishedApi internal constructor(
 
     /**
      * Supply a replacement Notification whose contents should be shown in insecure contexts
-     * (i.e. atop the secure lockscreen). See [Notification.visibility] and
+     * (i.e. atop the secure lockscreen). See [NotificationBuilder.visibility] and
      * [VISIBILITY_PUBLIC][NotificationCompat.VISIBILITY_PUBLIC].
      *
      * @param notification A replacement notification, presumably with some or all info redacted.
@@ -578,7 +579,7 @@ class Notification @PublishedApi internal constructor(
      *
      * @param style Object responsible for modifying the notification style.
      */
-    inline fun Notification.style(style: NotificationCompat.Style) {
+    inline fun NotificationBuilder.style(style: NotificationCompat.Style) {
         notification.setStyle(style)
     }
 
@@ -638,7 +639,7 @@ class Notification @PublishedApi internal constructor(
     }
 
     /**
-     * Sets [Notification.visibility].
+     * Sets [NotificationBuilder.visibility].
      *
      * @param visibility One of [NotificationCompat.VISIBILITY_PRIVATE] (the default),
      * [NotificationCompat.VISIBILITY_PUBLIC], or [NotificationCompat.VISIBILITY_SECRET].
@@ -661,7 +662,7 @@ class Notification @PublishedApi internal constructor(
  * and then the number of milliseconds to be off.
  */
 @ExperimentalTime
-inline fun Notification.lights(@ColorInt color: Int, on: Duration, off: Duration) {
+inline fun NotificationBuilder.lights(@ColorInt color: Int, on: Duration, off: Duration) {
     require(on.isPositive() && on.isFinite()) { "`on` must be greater or equals than zero and finite" }
     require(off.isPositive() && off.isFinite()) { "`off` must be greater or equals than zero and finite" }
     lights(color, on.toInt(DurationUnit.MILLISECONDS), off.toInt(DurationUnit.MILLISECONDS))
@@ -680,7 +681,7 @@ inline fun Notification.lights(@ColorInt color: Int, on: Duration, off: Duration
  *
  * **Note:** The reply text will only be shown on notifications that have least one action with a `RemoteInput`.
  */
-inline fun Notification.remoteInputHistory(vararg text: CharSequence) {
+inline fun NotificationBuilder.remoteInputHistory(vararg text: CharSequence) {
     notification.setRemoteInputHistory(text)
 }
 
@@ -697,7 +698,7 @@ inline fun Notification.remoteInputHistory(vararg text: CharSequence) {
  *
  * **Note:** The reply text will only be shown on notifications that have least one action with a `RemoteInput`.
  */
-inline fun Notification.remoteInputHistory(text: Iterable<CharSequence>) {
+inline fun NotificationBuilder.remoteInputHistory(text: Iterable<CharSequence>) {
     notification.setRemoteInputHistory(text.toArray())
 }
 
@@ -705,7 +706,7 @@ inline fun Notification.remoteInputHistory(text: Iterable<CharSequence>) {
  * Specifies the time at which this notification should be canceled, if it is not already canceled.
  */
 @ExperimentalTime
-inline fun Notification.timeoutAfter(duration: Duration) {
+inline fun NotificationBuilder.timeoutAfter(duration: Duration) {
     notification.setTimeoutAfter(duration.toLongMilliseconds())
 }
 
@@ -716,34 +717,34 @@ inline fun Notification.timeoutAfter(duration: Duration) {
  *
  * See [Vibrator][android.os.Vibrator] for a discussion of the `pattern` parameter.
  */
-inline fun Notification.vibrate(vararg pattern: Long) {
+inline fun NotificationBuilder.vibrate(vararg pattern: Long) {
     notification.setVibrate(pattern)
 }
 
 /**
  * Set the large text at the right-hand side of the notification.
  */
-fun Notification.contentInfo(@StringRes infoRes: Int) {
+fun NotificationBuilder.contentInfo(@StringRes infoRes: Int) {
     contentInfo(context.getText(infoRes))
 }
 
 /**
  * Set the text (second row) of the notification, in a standard notification.
  */
-fun Notification.contentText(@StringRes contentRes: Int) {
+fun NotificationBuilder.contentText(@StringRes contentRes: Int) {
     contentText(context.getText(contentRes))
 }
 
 /**
  * Set the title (first row) of the notification, in a standard notification.
  */
-fun Notification.contentTitle(@StringRes titleRes: Int) {
+fun NotificationBuilder.contentTitle(@StringRes titleRes: Int) {
     contentTitle(context.getText(titleRes))
 }
 
 /**
  * Set the third line of text in the platform notification template.
- * Don't use if you're also using [progress][Notification.progress];
+ * Don't use if you're also using [progress][NotificationBuilder.progress];
  * they occupy the same location in the standard template.
  *
  * &nbsp;
@@ -751,6 +752,6 @@ fun Notification.contentTitle(@StringRes titleRes: Int) {
  * If the platform does not provide large-format notifications, this method has no effect.
  * The third line of text only appears in expanded view.
  */
-fun Notification.subText(@StringRes textRes: Int) {
+fun NotificationBuilder.subText(@StringRes textRes: Int) {
     subText(context.getText(textRes))
 }

@@ -1,10 +1,9 @@
-package com.kirich1409.androidnotificationdsl.bubble.annotations
+package com.kirich1409.androidnotificationdsl.bubble
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadata
 
 /**
- * @see BubbleMetadata
+ * @see BubbleMetadataBuilder
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS)

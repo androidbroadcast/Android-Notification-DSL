@@ -4,11 +4,9 @@ package com.kirich1409.androidnotificationdsl.style.inbox
 
 import androidx.annotation.Size
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
-import com.kirich1409.androidnotificationdsl.style.inbox.annotations.NotificationInboxStyleLinesMarker
-import com.kirich1409.androidnotificationdsl.style.inbox.annotations.NotificationInboxStyleMarker
 
 @NotificationInboxStyleMarker
 @Suppress("UndocumentedPublicClass")
@@ -19,8 +17,7 @@ class InboxStyle @PublishedApi internal constructor(
     /**
      * Lines of the digest section of the Inbox notification.
      */
-    inline val lines: Lines
-        get() = Lines(inboxStyle)
+    val lines: LinesBuilder = LinesBuilder(inboxStyle)
 
     /**
      * Overrides ContentTitle in the big form of the template.
@@ -42,7 +39,7 @@ class InboxStyle @PublishedApi internal constructor(
     /**
      * Append lines to the digest section of the Inbox notification.
      */
-    inline fun lines(body: @NotificationInboxStyleMarker Lines.() -> Unit) {
+    inline fun lines(body: @NotificationInboxStyleMarker LinesBuilder.() -> Unit) {
         lines.body()
     }
 
@@ -53,31 +50,19 @@ class InboxStyle @PublishedApi internal constructor(
         inboxStyle.setSummaryText(summaryText)
     }
 
-    @NotificationInboxStyleLinesMarker
-    class Lines @PublishedApi internal constructor(
-        internal val inboxStyle: NotificationCompat.InboxStyle
-    ) {
-
-        /**
-         * Append a line to the digest section of the Inbox notification.
-         */
-        fun line(@Size(max = MAX_CHARSEQUENCE_LENGTH) line: CharSequence) {
-            inboxStyle.addLine(line)
-        }
-    }
 }
 
 /**
  * Append a line to the digest section of the Inbox notification.
  */
-operator fun InboxStyle.Lines.plus(@Size(max = MAX_CHARSEQUENCE_LENGTH) line: CharSequence) {
+operator fun LinesBuilder.plus(@Size(max = MAX_CHARSEQUENCE_LENGTH) line: CharSequence) {
     inboxStyle.addLine(line)
 }
 
 /**
  * Append a line to the digest section of the Inbox notification.
  */
-operator fun InboxStyle.Lines.plus(lines: Iterable<CharSequence>) {
+operator fun LinesBuilder.plus(lines: Iterable<CharSequence>) {
     lines.forEach { inboxStyle.addLine(it) }
 }
 
@@ -87,7 +72,7 @@ operator fun InboxStyle.Lines.plus(lines: Iterable<CharSequence>) {
  * If the platform does not provide rich notification styles, this method has no effect. The
  * user will always see the normal notification style.
  */
-inline fun Notification.inboxStyle(body: @NotificationMarker InboxStyle.() -> Unit): NotificationCompat.InboxStyle {
+inline fun NotificationBuilder.inboxStyle(body: @NotificationMarker InboxStyle.() -> Unit): NotificationCompat.InboxStyle {
     val inboxStyle = NotificationCompat.InboxStyle()
     style(inboxStyle.also { InboxStyle(it).body() })
     return inboxStyle

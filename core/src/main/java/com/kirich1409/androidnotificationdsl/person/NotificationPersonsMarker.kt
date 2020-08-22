@@ -1,10 +1,9 @@
-package com.kirich1409.androidnotificationdsl.person.annotations
+package com.kirich1409.androidnotificationdsl.person
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.person.Persons
 
 /**
- * @see Persons
+ * @see PersonsBuilder
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS)

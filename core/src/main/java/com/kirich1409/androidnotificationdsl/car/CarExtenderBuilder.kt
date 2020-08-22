@@ -5,13 +5,13 @@ package com.kirich1409.androidnotificationdsl.car
 import android.graphics.Bitmap
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.car.annotations.NotificationCarExtenderMarker
 
 @NotificationCarExtenderMarker
 @Suppress("UndocumentedPublicClass")
-class CarExtender @PublishedApi internal constructor(
+class CarExtenderBuilder @PublishedApi internal constructor(
     @PublishedApi internal val carExtender: NotificationCompat.CarExtender
 ) {
 
@@ -51,10 +51,10 @@ class CarExtender @PublishedApi internal constructor(
     @Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
     inline fun unreadConversation(
         name: String,
-        body: @NotificationCarExtenderMarker CarExtenderUnreadConversation.() -> Unit
+        body: @NotificationCarExtenderMarker CarExtenderUnreadConversationBuilder.() -> Unit
     ) {
         val builder = NotificationCompat.CarExtender.UnreadConversation.Builder(name)
-        CarExtenderUnreadConversation(builder).apply(body)
+        CarExtenderUnreadConversationBuilder(builder).apply(body)
         carExtender.unreadConversation = builder.build()
     }
 }
@@ -65,14 +65,14 @@ class CarExtender @PublishedApi internal constructor(
  *
  * Extenders may be used to add metadata or change options on this builder.
  */
-inline fun Notification.car(body: @NotificationMarker CarExtender.() -> Unit) {
+inline fun NotificationBuilder.car(body: @NotificationMarker CarExtenderBuilder.() -> Unit) {
     extend(carExtender(body))
 }
 
 /**
  * Create a [CarExtender][NotificationCompat.CarExtender].
  */
-inline fun carExtender(body: @NotificationMarker CarExtender.() -> Unit): NotificationCompat.CarExtender {
-    return NotificationCompat.CarExtender().apply { CarExtender(this).body() }
+inline fun carExtender(body: @NotificationMarker CarExtenderBuilder.() -> Unit): NotificationCompat.CarExtender {
+    return NotificationCompat.CarExtender().apply { CarExtenderBuilder(this).body() }
 }
 

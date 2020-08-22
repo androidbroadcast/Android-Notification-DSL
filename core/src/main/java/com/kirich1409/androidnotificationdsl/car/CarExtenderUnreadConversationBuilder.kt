@@ -5,7 +5,7 @@ package com.kirich1409.androidnotificationdsl.car
 import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.car.annotations.NotificationCarExtenderUnreadConversationMarker
-import com.kirich1409.androidnotificationdsl.remoteinput.RemoteInput
+import com.kirich1409.androidnotificationdsl.remoteinput.RemoteInputBuilder
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import androidx.core.app.RemoteInput as AndroidRemoteInput
@@ -13,7 +13,7 @@ import androidx.core.app.RemoteInput as AndroidRemoteInput
 @NotificationCarExtenderUnreadConversationMarker
 @Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
 @Suppress("UndocumentedPublicClass")
-class CarExtenderUnreadConversation @PublishedApi internal constructor(
+class CarExtenderUnreadConversationBuilder @PublishedApi internal constructor(
     private val unreadConversation: NotificationCompat.CarExtender.UnreadConversation.Builder
 ) {
     /**
@@ -47,10 +47,10 @@ class CarExtenderUnreadConversation @PublishedApi internal constructor(
     inline fun remoteInput(
         pendingIntent: PendingIntent,
         resultKey: String,
-        body: @NotificationCarExtenderUnreadConversationMarker RemoteInput.() -> Unit
+        body: @NotificationCarExtenderUnreadConversationMarker RemoteInputBuilder.() -> Unit
     ) {
         val remoteInput = AndroidRemoteInput.Builder(resultKey)
-            .also { builder -> RemoteInput(builder)
+            .also { builder -> RemoteInputBuilder(builder)
                 .body() }
             .build()
         remoteInput(pendingIntent, remoteInput)
@@ -77,6 +77,6 @@ class CarExtenderUnreadConversation @PublishedApi internal constructor(
  * @param timestamp The timestamp of the most recent message in the conversation.
  */
 @ExperimentalTime
-fun CarExtenderUnreadConversation.latestTimestamp(timestamp: Duration) {
+fun CarExtenderUnreadConversationBuilder.latestTimestamp(timestamp: Duration) {
     return latestTimestamp(timestamp.toLongMilliseconds())
 }

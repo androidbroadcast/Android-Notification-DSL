@@ -1,7 +1,6 @@
-package com.kirich1409.androidnotificationdsl.style.inbox.annotations
+package com.kirich1409.androidnotificationdsl.style.inbox
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.style.inbox.InboxStyle
 
 /**
  * @see InboxStyle.Lines

@@ -4,15 +4,14 @@ package com.kirich1409.androidnotificationdsl.remoteinput
 
 import android.os.Bundle
 import androidx.core.app.RemoteInput.EditChoicesBeforeSending
-import com.kirich1409.androidnotificationdsl.DataTypes
-import com.kirich1409.androidnotificationdsl.remoteinput.annotations.NotificationRemoteInputMarker
+import com.kirich1409.androidnotificationdsl.DataTypesBuilder
 import androidx.core.app.RemoteInput as AndroidRemoteInput
 
 /**
- * DSL Builder of [RemoteInput]
+ * DSL Builder of [RemoteInputBuilder]
  */
 @NotificationRemoteInputMarker
-class RemoteInput @PublishedApi internal constructor(
+class RemoteInputBuilder @PublishedApi internal constructor(
     @PublishedApi internal val remoteInput: AndroidRemoteInput.Builder
 ) {
 
@@ -27,8 +26,8 @@ class RemoteInput @PublishedApi internal constructor(
      *
      * @see AndroidRemoteInput.Builder.setAllowDataType
      */
-    inline val dataTypes: DataTypes
-        get() = DataTypes(remoteInput)
+    inline val dataTypes: DataTypesBuilder
+        get() = DataTypesBuilder(remoteInput)
 
     /**
      * Specifies whether the user can provide arbitrary text values.
@@ -61,7 +60,7 @@ class RemoteInput @PublishedApi internal constructor(
     /**
      * Specifies whether the user can provide arbitrary values
      */
-    inline fun dataTypes(body: DataTypes.() -> Unit) {
+    inline fun dataTypes(body: DataTypesBuilder.() -> Unit) {
         dataTypes.body()
     }
 
@@ -69,7 +68,7 @@ class RemoteInput @PublishedApi internal constructor(
      * Specifies whether tapping on a choice should let the user edit the input before it is
      * sent to the app. The default is [AndroidRemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO].
      *
-     * It cannot be used if [RemoteInput.allowFreeFormInput] has been set to false.
+     * It cannot be used if [RemoteInputBuilder.allowFreeFormInput] has been set to false.
      */
     fun editChoicesBeforeSending(@EditChoicesBeforeSending editChoicesBeforeSending: Int) {
         remoteInput.setEditChoicesBeforeSending(editChoicesBeforeSending)

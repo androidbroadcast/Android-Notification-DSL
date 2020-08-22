@@ -26,7 +26,7 @@ inline fun notify(
     notificationId: Int,
     channelId: String,
     @DrawableRes smallIcon: Int,
-    body: Notification.() -> Unit
+    body: NotificationBuilder.() -> Unit
 ): android.app.Notification? {
     val notificationManager = NotificationManagerCompat.from(context)
     return notificationManager.notify(context, notificationId, channelId, smallIcon, body)
@@ -48,7 +48,7 @@ inline fun NotificationManagerCompat.notify(
     notificationId: Int,
     channelId: String,
     @DrawableRes smallIcon: Int,
-    body: Notification.() -> Unit
+    body: NotificationBuilder.() -> Unit
 ): android.app.Notification? {
     if (areNotificationsEnabled(channelId)) {
         val notification = notification(context, channelId, smallIcon, body)
@@ -120,13 +120,16 @@ fun NotificationManagerCompat.notify(
 @Suppress("ReturnCount")
 fun NotificationManagerCompat.areNotificationsEnabled(channelId: String): Boolean {
     // Check that notifications isn't disabled for the app
-    if (!areNotificationsEnabled()) return false
+    if (!areNotificationsEnabled()) {
+        return false
+    }
 
     // Check notification channels
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         // Check that notification channel isn't disabled
-        val channel = getNotificationChannel(channelId)
-        if (channel == null || channel.importance == NotificationManager.IMPORTANCE_NONE) {
+        val channel = getNotificationChannel(channelId) ?: return true
+
+        if (channel.importance == NotificationManager.IMPORTANCE_NONE) {
             return false
         }
 

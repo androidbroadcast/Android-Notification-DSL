@@ -1,10 +1,9 @@
-package com.kirich1409.androidnotificationdsl.style.bigpicture.annotations
+package com.kirich1409.androidnotificationdsl.style.bigpicture
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.style.bigpicture.BigPictureStyle
 
 /**
- * @see BigPictureStyle
+ * @see BigPictureStyleBuilder
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS)

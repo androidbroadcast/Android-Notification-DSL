@@ -6,7 +6,8 @@ import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
-import com.kirich1409.androidnotificationdsl.action.Actions
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
 import com.kirich1409.androidnotificationdsl.expandable.annotations.BigPictureNotificationBuilderMarker
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.style.bigpicture.bigPictureStyle
@@ -69,13 +70,13 @@ class BigPictureNotificationBuilder internal constructor() {
 
     internal val expanded = Expanded()
 
-    internal var extender: (com.kirich1409.androidnotificationdsl.Notification.() -> Unit)? = null
+    internal var extender: (NotificationBuilder.() -> Unit)? = null
 
     fun expanded(body: @BigPictureNotificationBuilderMarker Expanded.() -> Unit) {
         expanded.body()
     }
 
-    fun extend(body: com.kirich1409.androidnotificationdsl.Notification.() -> Unit) {
+    fun extend(body: NotificationBuilder.() -> Unit) {
         extender = body
     }
 
@@ -92,7 +93,7 @@ class BigPictureNotificationBuilder internal constructor() {
 
         internal var text: Any? = NOTHING
 
-        internal var buildActions: (Actions.() -> Unit)? = null
+        internal var buildActions: (ActionsBuilder.() -> Unit)? = null
 
         /**
          * Replace large icon in expanded state. By default will be null and hide large icon
@@ -124,7 +125,7 @@ class BigPictureNotificationBuilder internal constructor() {
          *
          * Actions will not be showed on Android before 4.1
          */
-        fun actions(body: Actions.() -> Unit) {
+        fun actions(body: ActionsBuilder.() -> Unit) {
             buildActions = body
         }
     }

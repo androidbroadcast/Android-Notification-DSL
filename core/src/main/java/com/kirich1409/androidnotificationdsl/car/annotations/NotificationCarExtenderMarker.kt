@@ -1,10 +1,10 @@
 package com.kirich1409.androidnotificationdsl.car.annotations
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.car.CarExtender
+import com.kirich1409.androidnotificationdsl.car.CarExtenderBuilder
 
 /**
- * @see CarExtender
+ * @see CarExtenderBuilder
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)

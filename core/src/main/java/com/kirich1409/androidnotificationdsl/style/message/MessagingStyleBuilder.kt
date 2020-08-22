@@ -4,13 +4,12 @@ package com.kirich1409.androidnotificationdsl.style.message
 
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
-import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.NotificationMarker
-import com.kirich1409.androidnotificationdsl.style.message.annotations.NotificationMessagingStyleMarker
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 
 @NotificationMessagingStyleMarker
 @Suppress("UndocumentedPublicClass")
-class MessagingStyle @PublishedApi internal constructor(
+class MessagingStyleBuilder @PublishedApi internal constructor(
     @PublishedApi internal val messagingStyle: NotificationCompat.MessagingStyle
 ) {
 
@@ -46,28 +45,28 @@ class MessagingStyle @PublishedApi internal constructor(
     /**
      * Adds [Message][NotificationCompat.MessagingStyle.Message]s for display in this notification.
      */
-    inline fun messages(body: Messages.() -> Unit) {
-        Messages(messagingStyle).body()
+    inline fun messages(body: MessagesBuilder.() -> Unit) {
+        MessagesBuilder(messagingStyle).body()
     }
 }
 
 /**
- * Creates a new [MessagingStyle] instance and set is as style of the notification.
+ * Creates a new [MessagingStyleBuilder] instance and set is as style of the notification.
  * Note that [Person] must have a non-empty name.
  *
  * @param user This [Person]'s name will be shown when this app's notification is being replied to.
  * It's used temporarily so the app has time to process the send request and repost the notification
  * with updates to the conversation.
  */
-inline fun Notification.messagingStyle(
+inline fun NotificationBuilder.messagingStyle(
     user: Person,
-    body: @NotificationMarker MessagingStyle.() -> Unit
+    body: @NotificationMarker MessagingStyleBuilder.() -> Unit
 ) {
-    style(NotificationCompat.MessagingStyle(user).also { MessagingStyle(it).body() })
+    style(NotificationCompat.MessagingStyle(user).also { MessagingStyleBuilder(it).body() })
 }
 
 /**
- * Creates a new [MessagingStyle] instance. Note that [Person] must have a non-empty name.
+ * Creates a new [MessagingStyleBuilder] instance. Note that [Person] must have a non-empty name.
  *
  * @param user This [Person]'s name will be shown when this app's notification is being replied to.
  * It's used temporarily so the app has time to process the send request and repost the notification
@@ -75,8 +74,8 @@ inline fun Notification.messagingStyle(
  */
 inline fun messagingStyle(
     user: Person,
-    body: @NotificationMarker MessagingStyle.() -> Unit
+    body: @NotificationMarker MessagingStyleBuilder.() -> Unit
 ): NotificationCompat.MessagingStyle {
-    return NotificationCompat.MessagingStyle(user).also { MessagingStyle(it).body() }
+    return NotificationCompat.MessagingStyle(user).also { MessagingStyleBuilder(it).body() }
 }
 

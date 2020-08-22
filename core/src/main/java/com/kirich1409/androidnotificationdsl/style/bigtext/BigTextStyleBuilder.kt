@@ -4,14 +4,13 @@ package com.kirich1409.androidnotificationdsl.style.bigtext
 
 import androidx.annotation.Size
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
-import com.kirich1409.androidnotificationdsl.style.bigtext.annotations.NotificationBigTextStyleMarker
 
 @NotificationBigTextStyleMarker
 @Suppress("UndocumentedPublicClass")
-class BigTextStyle @PublishedApi internal constructor(
+class BigTextStyleBuilder @PublishedApi internal constructor(
     private val bigTextStyle: NotificationCompat.BigTextStyle
 ) {
 
@@ -63,8 +62,8 @@ class BigTextStyle @PublishedApi internal constructor(
  * If the platform does not provide rich notification styles, this method has no effect. The
  * user will always see the normal notification style.
  */
-inline fun Notification.bigTextStyle(body: @NotificationMarker BigTextStyle.() -> Unit) {
+inline fun NotificationBuilder.bigTextStyle(body: @NotificationMarker BigTextStyleBuilder.() -> Unit) {
     val bigTextStyle = NotificationCompat.BigTextStyle()
-    BigTextStyle(bigTextStyle).body()
+    BigTextStyleBuilder(bigTextStyle).body()
     style(bigTextStyle)
 }

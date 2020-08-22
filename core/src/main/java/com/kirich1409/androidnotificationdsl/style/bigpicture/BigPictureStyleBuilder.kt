@@ -5,14 +5,13 @@ package com.kirich1409.androidnotificationdsl.style.bigpicture
 import android.graphics.Bitmap
 import androidx.annotation.Size
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.Notification
-import com.kirich1409.androidnotificationdsl.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
-import com.kirich1409.androidnotificationdsl.style.bigpicture.annotations.NotificationBigPictureStyleMarker
 
 @NotificationBigPictureStyleMarker
 @Suppress("UndocumentedPublicClass")
-class BigPictureStyle @PublishedApi internal constructor(
+class BigPictureStyleBuilder @PublishedApi internal constructor(
     private val bigPictureStyle: NotificationCompat.BigPictureStyle
 ) {
 
@@ -77,11 +76,11 @@ class BigPictureStyle @PublishedApi internal constructor(
  * If the platform does not provide rich notification styles, this method has no effect. The
  * user will always see the normal notification style.
  */
-inline fun Notification.bigPictureStyle(
-    body: @NotificationMarker BigPictureStyle.() -> Unit
+inline fun NotificationBuilder.bigPictureStyle(
+    body: @NotificationMarker BigPictureStyleBuilder.() -> Unit
 ): NotificationCompat.BigPictureStyle {
     val bigPictureStyle = NotificationCompat.BigPictureStyle()
-    BigPictureStyle(bigPictureStyle).body()
+    BigPictureStyleBuilder(bigPictureStyle).body()
     style(bigPictureStyle)
     return bigPictureStyle
 }

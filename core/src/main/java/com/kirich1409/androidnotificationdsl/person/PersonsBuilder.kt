@@ -5,11 +5,10 @@ package com.kirich1409.androidnotificationdsl.person
 import android.app.Notification
 import android.provider.ContactsContract
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.person.annotations.NotificationPersonsMarker
 
 @NotificationPersonsMarker
 @Suppress("UndocumentedPublicClass")
-class Persons @PublishedApi internal constructor(
+class PersonsBuilder @PublishedApi internal constructor(
     private val notification: NotificationCompat.Builder
 ) {
 

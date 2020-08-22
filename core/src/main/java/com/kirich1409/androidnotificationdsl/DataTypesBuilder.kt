@@ -2,20 +2,15 @@
 
 package com.kirich1409.androidnotificationdsl
 
-import androidx.annotation.RestrictTo
 import androidx.core.app.RemoteInput
+import com.kirich1409.androidnotificationdsl.annotations.NotificationDataTypesMarker
 
-
-@DslMarker
-@Target(AnnotationTarget.CLASS)
-@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-internal annotation class NotificationDataTypesMarker
 
 /**
  * Data types builder
  */
 @NotificationDataTypesMarker
-class DataTypes @PublishedApi internal constructor(private val remoteInput: RemoteInput.Builder) {
+class DataTypesBuilder @PublishedApi internal constructor(private val remoteInput: RemoteInput.Builder) {
 
     /**
      * Specifies whether the user can provide arbitrary values.
@@ -53,7 +48,7 @@ class DataTypes @PublishedApi internal constructor(private val remoteInput: Remo
  *
  * @see allow
  */
-inline fun DataTypes.allow(vararg mimeTypes: String) {
+inline fun DataTypesBuilder.allow(vararg mimeTypes: String) {
     mimeTypes.forEach(::allow)
 }
 
@@ -66,7 +61,7 @@ inline fun DataTypes.allow(vararg mimeTypes: String) {
  *
  * @see allow
  */
-inline fun DataTypes.disallow(vararg mimeTypes: String) {
+inline fun DataTypesBuilder.disallow(vararg mimeTypes: String) {
     mimeTypes.forEach(::disallow)
 }
 
@@ -79,7 +74,7 @@ inline fun DataTypes.disallow(vararg mimeTypes: String) {
  *
  * @see allow
  */
-inline fun DataTypes.allow(mimeTypes: Iterable<String>) {
+inline fun DataTypesBuilder.allow(mimeTypes: Iterable<String>) {
     mimeTypes.forEach(::allow)
 }
 
@@ -92,7 +87,7 @@ inline fun DataTypes.allow(mimeTypes: Iterable<String>) {
  *
  * @see allow
  */
-inline fun DataTypes.disallow(mimeTypes: Iterable<String>) {
+inline fun DataTypesBuilder.disallow(mimeTypes: Iterable<String>) {
     mimeTypes.forEach(::disallow)
 }
 
@@ -105,7 +100,7 @@ inline fun DataTypes.disallow(mimeTypes: Iterable<String>) {
  *
  * @see allow
  */
-inline operator fun DataTypes.minus(mimeType: String) {
+inline operator fun DataTypesBuilder.minus(mimeType: String) {
     disallow(mimeType)
 }
 
@@ -118,6 +113,6 @@ inline operator fun DataTypes.minus(mimeType: String) {
  *
  * @see allow
  */
-inline operator fun DataTypes.plus(mimeType: String) {
+inline operator fun DataTypesBuilder.plus(mimeType: String) {
     allow(mimeType)
 }

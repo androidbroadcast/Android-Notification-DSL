@@ -8,13 +8,12 @@ import androidx.annotation.Dimension
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.kirich1409.androidnotificationdsl.bubble.annotations.NotificationBubbleMetadataMarker
 
 /**
  * Builder of notification's bubble metadata
  */
 @NotificationBubbleMetadataMarker
-class BubbleMetadata @PublishedApi internal constructor(
+class BubbleMetadataBuilder @PublishedApi internal constructor(
     private val bubbleMetadata: NotificationCompat.BubbleMetadata.Builder
 ) {
 

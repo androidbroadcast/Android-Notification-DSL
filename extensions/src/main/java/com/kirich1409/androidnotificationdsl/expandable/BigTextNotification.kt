@@ -5,7 +5,8 @@ package com.kirich1409.androidnotificationdsl.expandable
 import android.app.Notification
 import android.content.Context
 import androidx.annotation.DrawableRes
-import com.kirich1409.androidnotificationdsl.action.Actions
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
 import com.kirich1409.androidnotificationdsl.expandable.annotations.BigTextNotificationBuilderMarker
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.style.bigtext.bigTextStyle
@@ -59,13 +60,13 @@ class BigTextNotificationBuilder internal constructor() {
 
     internal val expanded = Expanded()
 
-    internal var extender: (com.kirich1409.androidnotificationdsl.Notification.() -> Unit)? = null
+    internal var extender: (NotificationBuilder.() -> Unit)? = null
 
     fun expanded(body: @BigTextNotificationBuilderMarker Expanded.() -> Unit) {
         expanded.body()
     }
 
-    fun extend(body: com.kirich1409.androidnotificationdsl.Notification.() -> Unit) {
+    fun extend(body: NotificationBuilder.() -> Unit) {
         extender = body
     }
 
@@ -75,7 +76,7 @@ class BigTextNotificationBuilder internal constructor() {
 
         internal var text: Any? = NOTHING
 
-        internal var buildActions: (Actions.() -> Unit)? = null
+        internal var buildActions: (ActionsBuilder.() -> Unit)? = null
 
         /**
          * Replace notification title in expanded state
@@ -100,7 +101,7 @@ class BigTextNotificationBuilder internal constructor() {
          *
          * Actions will not be showed on Android before 4.1
          */
-        fun actions(body: Actions.() -> Unit) {
+        fun actions(body: ActionsBuilder.() -> Unit) {
             buildActions = body
         }
     }

@@ -7,7 +7,7 @@ import androidx.annotation.DrawableRes
 import androidx.collection.SparseArrayCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.kirich1409.androidnotificationdsl.Notification
+import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.areNotificationsEnabled
 import com.kirich1409.androidnotificationdsl.group.annotations.NotificationsGroupMarker
 import com.kirich1409.androidnotificationdsl.internal.asMap
@@ -20,7 +20,13 @@ import android.app.Notification as AndroidNotification
 inline fun notificationsGroup(
     context: Context,
     groupKey: String,
+    /**
+     * Base channel id for all notification
+     */
     channelId: String,
+    /**
+     * Don't build notification if all notifications for the app are disabled or notification channel is disabled
+     */
     skipDisabledNotification: Boolean = true,
     @NotificationCompat.GroupAlertBehavior groupAlertBehavior: Int = NotificationCompat.GROUP_ALERT_ALL,
     body: NotificationsGroupBuilder.() -> Unit
@@ -62,7 +68,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
         notificationId: Int,
         @DrawableRes smallIcon: Int,
         channelId: String = this.channelId,
-        body: @NotificationsGroupMarker Notification.() -> Unit
+        body: @NotificationsGroupMarker NotificationBuilder.() -> Unit
     ) {
         if (needToBuildNotification(channelId)) {
             this.summaryId = notificationId
@@ -96,7 +102,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
         notificationId: Int,
         @DrawableRes smallIcon: Int,
         channelId: String = this@NotificationsGroupBuilder.channelId,
-        body: @NotificationsGroupMarker Notification.() -> Unit
+        body: @NotificationsGroupMarker NotificationBuilder.() -> Unit
     ) {
         if (needToBuildNotification(channelId)) {
             notifications.put(notificationId,
