@@ -16,21 +16,19 @@ class NotificationsGroup @PublishedApi internal constructor(
      * Post notifications to be shown in the status bar, stream, etc.
      */
     fun notify(notificationManager: NotificationManagerCompat) {
+        notificationManager.notify(summary.first, summary.second)
         notifications.forEach { (notificationId, notification) ->
             notificationManager.notify(notificationId, notification)
         }
-
-        notificationManager.notify(summary.first, summary.second)
     }
 
     /**
      * Post notifications to be shown in the status bar, stream, etc.
      */
     fun notify(notificationManager: NotificationManager) {
+        notificationManager.notify(summary.first, summary.second)
         notifications.forEach { (notificationId, notification) ->
             notificationManager.notify(notificationId, notification)
         }
-
-        notificationManager.notify(summary.first, summary.second)
     }
 }
