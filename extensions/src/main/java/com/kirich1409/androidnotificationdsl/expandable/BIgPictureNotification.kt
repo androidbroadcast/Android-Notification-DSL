@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl.expandable
 
 import android.app.Notification
@@ -26,12 +28,17 @@ fun bigPictureNotification(
         builder.text?.let(::contentText)
         builder.largeIcon?.let(::largeIcon)
         bigPictureStyle {
-            picture(requireNotNull(builder.expanded.bigPicture))
+            picture(builder.expanded.bigPicture)
             largeIcon(builder.expanded.largeIcon)
 
             val title = builder.expanded.title
             if (title is CharSequence?) {
                 contentTitle(title)
+            }
+
+            val text = builder.expanded.text
+            if (text is CharSequence?) {
+                summaryText(text)
             }
 
             builder.expanded.buildActions?.let(this@notification::actions)
@@ -50,6 +57,8 @@ class BigPictureNotificationBuilder internal constructor() {
 
     /**
      * Notification text
+     *
+     * Will be showed on Android 5.0 and newer
      */
     var text: CharSequence? = null
 
@@ -81,6 +90,8 @@ class BigPictureNotificationBuilder internal constructor() {
 
         internal var title: Any? = NOTHING
 
+        internal var text: Any? = NOTHING
+
         internal var buildActions: (Actions.() -> Unit)? = null
 
         /**
@@ -92,11 +103,27 @@ class BigPictureNotificationBuilder internal constructor() {
 
         /**
          * Replace notification title in expanded state
+         *
+         * @see BigPictureNotificationBuilder.title
          */
         fun overrideTitle(title: CharSequence?) {
             this.title = title
         }
 
+        /**
+         * Replace notification text in expanded state
+         *
+         * @see BigPictureNotificationBuilder.text
+         */
+        fun overrideText(text: CharSequence?) {
+            this.text = text
+        }
+
+        /**
+         * Notification's actions
+         *
+         * Actions will not be showed on Android before 4.1
+         */
         fun actions(body: Actions.() -> Unit) {
             buildActions = body
         }
