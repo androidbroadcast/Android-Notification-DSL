@@ -9,4 +9,4 @@ import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
 @DslMarker
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY, AnnotationTarget.TYPE)
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-internal annotation class NotificationActionsMarker
+annotation class NotificationActionsMarker
