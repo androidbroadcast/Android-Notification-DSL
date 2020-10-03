@@ -15,9 +15,9 @@ fun bigPictureExtensionSample(context: Context) =
         expanded {
             bigPicture = R.drawable.sea_expanded_big.asBitmap(context.resources)
             // Remove large icon from the notification by default
-            overrideLargeIcon(null)
-            overrideTitle("Expanded")
-            overrideText("Summary text")
+            largeIcon = null
+            title = "Expanded"
+            text = "Summary text"
         }
 
         // Allow to add addition information to the notification via Core Notification DSL

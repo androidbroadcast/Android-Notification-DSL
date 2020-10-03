@@ -6,6 +6,9 @@ import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
+import androidx.annotation.RestrictTo
+import com.ironsource.aura.dslint.annotations.DSLMandatory
+import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
 import com.kirich1409.androidnotificationdsl.expandable.annotations.BigPictureNotificationBuilderMarker
@@ -32,12 +35,12 @@ fun bigPictureNotification(
             picture(builder.expanded.bigPicture)
             largeIcon(builder.expanded.largeIcon)
 
-            val title = builder.expanded.title
+            val title = builder.expanded._title
             if (title is CharSequence?) {
                 contentTitle(title)
             }
 
-            val text = builder.expanded.text
+            val text = builder.expanded._text
             if (text is CharSequence?) {
                 summaryText(text)
             }
@@ -48,6 +51,7 @@ fun bigPictureNotification(
     }
 }
 
+@DSLint
 @BigPictureNotificationBuilderMarker
 class BigPictureNotificationBuilder internal constructor() {
 
@@ -80,45 +84,46 @@ class BigPictureNotificationBuilder internal constructor() {
         extender = body
     }
 
+    @DSLint
     class Expanded internal constructor() {
 
         /**
          * Picture displayed in notification expanded state
          */
+        @set:DSLMandatory
         var bigPicture: Bitmap by requiredNotificationProperty("bigPicture")
 
-        internal var largeIcon: Bitmap? = null
+        @RestrictTo(RestrictTo.Scope.LIBRARY)
+        internal var _title: Any? = NOTHING
 
-        internal var title: Any? = NOTHING
-
-        internal var text: Any? = NOTHING
+        @RestrictTo(RestrictTo.Scope.LIBRARY)
+        internal var _text: Any? = NOTHING
 
         internal var buildActions: (ActionsBuilder.() -> Unit)? = null
 
-        /**
-         * Replace large icon in expanded state. By default will be null and hide large icon
-         */
-        fun overrideLargeIcon(largeIcon: Bitmap?) {
-            this.largeIcon = largeIcon
-        }
+        var largeIcon: Bitmap? = null
 
         /**
          * Replace notification title in expanded state
          *
          * @see BigPictureNotificationBuilder.title
          */
-        fun overrideTitle(title: CharSequence?) {
-            this.title = title
-        }
+        var title: CharSequence?
+            get() = _title as? CharSequence?
+            set(value) {
+                _title = value
+            }
 
         /**
          * Replace notification text in expanded state
          *
          * @see BigPictureNotificationBuilder.text
          */
-        fun overrideText(text: CharSequence?) {
-            this.text = text
-        }
+        var text: CharSequence?
+            get() = _text as? CharSequence?
+            set(value) {
+                _text = value
+            }
 
         /**
          * Notification's actions
