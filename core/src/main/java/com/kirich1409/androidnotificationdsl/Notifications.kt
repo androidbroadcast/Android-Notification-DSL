@@ -41,12 +41,20 @@ inline fun notification(
     @DrawableRes smallIcon: Int,
     body: NotificationBuilder.() -> Unit
 ): AndroidNotification {
+    return buildNotification(context, channelId, smallIcon, body).build()
+}
+
+inline fun buildNotification(
+    context: Context,
+    channelId: String,
+    @DrawableRes smallIcon: Int,
+    body: NotificationBuilder.() -> Unit
+): NotificationBuilder {
     val builder = NotificationCompat.Builder(context, channelId).apply {
         setSmallIcon(smallIcon)
     }
 
-    NotificationBuilder(builder, context).apply(body)
-    return builder.build()
+    return NotificationBuilder(builder, context).apply(body)
 }
 
 /**
@@ -68,7 +76,7 @@ inline fun notification(context: Context, channelId: String, @DrawableRes smallI
  */
 @NotificationMarker
 @Suppress("TooManyFunctions")
-class NotificationBuilder @PublishedApi internal constructor(
+class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructor(
     @PublishedApi internal val notification: NotificationCompat.Builder,
     internal val context: Context
 ) {
@@ -124,6 +132,11 @@ class NotificationBuilder @PublishedApi internal constructor(
         val bubbleMetadataBuilder = NotificationCompat.BubbleMetadata.Builder()
         BubbleMetadataBuilder(bubbleMetadataBuilder).body()
         notification.bubbleMetadata = bubbleMetadataBuilder.build()
+    }
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+    fun build(): AndroidNotification {
+        return notification.build()
     }
 
     /**
@@ -427,6 +440,7 @@ class NotificationBuilder @PublishedApi internal constructor(
     inline fun persons(body: @NotificationMarker PersonsBuilder.() -> Unit) {
         persons.body()
     }
+
     /**
      * Set the relative priority for this notification.
      *
