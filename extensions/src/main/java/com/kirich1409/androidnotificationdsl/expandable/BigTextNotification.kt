@@ -5,6 +5,9 @@ package com.kirich1409.androidnotificationdsl.expandable
 import android.app.Notification
 import android.content.Context
 import androidx.annotation.DrawableRes
+import androidx.annotation.RestrictTo
+import com.ironsource.aura.dslint.annotations.DSLMandatory
+import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
 import com.kirich1409.androidnotificationdsl.expandable.annotations.BigTextNotificationBuilderMarker
@@ -45,6 +48,7 @@ fun bigTextNotification(
     }
 }
 
+@DSLint
 @BigTextNotificationBuilderMarker
 class BigTextNotificationBuilder internal constructor() {
 
@@ -56,6 +60,7 @@ class BigTextNotificationBuilder internal constructor() {
     /**
      * Picture displayed in notification expanded state
      */
+    @set:DSLMandatory
     var text: CharSequence by requiredNotificationProperty("text")
 
     internal val expanded = Expanded()
@@ -72,9 +77,11 @@ class BigTextNotificationBuilder internal constructor() {
 
     class Expanded internal constructor() {
 
-        internal var title: Any? = NOTHING
+        @RestrictTo(RestrictTo.Scope.LIBRARY)
+        internal var _title: Any? = NOTHING
 
-        internal var text: Any? = NOTHING
+        @RestrictTo(RestrictTo.Scope.LIBRARY)
+        internal var _text: Any? = NOTHING
 
         internal var buildActions: (ActionsBuilder.() -> Unit)? = null
 
@@ -83,18 +90,22 @@ class BigTextNotificationBuilder internal constructor() {
          *
          * @see BigTextNotificationBuilder.title
          */
-        fun overrideTitle(title: CharSequence?) {
-            this.title = title
-        }
+        var title: CharSequence?
+            get() = _title as? CharSequence?
+            set(value) {
+                _title = value
+            }
 
         /**
          * Replace notification text in expanded state
          *
          * @see BigTextNotificationBuilder.text
          */
-        fun overrideText(text: CharSequence?) {
-            this.text = text
-        }
+        var text: CharSequence?
+            get() = _text as? CharSequence?
+            set(value) {
+                _text = value
+            }
 
         /**
          * Notification's actions

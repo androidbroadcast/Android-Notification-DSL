@@ -13,8 +13,8 @@ fun bigTextExtensionSample(context: Context) =
         text = context.getText(R.string.long_text)
 
         expanded {
-            overrideTitle("Expanded")
-            overrideText("Summary text")
+            title = "Expanded"
+            text = "Summary text"
             actions {
                 action(
                     title = "Edit",
