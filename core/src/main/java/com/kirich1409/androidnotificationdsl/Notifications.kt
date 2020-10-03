@@ -769,3 +769,32 @@ fun NotificationBuilder.contentTitle(@StringRes titleRes: Int) {
 fun NotificationBuilder.subText(@StringRes textRes: Int) {
     subText(context.getText(textRes))
 }
+
+/**
+ * Set [NotificationBuilder.visibility]. Default value is [PRIVATE][Visibility.PRIVATE]
+ */
+fun NotificationBuilder.visibility(visibility: Visibility) {
+    visibility(visibility.value)
+}
+
+/**
+ * The level of detail visible in the notification from the lock screen
+ */
+enum class Visibility(val value: Int) {
+
+    /**
+     * Doesn't show any part of this notification on the lock screen.
+     */
+    SECRET(NotificationCompat.VISIBILITY_SECRET),
+
+    /**
+     * Shows basic information, such as the notification's icon and the content title,
+     * but hides the notification's full content.
+     */
+    PRIVATE(NotificationCompat.VISIBILITY_PRIVATE),
+
+    /**
+     * Shows the notification's full content
+     */
+    PUBLIC(NotificationCompat.VISIBILITY_PUBLIC),
+}
