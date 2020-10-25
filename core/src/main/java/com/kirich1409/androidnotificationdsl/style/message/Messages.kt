@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import com.kirich1409.androidnotificationdsl.ListContainer
 import java.time.Instant
 import java.util.*
 import kotlin.time.Duration
@@ -14,9 +15,10 @@ import kotlin.time.ExperimentalTime
 
 @NotificationMessagesMarker
 @Suppress("UndocumentedPublicClass")
-class MessagesBuilder @PublishedApi internal constructor(
+class Messages @PublishedApi internal constructor(
     @PublishedApi internal val style: NotificationCompat.MessagingStyle
-) {
+) : ListContainer<NotificationCompat.MessagingStyle.Message>,
+    List<NotificationCompat.MessagingStyle.Message> by style.messages {
 
     /**
      * Adds a message for display by this notification
@@ -39,8 +41,12 @@ class MessagesBuilder @PublishedApi internal constructor(
     /**
      * Adds a message for display by this notification
      */
-    fun message(message: NotificationCompat.MessagingStyle.Message) {
-        style.addMessage(message)
+    fun message(item: NotificationCompat.MessagingStyle.Message) {
+        style.addMessage(item)
+    }
+
+    override fun plusAssign(item: NotificationCompat.MessagingStyle.Message) {
+        message(item)
     }
 }
 
@@ -48,7 +54,7 @@ class MessagesBuilder @PublishedApi internal constructor(
  * Adds a message for display by this notification
  */
 @ExperimentalTime
-inline fun MessagesBuilder.message(text: CharSequence, timestamp: Duration, person: Person) {
+inline fun Messages.message(text: CharSequence, timestamp: Duration, person: Person) {
     message(text, timestamp.toLongMilliseconds(), person)
 }
 
@@ -56,7 +62,7 @@ inline fun MessagesBuilder.message(text: CharSequence, timestamp: Duration, pers
  * Adds a message for display by this notification
  */
 @ExperimentalTime
-inline fun MessagesBuilder.message(
+inline fun Messages.message(
     text: CharSequence,
     timestamp: Duration,
     person: Person,
@@ -69,14 +75,20 @@ inline fun MessagesBuilder.message(
 /**
  * Adds a message for display by this notification
  */
-inline fun MessagesBuilder.message(text: CharSequence, timestamp: Date, person: Person) {
+inline fun Messages.message(text: CharSequence, timestamp: Date, person: Person) {
     message(text, timestamp.time, person)
 }
 
 /**
  * Adds a message for display by this notification
  */
-inline fun MessagesBuilder.message(text: CharSequence, timestamp: Date, person: Person, dataMimeType: String, dataUri: Uri) {
+inline fun Messages.message(
+    text: CharSequence,
+    timestamp: Date,
+    person: Person,
+    dataMimeType: String,
+    dataUri: Uri
+) {
     message(text, timestamp.time, person, dataMimeType, dataUri)
 }
 
@@ -84,7 +96,7 @@ inline fun MessagesBuilder.message(text: CharSequence, timestamp: Date, person: 
  * Adds a message for display by this notification
  */
 @RequiresApi(Build.VERSION_CODES.O)
-inline fun MessagesBuilder.message(text: CharSequence, timestamp: Instant, person: Person) {
+inline fun Messages.message(text: CharSequence, timestamp: Instant, person: Person) {
     message(text, timestamp.toEpochMilli(), person)
 }
 
@@ -92,7 +104,7 @@ inline fun MessagesBuilder.message(text: CharSequence, timestamp: Instant, perso
  * Adds a message for display by this notification
  */
 @RequiresApi(Build.VERSION_CODES.O)
-inline fun MessagesBuilder.message(
+inline fun Messages.message(
     text: CharSequence,
     timestamp: Instant,
     person: Person,

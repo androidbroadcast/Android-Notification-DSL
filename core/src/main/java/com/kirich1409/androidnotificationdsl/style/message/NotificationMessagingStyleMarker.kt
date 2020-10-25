@@ -3,7 +3,7 @@ package com.kirich1409.androidnotificationdsl.style.message
 import androidx.annotation.RestrictTo
 
 /**
- * @see MessagingStyleBuilder
+ * @see MessagingStyle
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS)

@@ -10,7 +10,7 @@ import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
  * Create an instance of [MediaStyle] and set it as style of the [notification][this]
  */
 inline fun NotificationBuilder.mediaStyle(body: @NotificationMarker MediaStyle.() -> Unit) {
-    style(NotificationCompat.MediaStyle().also { style -> MediaStyle(style).body() })
+    style = NotificationCompat.MediaStyle().also { style -> MediaStyle(style).body() }
 }
 
 /**
@@ -25,7 +25,7 @@ inline fun mediaStyle(body: @NotificationMarker MediaStyle.() -> Unit): Notifica
  * and set it as style of the [notification][this]
  */
 fun NotificationBuilder.decoratedMediaCustomViewStyle() {
-    style(NotificationCompat.DecoratedMediaCustomViewStyle())
+    style = NotificationCompat.DecoratedMediaCustomViewStyle()
 }
 
 /**

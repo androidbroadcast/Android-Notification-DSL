@@ -3,7 +3,7 @@
 package com.kirich1409.androidnotificationdsl.action
 
 import android.app.PendingIntent
-import android.os.Bundle
+import androidx.annotation.RestrictTo
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionMarker
 import com.kirich1409.androidnotificationdsl.remoteinput.RemoteInputBuilder
@@ -18,20 +18,14 @@ class ActionBuilder @PublishedApi internal constructor(private val action: Notif
     /**
      * Merge additional metadata into this builder.
      */
-    fun addExtras(extras: Bundle) {
-        action.addExtras(extras)
-    }
+    val extras = Extras(action)
 
     /**
      * Add an input to be collected from the user when this action is sent.
      * Response values can be retrieved from the fired intent by using the
      * [AndroidRemoteInput.getResultsFromIntent] function.
-     *
-     * @param remoteInput a [RemoteInputBuilder] to add to the action
      */
-    fun addRemoteInput(remoteInput: AndroidRemoteInput) {
-        action.addRemoteInput(remoteInput)
-    }
+    val remoteInputs = RemoteInputs(action)
 
     /**
      * Add an input to be collected from the user when this action is sent.
@@ -52,23 +46,28 @@ class ActionBuilder @PublishedApi internal constructor(private val action: Notif
      *
      * The default value is {@code true}
      */
-    fun allowGeneratedReplies(allowGeneratedReplies: Boolean) {
-        action.setAllowGeneratedReplies(allowGeneratedReplies)
-    }
+    var allowGeneratedReplies: Boolean = true
+        set(value) {
+            field = value
+            action.setAllowGeneratedReplies(value)
+        }
 
     /**
      * Sets whether this [ActionBuilder] is a contextual action, i.e. whether the action is
      * dependent on the notification message body. An example of a contextual action could
      * be an action opening a map application with an address shown in the notification.
      */
-    fun contextual(contextual: Boolean) {
-        action.setContextual(contextual)
-    }
+    var contextual: Boolean = false
+        set(value) {
+            field = value
+            action.setContextual(value)
+        }
 
     /**
      * Apply an extender to this action builder.
      * Extenders may be used to add metadata or change options on this builder.
      */
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
     fun extend(extender: NotificationCompat.Action.Extender) {
         action.extend(extender)
     }
@@ -81,9 +80,12 @@ class ActionBuilder @PublishedApi internal constructor(private val action: Notif
      * @param semanticAction a [SemanticAction][@NotificationCompat.Action.SemanticAction] defined within
      * [ActionBuilder] with `SEMANTIC_ACTION_` prefixes
      */
-    fun semanticAction(@NotificationCompat.Action.SemanticAction semanticAction: Int) {
-        action.setSemanticAction(semanticAction)
-    }
+    @NotificationCompat.Action.SemanticAction
+    var semanticAction: Int = NotificationCompat.Action.SEMANTIC_ACTION_NONE
+        set(value) {
+            field = value
+            action.setSemanticAction(semanticAction)
+        }
 
     /**
      * Set whether or not this [Action][NotificationCompat.Action]'s [PendingIntent] will open a user
@@ -94,7 +96,9 @@ class ActionBuilder @PublishedApi internal constructor(private val action: Notif
      *
      * The default value is {@code true}
      */
-    fun showsUserInterface(showsUserInterface: Boolean) {
-        action.setShowsUserInterface(showsUserInterface)
-    }
+    var showsUserInterface = true
+        set(value) {
+            field = value
+            action.setShowsUserInterface(value)
+        }
 }

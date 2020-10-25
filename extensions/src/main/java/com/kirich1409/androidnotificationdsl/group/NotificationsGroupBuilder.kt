@@ -5,7 +5,6 @@ package com.kirich1409.androidnotificationdsl.group
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.collection.SparseArrayCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.areNotificationsEnabled
@@ -28,7 +27,7 @@ inline fun notificationsGroup(
      * Don't build notification if all notifications for the app are disabled or notification channel is disabled
      */
     skipDisabledNotification: Boolean = true,
-    @NotificationCompat.GroupAlertBehavior groupAlertBehavior: Int = NotificationCompat.GROUP_ALERT_ALL,
+    groupAlertBehavior: GroupAlertBehavior = GroupAlertBehavior.ALERT_ALL,
     body: NotificationsGroupBuilder.() -> Unit
 ): NotificationsGroup {
     val group = NotificationsGroupBuilder(context, groupKey, channelId, skipDisabledNotification, groupAlertBehavior)
@@ -44,7 +43,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
     private val groupKey: String,
     private val channelId: String,
     private val skipDisabledNotification: Boolean,
-    @NotificationCompat.GroupAlertBehavior private val groupAlertBehavior: Int
+    private val groupAlertBehavior: GroupAlertBehavior
 ) {
     private val notificationManager = NotificationManagerCompat.from(context)
 
@@ -74,9 +73,9 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
             this.summaryId = notificationId
             summary = com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
                 body()
-                group(groupKey)
-                groupAlertBehavior(groupAlertBehavior)
-                groupSummary(true)
+                group = group
+                groupAlertBehavior = this@NotificationsGroupBuilder.groupAlertBehavior.intValue
+                groupSummary = true
             }
         }
     }
@@ -108,7 +107,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
             notifications.put(notificationId,
                 com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
                     body()
-                    group(groupKey)
+                    group = group
                 }
             )
         }
@@ -126,7 +125,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
         if (needToBuildNotification(channelId)) {
             notifications.put(notificationId,
                 com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
-                    group(groupKey)
+                    group = group
                 }
             )
         }

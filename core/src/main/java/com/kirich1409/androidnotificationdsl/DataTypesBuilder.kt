@@ -10,7 +10,9 @@ import com.kirich1409.androidnotificationdsl.annotations.NotificationDataTypesMa
  * Data types builder
  */
 @NotificationDataTypesMarker
-class DataTypesBuilder @PublishedApi internal constructor(private val remoteInput: RemoteInput.Builder) {
+class DataTypesBuilder @PublishedApi internal constructor(
+    private val remoteInput: RemoteInput.Builder
+) : Container<String> {
 
     /**
      * Specifies whether the user can provide arbitrary values.
@@ -36,6 +38,10 @@ class DataTypesBuilder @PublishedApi internal constructor(private val remoteInpu
      */
     fun disallow(mimeType: String) {
         remoteInput.setAllowDataType(mimeType, false)
+    }
+
+    override fun plusAssign(item: String) {
+        allow(item)
     }
 }
 
@@ -102,17 +108,4 @@ inline fun DataTypesBuilder.disallow(mimeTypes: Iterable<String>) {
  */
 inline operator fun DataTypesBuilder.minus(mimeType: String) {
     disallow(mimeType)
-}
-
-/**
- * Specifies whether the user can provide arbitrary values.
- *
- * @param mimeType A mime type that results are disallowed to come in.
- *         Be aware that text results (see [RemoteInputs.allowFreeFormInput])
- *         are allowed by default. If you want text results you will have to call [allow]
- *
- * @see allow
- */
-inline operator fun DataTypesBuilder.plus(mimeType: String) {
-    allow(mimeType)
 }

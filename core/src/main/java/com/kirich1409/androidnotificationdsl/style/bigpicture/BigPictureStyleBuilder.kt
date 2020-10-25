@@ -78,9 +78,8 @@ class BigPictureStyleBuilder @PublishedApi internal constructor(
  */
 inline fun NotificationBuilder.bigPictureStyle(
     body: @NotificationMarker BigPictureStyleBuilder.() -> Unit
-): NotificationCompat.BigPictureStyle {
+) {
     val bigPictureStyle = NotificationCompat.BigPictureStyle()
     BigPictureStyleBuilder(bigPictureStyle).body()
-    style(bigPictureStyle)
-    return bigPictureStyle
+    style = bigPictureStyle
 }

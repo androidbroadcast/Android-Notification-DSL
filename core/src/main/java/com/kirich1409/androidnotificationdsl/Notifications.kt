@@ -1,96 +1,61 @@
-@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE", "TooManyFunctions")
+@file:Suppress(
+    "unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE", "TooManyFunctions",
+    "UsePropertyAccessSyntax"
+)
 
 package com.kirich1409.androidnotificationdsl
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.annotation.*
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.NotificationVisibility
-import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
+import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.annotations.NotificationCategory
 import com.kirich1409.androidnotificationdsl.annotations.NotificationDefaults
 import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.annotations.NotificationPriority
 import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadataBuilder
 import com.kirich1409.androidnotificationdsl.internal.toArray
-import com.kirich1409.androidnotificationdsl.person.PersonsBuilder
 import kotlin.time.Duration
-import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import android.app.Notification as AndroidNotification
-
-/**
- * Create new notification for specified [channelId]
- *
- * @param channelId The constructed Notification will be posted on this NotificationChannel
- *
- * @return A new [NotificationBuilder] object.
- */
-inline fun notification(
-    context: Context,
-    channelId: String,
-    @DrawableRes smallIcon: Int,
-    body: NotificationBuilder.() -> Unit
-): AndroidNotification {
-    return buildNotification(context, channelId, smallIcon, body).build()
-}
-
-inline fun buildNotification(
-    context: Context,
-    channelId: String,
-    @DrawableRes smallIcon: Int,
-    body: NotificationBuilder.() -> Unit
-): NotificationBuilder {
-    val builder = NotificationCompat.Builder(context, channelId).apply {
-        setSmallIcon(smallIcon)
-    }
-
-    return NotificationBuilder(builder, context).apply(body)
-}
-
-/**
- * Create new notification for specified [channelId]
- *
- * @param channelId The constructed Notification will be posted on this NotificationChannel
- *
- * @return A new [NotificationBuilder] object.
- */
-inline fun notification(context: Context, channelId: String, @DrawableRes smallIcon: Int): AndroidNotification {
-    NotificationCompat.Builder(context, channelId).apply {
-        setSmallIcon(smallIcon)
-        return@notification build()
-    }
-}
 
 /**
  * Notification builder
  */
 @NotificationMarker
 @Suppress("TooManyFunctions")
-class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructor(
-    @PublishedApi internal val notification: NotificationCompat.Builder,
-    internal val context: Context
+class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @PublishedApi internal constructor(
+    internal val context: Context,
+    @PublishedApi internal val notification: NotificationCompat.Builder
 ) {
 
-    /**
-     * Notification's actions
-     */
-    inline val actions: ActionsBuilder
-        get() = ActionsBuilder(notification)
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+    @PublishedApi
+    internal constructor(context: Context, channelId: String, @DrawableRes smallIcon: Int)
+            : this(context, defaultNotification(context, channelId, smallIcon)) {
+        whenTime = System.currentTimeMillis()
+    }
 
     /**
      * Notification's actions
      */
-    inline fun actions(body: @NotificationMarker ActionsBuilder.() -> Unit) {
+    inline val actions: Actions
+        get() = Actions(notification)
+
+    /**
+     * Notification's actions
+     */
+    inline fun actions(body: @NotificationMarker Actions.() -> Unit) {
         actions.body()
     }
 
@@ -99,9 +64,11 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * By default this is true.
      */
-    fun allowSystemGeneratedContextualActions(allowed: Boolean) {
-        notification.setAllowSystemGeneratedContextualActions(allowed)
-    }
+    var allowSystemGeneratedContextualAction = DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION
+        set(value) {
+            field = value
+            notification.setAllowSystemGeneratedContextualActions(value)
+        }
 
     /**
      * Setting this flag will make it so the notification is automatically canceled
@@ -109,9 +76,11 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * The PendingIntent set with [deleteIntent] will be broadcast when the notification is canceled.
      */
-    fun autoCancel(autoCancel: Boolean) {
-        notification.setAutoCancel(autoCancel)
-    }
+    var autoCancel = DEFAULT_AUTO_CANCEL
+        set(value) {
+            field = value
+            notification.setAutoCancel(value)
+        }
 
     /**
      * Sets which icon to display as a badge for this notification.
@@ -121,17 +90,20 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * **Note:** This value might be ignored, for launchers that don't support badge icons.
      */
-    fun badgeIconType(@NotificationCompat.BadgeIconType value: Int) {
-        notification.setBadgeIconType(value)
-    }
+    @NotificationCompat.BadgeIconType
+    var badgeIconType = DEFAULT_BADGE_ICON_TYPE
+        set(value) {
+            field = value
+            notification.setBadgeIconType(value)
+        }
 
     /**
      * Setup bubble metadata of the notification
      */
     inline fun bubbleMetadata(body: @NotificationMarker BubbleMetadataBuilder.() -> Unit) {
-        val bubbleMetadataBuilder = NotificationCompat.BubbleMetadata.Builder()
-        BubbleMetadataBuilder(bubbleMetadataBuilder).body()
-        notification.bubbleMetadata = bubbleMetadataBuilder.build()
+        notification.bubbleMetadata = NotificationCompat.BubbleMetadata.Builder()
+            .also { BubbleMetadataBuilder(it).body() }
+            .build()
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
@@ -147,18 +119,22 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * May be used by the system for ranking and filtering.
      */
-    fun category(@NotificationCategory category: String) {
-        notification.setCategory(category)
-    }
+    @NotificationCategory
+    var category = DEFAULT_CATEGORY
+        set(value) {
+            field = value
+            notification.setCategory(category)
+        }
 
     /**
-     * Sets [NotificationBuilder.color].
-     *
-     * @param color The accent color to use
+     * The accent color to use for [NotificationBuilder.color].
      */
-    fun color(@ColorInt color: Int) {
-        notification.color = color
-    }
+    @ColorInt
+    var color = DEFAULT_COLOR
+        set(value) {
+            field = value
+            notification.setColor(color)
+        }
 
     /**
      * Set whether this notification should be colorized. When set, the color set with [color] will be used
@@ -178,16 +154,20 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * @see color
      */
-    fun colorized(colorize: Boolean) {
-        notification.setColorized(colorize)
-    }
+    var colorized = DEFAULT_COLORIZED
+        set(value) {
+            field = value
+            notification.setColorized(value)
+        }
 
     /**
      * Supply a custom [RemoteViews] to use instead of the standard one.
      */
-    fun content(views: RemoteViews) {
-        notification.setContent(views)
-    }
+    var content: RemoteViews? = null
+        set(value) {
+            field = value
+            notification.setContent(value)
+        }
 
     /**
      * Supply a [PendingIntent] to send when the notification is clicked. If you do not supply an intent,
@@ -195,30 +175,38 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * [RemoteViews.setOnClickPendingIntent].
      * Be sure to read [NotificationBuilder.contentIntent] for how to correctly use this.
      */
-    fun contentIntent(intent: PendingIntent) {
-        notification.setContentIntent(intent)
-    }
+    var contentIntent: PendingIntent? = DEFAULT_CONTENT_INTENT
+        set(value) {
+            field = value
+            notification.setContentIntent(value)
+        }
 
     /**
      * Set the large text at the right-hand side of the notification.
      */
-    fun contentInfo(info: CharSequence) {
-        notification.setContentInfo(info)
-    }
+    var contentInfo: CharSequence? = DEFAULT_CONTENT_INFO
+        set(value) {
+            field = value
+            notification.setContentInfo(value)
+        }
 
     /**
      * Set the text (second row) of the notification, in a standard notification.
      */
-    fun contentText(text: CharSequence) {
-        notification.setContentText(text)
-    }
+    var contentText: CharSequence? = DEFAULT_CONTENT_TEXT
+        set(value) {
+            field = value
+            notification.setContentText(value)
+        }
 
     /**
      * Set the title (first row) of the notification, in a standard notification.
      */
-    fun contentTitle(title: CharSequence) {
-        notification.setContentTitle(title)
-    }
+    var contentTitle: CharSequence? = DEFAULT_CONTENT_TITLE
+        set(value) {
+            field = value
+            notification.setContentTitle(value)
+        }
 
     /**
      * Sets the Chronometer to count down instead of counting up.
@@ -230,11 +218,13 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * @see android.widget.Chronometer
      */
-    fun chronometerCountDown(countsDown: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            notification.setChronometerCountDown(countsDown)
+    var chronometerCountDown: Boolean = DEFAULT_CHRONOMETER_COUNT_DOWN
+        set(countsDown) {
+            field = countsDown
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                notification.setChronometerCountDown(countsDown)
+            }
         }
-    }
 
     /**
      * Supply custom RemoteViews to use instead of the platform template in the expanded form.
@@ -243,18 +233,22 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * No-op on versions prior to [Build.VERSION_CODES.JELLY_BEAN][android.os.Build.VERSION_CODES.JELLY_BEAN].
      */
-    fun customBigContentView(contentView: RemoteViews) {
-        notification.setCustomBigContentView(contentView)
-    }
+    var customBigContentView: RemoteViews? = DEFAULT_CUSTOM_BIG_CONTENT_VIEW
+        set(contentView) {
+            field = contentView
+            notification.setCustomBigContentView(contentView)
+        }
 
     /**
      * Supply custom RemoteViews to use instead of the platform template.
      *
      * This will override the layout that would otherwise be constructed by this Builder object.
      */
-    fun customContentView(contentView: RemoteViews) {
-        notification.setCustomContentView(contentView)
-    }
+    var customContentView: RemoteViews? = DEFAULT_CUSTOM_CONTENT_VIEW
+        set(contentView) {
+            field = contentView
+            notification.setCustomContentView(contentView)
+        }
 
     /**
      * Supply custom RemoteViews to use instead of the platform template in the heads up dialog.
@@ -263,9 +257,11 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * No-op on versions prior to [Build.VERSION_CODES.LOLLIPOP][android.os.Build.VERSION_CODES.LOLLIPOP].
      */
-    fun customHeadsUpContentView(contentView: RemoteViews) {
-        notification.setCustomHeadsUpContentView(contentView)
-    }
+    var customHeadsUpContentView: RemoteViews? = DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW
+        set(contentView) {
+            field = contentView
+            notification.setCustomHeadsUpContentView(contentView)
+        }
 
     /**
      * Set the default notification options that will be used.
@@ -275,9 +271,12 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * For all default values, use [NotificationCompat.DEFAULT_ALL].
      */
-    fun defaults(@NotificationDefaults defaults: Int) {
-        notification.setDefaults(defaults)
-    }
+    @NotificationDefaults
+    var defaults = DEFAULT_DEFAULTS
+        set(value) {
+            field = value
+            notification.setDefaults(value)
+        }
 
     /**
      * Supply a [PendingIntent] to send when the notification is cleared by the user directly from
@@ -285,9 +284,11 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * or the individual "X" buttons on notifications. This intent is not sent when the application calls
      * [NotificationManager.cancel].
      */
-    fun deleteIntent(intent: PendingIntent) {
-        notification.setDeleteIntent(intent)
-    }
+    var deleteIntent: PendingIntent? = DEFAULT_DELETE_INTENT
+        set(value) {
+            field = value
+            notification.setDeleteIntent(value)
+        }
 
     /**
      * The current metadata [Bundle] used by this notification Builder.
@@ -324,6 +325,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * @param highPriority Passing true will cause this notification to be sent even
      * if other notifications are suppressed.
      */
+    @SuppressLint("InlinedApi")
     @RequiresPermission(Manifest.permission.USE_FULL_SCREEN_INTENT)
     fun fullScreenIntent(intent: PendingIntent, highPriority: Boolean = false) {
         notification.setFullScreenIntent(intent, highPriority)
@@ -336,14 +338,13 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * To make this notification the summary for its group, also call [groupSummary].
      * A sort order can be specified for group members by using [sortKey]
      *
-     * @param groupKey The group key of the group.
-     * @return this object for method chaining
-     *
      * @see groupSummary
      */
-    fun group(groupKey: String) {
-        notification.setGroup(groupKey)
-    }
+    var group: String? = DEFAULT_GROUP_KEY
+        set(groupKey) {
+            field = groupKey
+            notification.setGroup(groupKey)
+        }
 
     /**
      * Sets the group alert behavior for this notification. Use this method to mute this
@@ -358,37 +359,48 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * The default value is [GROUP_ALERT_ALL][NotificationCompat.GROUP_ALERT_ALL]
      */
-    fun groupAlertBehavior(@NotificationCompat.GroupAlertBehavior groupAlertBehavior: Int) {
-        notification.setGroupAlertBehavior(groupAlertBehavior)
-    }
+    @NotificationCompat.GroupAlertBehavior
+    var groupAlertBehavior: Int = DEFAULT_GROUP_ALERT_BEHAVIOR
+        set(groupAlertBehavior) {
+            field = groupAlertBehavior
+            notification.setGroupAlertBehavior(groupAlertBehavior)
+        }
 
     /**
      * Set this notification to be the group summary for a group of notifications.
      * Grouped notifications may display in a cluster or stack on devices which
      * support such rendering. Requires a group key also be set using [group].
      *
-     * @param isGroupSummary Whether this notification should be a group summary.
-     *
      * @see group
      */
-    fun groupSummary(isGroupSummary: Boolean) {
-        notification.setGroupSummary(isGroupSummary)
-    }
+    var groupSummary: Boolean = false
+        set(isGroupSummary) {
+            field = isGroupSummary
+            notification.setGroupSummary(isGroupSummary)
+        }
 
     /**
      * Set the large icon that is shown in the ticker and notification.
      */
-    fun largeIcon(icon: Bitmap) {
-        notification.setLargeIcon(icon)
-    }
+    var largeIcon: Bitmap? = DEFAULT_LARGE_ICON
+        set(value) {
+            field = value
+            notification.setLargeIcon(value)
+        }
 
     /**
      * Set the argb value that you would like the LED on the device to blink, as well as the
      * rate. The rate is specified in terms of the number of milliseconds to be on
      * and then the number of milliseconds to be off.
      */
-    fun lights(@ColorInt color: Int, @IntRange(from = 0) onMs: Int, @IntRange(from = 0) offMs: Int) {
-        notification.setLights(color, onMs, offMs)
+    var lights: Lights? = DEFAULT_LIGHTS
+        set(value) {
+            field = value
+            updateLights(value ?: Lights.NULL)
+        }
+
+    private fun updateLights(lights: Lights) {
+        notification.setLights(lights.color, lights.onMs, lights.offMs)
     }
 
     /**
@@ -396,18 +408,24 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * Some notifications can be bridged to other devices for remote display.
      * This hint can be set to recommend this notification not be bridged.
+     *
+     * Default value is `false`
      */
-    fun localOnly(localOnly: Boolean) {
-        notification.setLocalOnly(localOnly)
-    }
+    var localOnly: Boolean = DEFAULT_LOCAL_ONLY
+        set(localOnly) {
+            field = localOnly
+            notification.setLocalOnly(localOnly)
+        }
 
     /**
      * Set the large number at the right-hand side of the notification. This is equivalent to setContentInfo,
      * although it might show the number in a different font size for readability.
      */
-    fun number(number: Int) {
-        notification.setNumber(number)
-    }
+    var number: Int = 0
+        set(number) {
+            field = number
+            notification.setNumber(number)
+        }
 
     /**
      * Set whether this is an ongoing notification.
@@ -416,28 +434,31 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * * Ongoing notifications are sorted above the regular notifications in the notification panel.
      * * Ongoing notifications do not have an 'X' close button, and are not affected by the "Clear all" button.
      */
-    fun ongoing(ongoing: Boolean) {
-        notification.setOngoing(ongoing)
-    }
+    var ongoing: Boolean = false
+        set(ongoing) {
+            field = ongoing
+            notification.setOngoing(ongoing)
+        }
 
     /**
      * Set this flag if you would only like the sound, vibrate
      * and ticker to be played if the notification is not already showing.
      */
-    fun onlyAlertOnce(onlyAlertOnce: Boolean) {
-        notification.setOnlyAlertOnce(onlyAlertOnce)
-    }
+    var onlyAlertOnce: Boolean = DEFAULT_ONLY_ALERT_ONCE
+        set(value) {
+            field = value
+            notification.setOnlyAlertOnce(value)
+        }
 
     /**
      * Persons associated with the notification
      */
-    inline val persons: PersonsBuilder
-        get() = PersonsBuilder(notification)
+    val persons = Persons(notification)
 
     /**
-     * Managing persons associated with the notification
+     * Persons associated with the notification
      */
-    inline fun persons(body: @NotificationMarker PersonsBuilder.() -> Unit) {
+    fun persons(body: @NotificationMarker Persons.() -> Unit) {
         persons.body()
     }
 
@@ -450,13 +471,15 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * The system sets a notification's priority based on various factors including the setPriority value.
      * The effect may differ slightly on different platforms.
      *
-     * @param priority Relative priority for this notification.
      * Must be one of the priority constants defined by [NotificationCompat].
      * Acceptable values range from [NotificationCompat.PRIORITY_MIN] (-2) to [NotificationCompat.PRIORITY_MAX] (2).
      */
-    fun priority(@NotificationPriority priority: Int) {
-        notification.priority = priority
-    }
+    @NotificationPriority
+    var priority: Int = DEFAULT_PRIORITY
+        set(value) {
+            field = value
+            notification.setPriority(priority)
+        }
 
     /**
      * Set the progress this notification represents, which may be
@@ -470,12 +493,12 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * Supply a replacement Notification whose contents should be shown in insecure contexts
      * (i.e. atop the secure lockscreen). See [NotificationBuilder.visibility] and
      * [VISIBILITY_PUBLIC][NotificationCompat.VISIBILITY_PUBLIC].
-     *
-     * @param notification A replacement notification, presumably with some or all info redacted.
      */
-    infix fun publicVersion(notification: AndroidNotification) {
-        this.notification.setPublicVersion(notification)
-    }
+    var publicVersion: AndroidNotification? = null
+        set(notification) {
+            field = notification
+            this.notification.setPublicVersion(notification)
+        }
 
     /**
      * Set the remote input history.
@@ -490,31 +513,35 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * **Note:** The reply text will only be shown on notifications that have least one action with a `RemoteInput`.
      */
-    fun remoteInputHistory(text: Array<CharSequence>) {
-        notification.setRemoteInputHistory(text)
-    }
+    var remoteInputHistory: Array<CharSequence>? = null
+        get() = field?.copyOf()
+        set(text) {
+            field = text
+            notification.setRemoteInputHistory(text)
+        }
 
     /**
      * If this notification is duplicative of a Launcher shortcut,
      * sets the [id][androidx.core.content.pm.ShortcutInfoCompat.getId] of the shortcut,
      * in case the Launcher wants to hide the shortcut.
      *
-     * **Note:** This field will be ignored by Launchers that don't support
+     * **Note:** This field will be ignored by Launchers that doesn't support
      * badging or [shortcuts][androidx.core.content.pm.ShortcutInfoCompat].
-     *
-     * @param shortcutId the [id][androidx.core.content.pm.ShortcutInfoCompat.getId]
-     * of the shortcut this notification supersedes
      */
-    fun shortcutId(shortcutId: String) {
-        notification.setShortcutId(shortcutId)
-    }
+    var shortcutId: String? = DEFAULT_SHORTCUT_ID
+        set(value) {
+            field = value
+            notification.setShortcutId(shortcutId)
+        }
 
     /**
      * Control whether the timestamp set with [whenTime] is shown in the content view.
      */
-    fun showWhen(show: Boolean) {
-        notification.setShowWhen(show)
-    }
+    var showWhen: Boolean = DEFAULT_SHOW_WHEN
+        set(value) {
+            field = value
+            notification.setShowWhen(value)
+        }
 
     /**
      * Silences this instance of the notification, regardless of the sounds or vibrations set
@@ -559,18 +586,11 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * @see String.compareTo
      */
-    fun sortKey(sortKey: String) {
-        notification.setSortKey(sortKey)
-    }
-
-    /**
-     * Set the sound to play. It will play on the default stream.
-     *
-     * On some platforms, a notification that is noisy is more likely to be presented as a heads-up notification.
-     */
-    fun sound(sound: Uri) {
-        notification.setSound(sound)
-    }
+    var sortKey: String? = null
+        set(sortKey) {
+            field = sortKey
+            notification.setSortKey(sortKey)
+        }
 
     /**
      * Set the sound to play. It will play on the stream you supply.
@@ -581,34 +601,40 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * @see NotificationCompat.STREAM_DEFAULT
      */
-    fun sound(sound: Uri, @NotificationCompat.StreamType streamType: Int) {
-        notification.setSound(sound, streamType)
-    }
+    var sound: Sound? = DEFAULT_SOUND
+        set(value) {
+            field = value
+            if (value == null) {
+                notification.setSound(null, NotificationCompat.STREAM_DEFAULT)
+            } else {
+                notification.setSound(value.sound, value.streamType.streamTypeInt)
+            }
+        }
 
     /**
      * Add a rich notification style to be applied at build time.
      *
      * If the platform does not provide rich notification styles, this method has no effect. The
      * user will always see the normal notification style.
-     *
-     * @param style Object responsible for modifying the notification style.
      */
-    inline fun NotificationBuilder.style(style: NotificationCompat.Style) {
-        notification.setStyle(style)
-    }
+    var style: NotificationCompat.Style? = DEFAULT_STYLE
+        set(style) {
+            field = style
+            notification.setStyle(style)
+        }
 
     /**
      * Set the third line of text in the platform notification template.
      * Don't use if you're also using [progress]; they occupy the same location in the standard template.
      *
-     * &nbsp;
-     *
      * If the platform does not provide large-format notifications, this method has no effect.
      * The third line of text only appears in expanded view.
      */
-    fun subText(text: CharSequence) {
-        notification.setSubText(text)
-    }
+    var subText: CharSequence? = DEFAULT_SUB_TEXT
+        set(text) {
+            field = text
+            notification.setSubText(text)
+        }
 
     /**
      * Sets the "ticker" text which is sent to accessibility services. Prior to [Build.VERSION_CODES.LOLLIPOP],
@@ -622,9 +648,12 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
     /**
      * Specifies the time at which this notification should be canceled, if it is not already canceled.
      */
-    fun timeoutAfter(@IntRange(from = 0) durationMs: Long) {
-        notification.setTimeoutAfter(durationMs)
-    }
+    @IntRange(from = 0)
+    var timeoutAfter: Long = DEFAULT_TIMEOUT_AFTER
+        set(value) {
+            field = value
+            notification.setTimeoutAfter(value)
+        }
 
     /**
      * Show the [Notification.when][AndroidNotification.when] field as a stopwatch.
@@ -635,11 +664,13 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      * Useful when showing an elapsed time (like an ongoing phone call).
      *
      * @see android.widget.Chronometer
-     * @see AndroidNotification.when
+     * @see whenTime
      */
-    fun usesChronometer(value: Boolean) {
-        notification.setUsesChronometer(value)
-    }
+    var usesChronometer: Boolean = DEFAULT_USES_CHRONOMETER
+        set(value) {
+            field = value
+            notification.setUsesChronometer(value)
+        }
 
     /**
      * Set the vibration pattern to use.
@@ -648,38 +679,157 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) constructo
      *
      * See [Vibrator][android.os.Vibrator] for a discussion of the `pattern` parameter.
      */
-    fun vibrate(pattern: LongArray) {
-        notification.setVibrate(pattern)
-    }
+    var vibrate: LongArray? = DEFAULT_VIBRATE
+        get() = field?.copyOf()
+        set(value) {
+            field = value
+            notification.setVibrate(value)
+        }
 
     /**
      * Sets [NotificationBuilder.visibility].
      *
-     * @param visibility One of [NotificationCompat.VISIBILITY_PRIVATE] (the default),
-     * [NotificationCompat.VISIBILITY_PUBLIC], or [NotificationCompat.VISIBILITY_SECRET].
+     * @see Visibility
      */
-    fun visibility(@NotificationVisibility visibility: Int) {
-        notification.setVisibility(visibility)
-    }
+    var visibility = Visibility.from(DEFAULT_VISIBILITY)
+        set(value) {
+            field = value
+            notification.setWhen(whenTime)
+        }
 
     /**
      * Set the time that the event occurred. Notifications in the panel are sorted by this time.
      */
-    fun whenTime(@IntRange(from = 0) time: Long) {
-        notification.setWhen(time)
+    @IntRange(from = 0)
+    var whenTime: Long = 0
+        set(value) {
+            field = value
+            notification.setWhen(whenTime)
+        }
+
+    private companion object {
+
+        const val DEFAULT_AUTO_CANCEL = true
+        const val DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION = true
+        const val DEFAULT_BADGE_ICON_TYPE = NotificationCompat.BADGE_ICON_NONE
+        val DEFAULT_CATEGORY: String? = null
+        const val DEFAULT_COLOR = Color.TRANSPARENT
+        const val DEFAULT_COLORIZED = false
+        val DEFAULT_CONTENT_TEXT: CharSequence? = null
+        val DEFAULT_CONTENT_TITLE: CharSequence? = null
+        val DEFAULT_CONTENT_INFO: CharSequence? = null
+        val DEFAULT_CONTENT_INTENT: PendingIntent? = null
+        const val DEFAULT_DEFAULTS = 0
+        val DEFAULT_LARGE_ICON: Bitmap? = null
+        const val DEFAULT_ONLY_ALERT_ONCE = true
+        const val DEFAULT_PRIORITY = NotificationCompat.PRIORITY_DEFAULT
+        const val DEFAULT_VISIBILITY = NotificationCompat.VISIBILITY_PRIVATE
+        val DEFAULT_VIBRATE: LongArray? = null
+        val DEFAULT_DELETE_INTENT: PendingIntent? = null
+        val DEFAULT_SHORTCUT_ID: String? = null
+        const val DEFAULT_SHOW_WHEN = true
+        const val DEFAULT_USES_CHRONOMETER = false
+        const val DEFAULT_TIMEOUT_AFTER: Long = 0
+        val DEFAULT_SUB_TEXT: CharSequence? = null
+        val DEFAULT_STYLE: NotificationCompat.Style? = null
+        val DEFAULT_SOUND: Sound? = null
+        val DEFAULT_SORT_KEY: String? = null
+        val DEFAULT_REMOTE_INPUT_HISTORY: Array<CharSequence>? = null
+        const val DEFAULT_SOUND_STREAM_TYPE = NotificationCompat.STREAM_DEFAULT
+        const val DEFAULT_ONGOING = false
+        const val DEFAULT_NUMBER = 0
+        const val DEFAULT_LOCAL_ONLY = false
+        const val DEFAULT_GROUP_SUMMARY = false
+        const val DEFAULT_GROUP_ALERT_BEHAVIOR: Int = NotificationCompat.GROUP_ALERT_ALL
+        val DEFAULT_GROUP_KEY: String? = null
+        const val DEFAULT_CHRONOMETER_COUNT_DOWN = false
+        val DEFAULT_CUSTOM_BIG_CONTENT_VIEW: RemoteViews? = null
+        val DEFAULT_CUSTOM_CONTENT_VIEW: RemoteViews? = null
+        val DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW: RemoteViews? = null
+        val DEFAULT_LIGHTS: Lights? = null
+
+        fun defaultNotification(
+            context: Context,
+            channelId: String,
+            @DrawableRes smallIcon: Int
+        ): NotificationCompat.Builder {
+            return NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(smallIcon)
+                .setAutoCancel(DEFAULT_AUTO_CANCEL)
+                .setAllowSystemGeneratedContextualActions(DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION)
+                .setBadgeIconType(DEFAULT_BADGE_ICON_TYPE)
+                .setCategory(DEFAULT_CATEGORY)
+                .setColor(DEFAULT_COLOR)
+                .setColorized(DEFAULT_COLORIZED)
+                .setContentText(DEFAULT_CONTENT_TEXT)
+                .setContentTitle(DEFAULT_CONTENT_TITLE)
+                .setContentInfo(DEFAULT_CONTENT_INFO)
+                .setContentIntent(DEFAULT_CONTENT_INTENT)
+                .setDefaults(DEFAULT_DEFAULTS)
+                .setLargeIcon(DEFAULT_LARGE_ICON)
+                .setOnlyAlertOnce(DEFAULT_ONLY_ALERT_ONCE)
+                .setPriority(DEFAULT_PRIORITY)
+                .setVisibility(DEFAULT_VISIBILITY)
+                .setVibrate(DEFAULT_VIBRATE)
+                .setDeleteIntent(DEFAULT_DELETE_INTENT)
+                .setShortcutId(DEFAULT_SHORTCUT_ID)
+                .setShowWhen(DEFAULT_SHOW_WHEN)
+                .setUsesChronometer(DEFAULT_USES_CHRONOMETER)
+                .setTimeoutAfter(DEFAULT_TIMEOUT_AFTER)
+                .setSubText(DEFAULT_SUB_TEXT)
+                .setStyle(DEFAULT_STYLE)
+                .setSound(null, DEFAULT_SOUND_STREAM_TYPE)
+                .setSortKey(DEFAULT_SORT_KEY)
+                .setRemoteInputHistory(DEFAULT_REMOTE_INPUT_HISTORY)
+                .setOngoing(DEFAULT_ONGOING)
+                .setNumber(DEFAULT_NUMBER)
+                .setLocalOnly(DEFAULT_LOCAL_ONLY)
+                .setGroupSummary(DEFAULT_GROUP_SUMMARY)
+                .setGroupAlertBehavior(DEFAULT_GROUP_ALERT_BEHAVIOR)
+                .setGroup(DEFAULT_GROUP_KEY)
+                .setChronometerCountDown(DEFAULT_CHRONOMETER_COUNT_DOWN)
+                .setCustomBigContentView(DEFAULT_CUSTOM_BIG_CONTENT_VIEW)
+                .setCustomContentView(DEFAULT_CUSTOM_CONTENT_VIEW)
+                .setCustomHeadsUpContentView(DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW)
+            // Ignored .setLights(DEFAULT_LIGHTS)
+        }
     }
 }
 
 /**
- * Set the argb value that you would like the LED on the device to blink, as well as the
- * rate. The rate is specified in terms of the number of milliseconds to be on
- * and then the number of milliseconds to be off.
+ * Create new notification for specified [channelId]
+ *
+ * @param channelId The constructed Notification will be posted on this NotificationChannel
+ *
+ * @return A new [NotificationBuilder] object.
  */
-@ExperimentalTime
-inline fun NotificationBuilder.lights(@ColorInt color: Int, on: Duration, off: Duration) {
-    require(on.isPositive() && on.isFinite()) { "`on` must be greater or equals than zero and finite" }
-    require(off.isPositive() && off.isFinite()) { "`off` must be greater or equals than zero and finite" }
-    lights(color, on.toInt(DurationUnit.MILLISECONDS), off.toInt(DurationUnit.MILLISECONDS))
+inline fun notification(
+    context: Context,
+    channelId: String,
+    @DrawableRes smallIcon: Int,
+    body: NotificationBuilder.() -> Unit
+): AndroidNotification {
+    return buildNotification(context, channelId, smallIcon, body).build()
+}
+
+/**
+ * Create new notification for specified [channelId]
+ *
+ * @param channelId The constructed Notification will be posted on this NotificationChannel
+ *
+ * @return A new [NotificationBuilder] object.
+ */
+fun notification(context: Context, channelId: String, @DrawableRes smallIcon: Int): AndroidNotification {
+    return NotificationBuilder(context, channelId, smallIcon).build()
+}
+
+inline fun buildNotification(
+    context: Context,
+    channelId: String,
+    @DrawableRes smallIcon: Int,
+    body: NotificationBuilder.() -> Unit
+): NotificationBuilder {
+    return NotificationBuilder(context, channelId, smallIcon).apply(body)
 }
 
 /**
@@ -739,21 +889,21 @@ inline fun NotificationBuilder.vibrate(vararg pattern: Long) {
  * Set the large text at the right-hand side of the notification.
  */
 fun NotificationBuilder.contentInfo(@StringRes infoRes: Int) {
-    contentInfo(context.getText(infoRes))
+    contentInfo = context.getText(infoRes)
 }
 
 /**
  * Set the text (second row) of the notification, in a standard notification.
  */
 fun NotificationBuilder.contentText(@StringRes contentRes: Int) {
-    contentText(context.getText(contentRes))
+    contentText = context.getText(contentRes)
 }
 
 /**
  * Set the title (first row) of the notification, in a standard notification.
  */
 fun NotificationBuilder.contentTitle(@StringRes titleRes: Int) {
-    contentTitle(context.getText(titleRes))
+    contentTitle = context.getText(titleRes)
 }
 
 /**
@@ -767,34 +917,5 @@ fun NotificationBuilder.contentTitle(@StringRes titleRes: Int) {
  * The third line of text only appears in expanded view.
  */
 fun NotificationBuilder.subText(@StringRes textRes: Int) {
-    subText(context.getText(textRes))
-}
-
-/**
- * Set [NotificationBuilder.visibility]. Default value is [PRIVATE][Visibility.PRIVATE]
- */
-fun NotificationBuilder.visibility(visibility: Visibility) {
-    visibility(visibility.value)
-}
-
-/**
- * The level of detail visible in the notification from the lock screen
- */
-enum class Visibility(val value: Int) {
-
-    /**
-     * Doesn't show any part of this notification on the lock screen.
-     */
-    SECRET(NotificationCompat.VISIBILITY_SECRET),
-
-    /**
-     * Shows basic information, such as the notification's icon and the content title,
-     * but hides the notification's full content.
-     */
-    PRIVATE(NotificationCompat.VISIBILITY_PRIVATE),
-
-    /**
-     * Shows the notification's full content
-     */
-    PUBLIC(NotificationCompat.VISIBILITY_PUBLIC),
+    subText = context.getText(textRes)
 }

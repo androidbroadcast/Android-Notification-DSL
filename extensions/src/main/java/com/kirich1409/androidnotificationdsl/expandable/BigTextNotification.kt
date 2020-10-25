@@ -9,7 +9,7 @@ import androidx.annotation.RestrictTo
 import com.ironsource.aura.dslint.annotations.DSLMandatory
 import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
-import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
+import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.expandable.annotations.BigTextNotificationBuilderMarker
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.style.bigtext.bigTextStyle
@@ -27,19 +27,15 @@ fun bigTextNotification(
 ): Notification {
     val builder = BigTextNotificationBuilder().apply(body)
     return notification(context, channelId, smallIcon) {
-        builder.title?.let(::contentTitle)
-        contentText(builder.text)
+        contentTitle = builder.title
+        contentText = builder.text
         bigTextStyle {
-            text(builder.text)
-
-            val title = builder.expanded.title
-            if (title is CharSequence?) {
-                contentTitle(title)
-            }
+            text = builder.text
+            contentTitle = builder.expanded.title
 
             val text = builder.expanded.text
             if (text is CharSequence) {
-                summaryText(text)
+                summaryText = text
             }
 
             builder.expanded.buildActions?.let(this@notification::actions)
@@ -83,7 +79,7 @@ class BigTextNotificationBuilder internal constructor() {
         @RestrictTo(RestrictTo.Scope.LIBRARY)
         internal var _text: Any? = NOTHING
 
-        internal var buildActions: (ActionsBuilder.() -> Unit)? = null
+        internal var buildActions: (Actions.() -> Unit)? = null
 
         /**
          * Replace notification title in expanded state
@@ -112,7 +108,7 @@ class BigTextNotificationBuilder internal constructor() {
          *
          * Actions will not be showed on Android before 4.1
          */
-        fun actions(body: ActionsBuilder.() -> Unit) {
+        fun actions(body: Actions.() -> Unit) {
             buildActions = body
         }
     }

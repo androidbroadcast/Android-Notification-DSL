@@ -1,10 +1,10 @@
 package com.kirich1409.androidnotificationdsl.action.annotations
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
+import com.kirich1409.androidnotificationdsl.action.Actions
 
 /**
- * @see ActionsBuilder
+ * @see Actions
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY, AnnotationTarget.TYPE)

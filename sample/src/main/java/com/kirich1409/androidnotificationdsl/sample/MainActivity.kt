@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.kirich1409.androidnotificationdsl.sample.extentions.bigTextExtensionSample
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,11 +15,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         findViewById<View>(R.id.show_notification).setOnClickListener { view: View ->
             val context = view.context
-            val notification = bigTextExtensionSample(context)
+            val notifications = buildNotificationsGroupOld(context)
 
             val notificationManager =
                 requireNotNull(ContextCompat.getSystemService(context, NotificationManager::class.java))
-            notificationManager.notify(notificationId++, notification)
+            notifications.forEach { notification ->
+                notificationManager.notify(notificationId++, notification)
+            }
         }
     }
 }

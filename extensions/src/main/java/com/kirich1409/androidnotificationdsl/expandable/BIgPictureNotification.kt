@@ -10,7 +10,7 @@ import androidx.annotation.RestrictTo
 import com.ironsource.aura.dslint.annotations.DSLMandatory
 import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
-import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
+import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.expandable.annotations.BigPictureNotificationBuilderMarker
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.style.bigpicture.bigPictureStyle
@@ -28,9 +28,9 @@ fun bigPictureNotification(
 ): Notification {
     val builder = BigPictureNotificationBuilder().apply(body)
     return notification(context, channelId, smallIcon) {
-        builder.title?.let(::contentTitle)
-        builder.text?.let(::contentText)
-        builder.largeIcon?.let(::largeIcon)
+        contentTitle = builder.title
+        contentText = builder.text
+        largeIcon = builder.largeIcon
         bigPictureStyle {
             picture(builder.expanded.bigPicture)
             largeIcon(builder.expanded.largeIcon)
@@ -99,7 +99,7 @@ class BigPictureNotificationBuilder internal constructor() {
         @RestrictTo(RestrictTo.Scope.LIBRARY)
         internal var _text: Any? = NOTHING
 
-        internal var buildActions: (ActionsBuilder.() -> Unit)? = null
+        internal var buildActions: (Actions.() -> Unit)? = null
 
         var largeIcon: Bitmap? = null
 
@@ -130,7 +130,7 @@ class BigPictureNotificationBuilder internal constructor() {
          *
          * Actions will not be showed on Android before 4.1
          */
-        fun actions(body: ActionsBuilder.() -> Unit) {
+        fun actions(body: Actions.() -> Unit) {
             buildActions = body
         }
     }

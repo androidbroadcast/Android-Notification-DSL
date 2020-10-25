@@ -7,7 +7,7 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
-import com.kirich1409.androidnotificationdsl.action.ActionsBuilder
+import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionsMarker
 import com.kirich1409.androidnotificationdsl.notification
 
@@ -22,8 +22,8 @@ fun progressNotification(
 ): Notification {
     val builder = ProgressNotificationBuilder().apply(body)
     return notification(context, channelId, smallIcon) {
-        builder.title?.let(::contentTitle)
-        builder.progressText?.let(::contentText)
+        contentTitle = builder.title
+        contentText = builder.progressText
         if (builder.indeterminated) {
             builder.progress?.let { progress ->
                 progress(progress.max, progress.current, indeterminate = true)
@@ -71,7 +71,7 @@ class ProgressNotificationBuilder internal constructor() {
 
     internal var progress: Progress? = null
 
-    internal var buildActions: (ActionsBuilder.() -> Unit)? = null
+    internal var buildActions: (Actions.() -> Unit)? = null
 
     fun progress(body: @ProgressMarker Progress.() -> Unit) {
         (this.progress ?: Progress().also { this.progress = it }).apply(body)
@@ -96,7 +96,7 @@ class ProgressNotificationBuilder internal constructor() {
      *
      * Actions will not be showed on Android before 4.1
      */
-    fun actions(body: @NotificationActionsMarker ActionsBuilder.() -> Unit) {
+    fun actions(body: @NotificationActionsMarker Actions.() -> Unit) {
         buildActions = body
     }
 

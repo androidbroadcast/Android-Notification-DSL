@@ -6,13 +6,15 @@ import android.app.PendingIntent
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
+import com.kirich1409.androidnotificationdsl.Container
 import com.kirich1409.androidnotificationdsl.action.ActionBuilder
 
 @NotificationWearableExtenderActionsMarker
 @Suppress("UndocumentedPublicClass")
 class WearableExtenderActions @PublishedApi internal constructor(
     @PublishedApi internal val wearableExtender: NotificationCompat.WearableExtender
-) {
+) : Container<NotificationCompat.Action> {
+    
     /**
      * Add a wearable action to this notification.
      *
@@ -24,7 +26,7 @@ class WearableExtenderActions @PublishedApi internal constructor(
      *
      * @see NotificationCompat.Action
      */
-    fun addAction(action: NotificationCompat.Action) {
+    fun action(action: NotificationCompat.Action) {
         wearableExtender.addAction(action)
     }
 
@@ -81,18 +83,7 @@ class WearableExtenderActions @PublishedApi internal constructor(
         wearableExtender.addAction(action)
     }
 
-    /**
-     * Add a wearable action to this notification.
-     *
-     * When wearable actions are added using this method, the set of actions that show on a wearable device splits
-     * from devices that only show actions added using [NotificationCompat.Builder.addAction].
-     * This allows for customization of which actions display on different devices.
-     *
-     * @param action the action to add to this notification
-     *
-     * @see NotificationCompat.Action
-     */
-    operator fun plus(action: NotificationCompat.Action) {
-        addAction(action)
+    override fun plusAssign(item: NotificationCompat.Action) {
+        action(item)
     }
 }

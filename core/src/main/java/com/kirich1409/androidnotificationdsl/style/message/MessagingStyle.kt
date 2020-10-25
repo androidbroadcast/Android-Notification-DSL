@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.kirich1409.androidnotificationdsl.style.message
 
@@ -9,14 +9,14 @@ import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 
 @NotificationMessagingStyleMarker
 @Suppress("UndocumentedPublicClass")
-class MessagingStyleBuilder @PublishedApi internal constructor(
+class MessagingStyle @PublishedApi internal constructor(
     @PublishedApi internal val messagingStyle: NotificationCompat.MessagingStyle
 ) {
 
     /**
      * The title to be displayed on this conversation.
      */
-    inline var conversationTitle: CharSequence?
+    public inline var conversationTitle: CharSequence?
         get() = messagingStyle.conversationTitle
         set(value) {
             messagingStyle.conversationTitle = value
@@ -25,33 +25,26 @@ class MessagingStyleBuilder @PublishedApi internal constructor(
     /**
      * Whether this conversation notification represents a group
      */
-    inline var groupConversation: Boolean
+    public inline var groupConversation: Boolean
         get() = messagingStyle.isGroupConversation
         set(value) {
             messagingStyle.isGroupConversation = value
         }
 
     /**
-     * Gets the list of [Message][NotificationCompat.MessagingStyle.Message] objects that represent the notification
-     */
-    inline val messages: List<NotificationCompat.MessagingStyle.Message>
-        get() = messagingStyle.messages
-
-    /**
      * Returns the person to be used for any replies sent by the user.
      */
-    inline val user: Person get() = messagingStyle.user
+    public inline val user: Person get() = messagingStyle.user
 
-    /**
-     * Adds [Message][NotificationCompat.MessagingStyle.Message]s for display in this notification.
-     */
-    inline fun messages(body: MessagesBuilder.() -> Unit) {
-        MessagesBuilder(messagingStyle).body()
+    public val messages = Messages(messagingStyle)
+
+    public inline fun messages(body: Messages.() -> Unit) {
+        messages.apply(body)
     }
 }
 
 /**
- * Creates a new [MessagingStyleBuilder] instance and set is as style of the notification.
+ * Creates a new [MessagingStyle] instance and set is as style of the notification.
  * Note that [Person] must have a non-empty name.
  *
  * @param user This [Person]'s name will be shown when this app's notification is being replied to.
@@ -60,22 +53,23 @@ class MessagingStyleBuilder @PublishedApi internal constructor(
  */
 inline fun NotificationBuilder.messagingStyle(
     user: Person,
-    body: @NotificationMarker MessagingStyleBuilder.() -> Unit
+    body: @NotificationMarker MessagingStyle.() -> Unit
 ) {
-    style(NotificationCompat.MessagingStyle(user).also { MessagingStyleBuilder(it).body() })
+    style = NotificationCompat.MessagingStyle(user).also { MessagingStyle(it).body() }
 }
 
 /**
- * Creates a new [MessagingStyleBuilder] instance. Note that [Person] must have a non-empty name.
+ * Creates a new [MessagingStyle] instance. Note that [Person] must have a non-empty name.
  *
  * @param user This [Person]'s name will be shown when this app's notification is being replied to.
  * It's used temporarily so the app has time to process the send request and repost the notification
  * with updates to the conversation.
  */
-inline fun messagingStyle(
+inline fun newMessagingStyle(
     user: Person,
-    body: @NotificationMarker MessagingStyleBuilder.() -> Unit
+    body: @NotificationMarker MessagingStyle.() -> Unit
 ): NotificationCompat.MessagingStyle {
-    return NotificationCompat.MessagingStyle(user).also { MessagingStyleBuilder(it).body() }
+    return NotificationCompat.MessagingStyle(user)
+        .also { style -> MessagingStyle(style).body() }
 }
 

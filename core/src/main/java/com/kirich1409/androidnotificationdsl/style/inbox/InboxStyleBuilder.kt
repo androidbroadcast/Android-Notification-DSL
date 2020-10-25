@@ -15,55 +15,38 @@ class InboxStyle @PublishedApi internal constructor(
 ) {
 
     /**
+     * Overrides ContentTitle in the big form of the template.
+     * This defaults to the value passed to setContentTitle().
+     */
+    @Size(max = MAX_CHARSEQUENCE_LENGTH)
+    var contentTile: CharSequence? = null
+        set(value) {
+            field = value
+            inboxStyle.setBigContentTitle(value)
+        }
+
+    /**
      * Lines of the digest section of the Inbox notification.
      */
-    val lines: LinesBuilder = LinesBuilder(inboxStyle)
-
-    /**
-     * Overrides ContentTitle in the big form of the template.
-     * This defaults to the value passed to setContentTitle().
-     */
-    @Deprecated("Use contentTitle() instead", ReplaceWith("contentTitle(title)"))
-    fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
-        contentTitle(title)
-    }
-
-    /**
-     * Overrides ContentTitle in the big form of the template.
-     * This defaults to the value passed to setContentTitle().
-     */
-    fun contentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
-        inboxStyle.setBigContentTitle(title)
-    }
+    val lines = Lines(inboxStyle)
 
     /**
      * Append lines to the digest section of the Inbox notification.
      */
-    inline fun lines(body: @NotificationInboxStyleMarker LinesBuilder.() -> Unit) {
+    inline fun lines(body: @NotificationInboxStyleMarker Lines.() -> Unit) {
         lines.body()
     }
 
     /**
      * Set the first line of text after the detail section in the big form of the template.
      */
-    fun summaryText(@Size(max = MAX_CHARSEQUENCE_LENGTH) summaryText: CharSequence?) {
-        inboxStyle.setSummaryText(summaryText)
-    }
+    @Size(max = MAX_CHARSEQUENCE_LENGTH)
+    var summaryText: CharSequence? = null
+        set(value) {
+            field = value
+            inboxStyle.setSummaryText(value)
+        }
 
-}
-
-/**
- * Append a line to the digest section of the Inbox notification.
- */
-operator fun LinesBuilder.plus(@Size(max = MAX_CHARSEQUENCE_LENGTH) line: CharSequence) {
-    inboxStyle.addLine(line)
-}
-
-/**
- * Append a line to the digest section of the Inbox notification.
- */
-operator fun LinesBuilder.plus(lines: Iterable<CharSequence>) {
-    lines.forEach { inboxStyle.addLine(it) }
 }
 
 /**
@@ -72,8 +55,37 @@ operator fun LinesBuilder.plus(lines: Iterable<CharSequence>) {
  * If the platform does not provide rich notification styles, this method has no effect. The
  * user will always see the normal notification style.
  */
-inline fun NotificationBuilder.inboxStyle(body: @NotificationMarker InboxStyle.() -> Unit): NotificationCompat.InboxStyle {
+inline fun NotificationBuilder.inboxStyle(
+    body: @NotificationMarker InboxStyle.() -> Unit
+): NotificationCompat.InboxStyle {
+    return NotificationCompat.InboxStyle().also { inboxStyle ->
+        style = inboxStyle.also { InboxStyle(it).body() }
+    }
+}
+
+fun NotificationBuilder.inboxStyle(
+    title: CharSequence? = null,
+    summaryText: CharSequence? = null
+): NotificationCompat.InboxStyle {
+    return NotificationCompat.InboxStyle()
+        .setBigContentTitle(title)
+        .setSummaryText(summaryText)
+        .also { style = it }
+}
+
+inline fun NotificationBuilder.inboxStyle(
+    title: CharSequence? = null,
+    summaryText: CharSequence? = null,
+    lines: @NotificationMarker Lines.() -> Unit
+): NotificationCompat.InboxStyle {
     val inboxStyle = NotificationCompat.InboxStyle()
-    style(inboxStyle.also { InboxStyle(it).body() })
+        .setBigContentTitle(title)
+        .setSummaryText(summaryText)
+    Lines(inboxStyle).lines()
+    style = inboxStyle
     return inboxStyle
+}
+
+fun NotificationBuilder.inboxStyle(): NotificationCompat.InboxStyle {
+    return NotificationCompat.InboxStyle().also { style = it }
 }

@@ -22,6 +22,6 @@ fun bigPictureExtensionSample(context: Context) =
 
         // Allow to add addition information to the notification via Core Notification DSL
         extend {
-            whenTime(System.currentTimeMillis())
+            whenTime = System.currentTimeMillis()
         }
     }

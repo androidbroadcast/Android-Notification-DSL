@@ -6,7 +6,7 @@ import com.kirich1409.androidnotificationdsl.utils.activityPendingIntent
 
 fun buildNotification(context: Context) =
     notification(context, NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
-        contentTitle("Notification title")
+        contentTitle = "Notification title"
         actions {
             action(
                 title = "Edit",

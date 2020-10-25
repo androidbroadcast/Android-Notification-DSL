@@ -120,25 +120,19 @@ fun NotificationManagerCompat.notify(
 @Suppress("ReturnCount")
 fun NotificationManagerCompat.areNotificationsEnabled(channelId: String): Boolean {
     // Check that notifications isn't disabled for the app
-    if (!areNotificationsEnabled()) {
-        return false
-    }
+    if (!areNotificationsEnabled()) return false
 
     // Check notification channels
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         // Check that notification channel isn't disabled
         val channel = getNotificationChannel(channelId) ?: return true
 
-        if (channel.importance == NotificationManager.IMPORTANCE_NONE) {
-            return false
-        }
+        if (channel.importance == NotificationManager.IMPORTANCE_NONE) return false
 
         // Check that notification channel group isn't blocked
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val channelGroup = channel.group?.let(::getNotificationChannelGroup)
-            if (channelGroup != null && channelGroup.isBlocked) {
-                return false
-            }
+            if (channelGroup != null && channelGroup.isBlocked) return false
         }
     }
 
