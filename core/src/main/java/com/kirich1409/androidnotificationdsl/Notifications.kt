@@ -6,7 +6,6 @@
 package com.kirich1409.androidnotificationdsl
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -36,15 +35,22 @@ import android.app.Notification as AndroidNotification
 @Suppress("TooManyFunctions")
 class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @PublishedApi internal constructor(
     internal val context: Context,
+    internal val channelId: String,
     @PublishedApi internal val notification: NotificationCompat.Builder
 ) {
 
     @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
     @PublishedApi
     internal constructor(context: Context, channelId: String, @DrawableRes smallIcon: Int)
-            : this(context, defaultNotification(context, channelId, smallIcon)) {
-        whenTime = System.currentTimeMillis()
-    }
+            : this(context, channelId, defaultNotification(context, channelId, smallIcon))
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+    @PublishedApi
+    internal constructor(
+        context: Context,
+        builder: NotificationBuilder,
+        channelId: String = builder.channelId
+    ) : this(context, channelId, createNotification(context, channelId, builder))
 
     /**
      * Notification's actions
@@ -325,7 +331,6 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * @param highPriority Passing true will cause this notification to be sent even
      * if other notifications are suppressed.
      */
-    @SuppressLint("InlinedApi")
     @RequiresPermission(Manifest.permission.USE_FULL_SCREEN_INTENT)
     fun fullScreenIntent(intent: PendingIntent, highPriority: Boolean = false) {
         notification.setFullScreenIntent(intent, highPriority)
@@ -396,12 +401,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
     var lights: Lights? = DEFAULT_LIGHTS
         set(value) {
             field = value
-            updateLights(value ?: Lights.NULL)
+            with(value ?: Lights.NULL) {
+                notification.setLights(color, onMs, offMs)
+            }
         }
-
-    private fun updateLights(lights: Lights) {
-        notification.setLights(lights.color, lights.onMs, lights.offMs)
-    }
 
     /**
      * Set whether or not this notification is only relevant to the current device.
@@ -485,9 +488,13 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * Set the progress this notification represents, which may be
      * represented as a [ProgressBar][android.widget.ProgressBar].
      */
-    fun progress(@IntRange(from = 0) max: Int, @IntRange(from = 0) progress: Int, indeterminate: Boolean = false) {
-        notification.setProgress(max, progress, indeterminate)
-    }
+    var progress: NotificationProgress? = DEFAULT_PROGRESS
+        set(value) {
+            field = value
+            with(value ?: NotificationProgress.NULL) {
+                notification.setProgress(max, progress, indeterminate)
+            }
+        }
 
     /**
      * Supply a replacement Notification whose contents should be shown in insecure contexts
@@ -558,22 +565,17 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      *
      * @param icon A resource ID in the application's package of the drawable to use.
      */
-    fun smallIcon(@DrawableRes icon: Int) {
-        notification.setSmallIcon(icon)
-    }
-
-    /**
-     * A variant of [smallIcon] that takes an additional level parameter for when the icon is a
-     * [LevelListDrawable][android.graphics.drawable.LevelListDrawable].
-     *
-     * @param icon A resource ID in the application's package of the drawable to use.
-     * @param level The level to use for the icon.
-     *
-     * @see android.graphics.drawable.LevelListDrawable
-     */
-    fun smallIcon(@DrawableRes icon: Int, @IntRange(from = 0) level: Int) {
-        notification.setSmallIcon(icon, level)
-    }
+    var smallIcon: NotificationIcon? = DEFAULT_SMALL_ICON
+        set(value) {
+            field = value
+            with(value ?: NotificationIcon.NULL) {
+                if (level >= 0) {
+                    notification.setSmallIcon(icon, level)
+                } else {
+                    notification.setSmallIcon(icon)
+                }
+            }
+        }
 
     /**
      * Set a sort key that orders this notification among other notifications from the
@@ -651,6 +653,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
     @IntRange(from = 0)
     var timeoutAfter: Long = DEFAULT_TIMEOUT_AFTER
         set(value) {
+            require(value >= 0) { "ticker must be >= 0" }
             field = value
             notification.setTimeoutAfter(value)
         }
@@ -679,11 +682,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      *
      * See [Vibrator][android.os.Vibrator] for a discussion of the `pattern` parameter.
      */
-    var vibrate: LongArray? = DEFAULT_VIBRATE
-        get() = field?.copyOf()
+    var vibrate: VibratePattern? = DEFAULT_VIBRATE
         set(value) {
             field = value
-            notification.setVibrate(value)
+            notification.setVibrate(value?.asArray())
         }
 
     /**
@@ -707,6 +709,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
             notification.setWhen(whenTime)
         }
 
+    init {
+        whenTime = System.currentTimeMillis()
+    }
+
     private companion object {
 
         const val DEFAULT_AUTO_CANCEL = true
@@ -724,7 +730,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         const val DEFAULT_ONLY_ALERT_ONCE = true
         const val DEFAULT_PRIORITY = NotificationCompat.PRIORITY_DEFAULT
         const val DEFAULT_VISIBILITY = NotificationCompat.VISIBILITY_PRIVATE
-        val DEFAULT_VIBRATE: LongArray? = null
+        val DEFAULT_VIBRATE: VibratePattern? = null
         val DEFAULT_DELETE_INTENT: PendingIntent? = null
         val DEFAULT_SHORTCUT_ID: String? = null
         const val DEFAULT_SHOW_WHEN = true
@@ -747,6 +753,8 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         val DEFAULT_CUSTOM_CONTENT_VIEW: RemoteViews? = null
         val DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW: RemoteViews? = null
         val DEFAULT_LIGHTS: Lights? = null
+        val DEFAULT_PROGRESS: NotificationProgress? = null
+        var DEFAULT_SMALL_ICON: NotificationIcon? = null
 
         fun defaultNotification(
             context: Context,
@@ -756,7 +764,9 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
             return NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(smallIcon)
                 .setAutoCancel(DEFAULT_AUTO_CANCEL)
-                .setAllowSystemGeneratedContextualActions(DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION)
+                .setAllowSystemGeneratedContextualActions(
+                    DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION
+                )
                 .setBadgeIconType(DEFAULT_BADGE_ICON_TYPE)
                 .setCategory(DEFAULT_CATEGORY)
                 .setColor(DEFAULT_COLOR)
@@ -770,7 +780,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setOnlyAlertOnce(DEFAULT_ONLY_ALERT_ONCE)
                 .setPriority(DEFAULT_PRIORITY)
                 .setVisibility(DEFAULT_VISIBILITY)
-                .setVibrate(DEFAULT_VIBRATE)
+                // Ignored .setVibrate(DEFAULT_VIBRATE)
                 .setDeleteIntent(DEFAULT_DELETE_INTENT)
                 .setShortcutId(DEFAULT_SHORTCUT_ID)
                 .setShowWhen(DEFAULT_SHOW_WHEN)
@@ -792,6 +802,72 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setCustomContentView(DEFAULT_CUSTOM_CONTENT_VIEW)
                 .setCustomHeadsUpContentView(DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW)
             // Ignored .setLights(DEFAULT_LIGHTS)
+            // Ignored .setProgress(DEFAULT_PROGRESS)
+            // Ignored .setSmallIcon(DEFAULT_SMALL_ICON)
+        }
+
+        internal fun createNotification(
+            context: Context,
+            channelId: String,
+            builder: NotificationBuilder
+        ): NotificationCompat.Builder {
+            val notificationBuilder = NotificationCompat.Builder(context, channelId)
+            notificationBuilder.setAutoCancel(builder.autoCancel)
+                .setAllowSystemGeneratedContextualActions(builder.allowSystemGeneratedContextualAction)
+                .setBadgeIconType(builder.badgeIconType)
+                .setCategory(builder.category)
+                .setColor(builder.color)
+                .setColorized(builder.colorized)
+                .setContentText(builder.contentText)
+                .setContentTitle(builder.contentTitle)
+                .setContentInfo(builder.contentInfo)
+                .setContentIntent(builder.contentIntent)
+                .setDefaults(builder.defaults)
+                .setLargeIcon(builder.largeIcon)
+                .setOnlyAlertOnce(builder.onlyAlertOnce)
+                .setPriority(builder.priority)
+                .setVisibility(builder.visibility.value)
+                .setDeleteIntent(builder.deleteIntent)
+                .setShortcutId(builder.shortcutId)
+                .setShowWhen(builder.showWhen)
+                .setUsesChronometer(builder.usesChronometer)
+                .setTimeoutAfter(builder.timeoutAfter)
+                .setSubText(builder.subText)
+                .setStyle(builder.style)
+                .setSortKey(builder.sortKey)
+                .setRemoteInputHistory(builder.remoteInputHistory)
+                .setOngoing(builder.ongoing)
+                .setNumber(builder.number)
+                .setLocalOnly(builder.localOnly)
+                .setGroupSummary(builder.groupSummary)
+                .setGroupAlertBehavior(builder.groupAlertBehavior)
+                .setGroup(builder.group)
+                .setChronometerCountDown(builder.chronometerCountDown)
+                .setCustomBigContentView(builder.customBigContentView)
+                .setCustomContentView(builder.customContentView)
+                .setCustomHeadsUpContentView(builder.customHeadsUpContentView)
+
+            builder.sound?.apply {
+                notificationBuilder.setSound(sound, streamType.streamTypeInt)
+            }
+
+            builder.vibrate?.apply {
+                notificationBuilder.setVibrate(asArray())
+            }
+
+            builder.lights?.apply {
+                notificationBuilder.setLights(color, onMs, offMs)
+            }
+
+            builder.progress?.apply {
+                notificationBuilder.setProgress(max, progress, indeterminate)
+            }
+
+            builder.smallIcon?.apply {
+                notificationBuilder.setSmallIcon(icon, level)
+            }
+
+            return notificationBuilder
         }
     }
 }
@@ -819,7 +895,11 @@ inline fun notification(
  *
  * @return A new [NotificationBuilder] object.
  */
-fun notification(context: Context, channelId: String, @DrawableRes smallIcon: Int): AndroidNotification {
+fun notification(
+    context: Context,
+    channelId: String,
+    @DrawableRes smallIcon: Int
+): AndroidNotification {
     return NotificationBuilder(context, channelId, smallIcon).build()
 }
 
