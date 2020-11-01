@@ -3,7 +3,7 @@ package com.kirich1409.androidnotificationdsl.sample.extentions
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.Visibility
+import com.kirich1409.androidnotificationdsl.NotificationVisibility
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.progress.progressNotification
 import com.kirich1409.androidnotificationdsl.sample.MainActivity
@@ -87,7 +87,7 @@ fun sampleNotificationDsl(context: Context, message: Message) {
         defaults = NotificationCompat.DEFAULT_ALL
         priority = NotificationCompat.PRIORITY_HIGH
         whenTime = message.date.time
-        visibility = Visibility.PRIVATE
+        notificationVisibility = NotificationVisibility.PRIVATE
         largeIcon = BitmapFactory.decodeFile(message.personIconPath)
         category = NotificationCompat.CATEGORY_MESSAGE
         persons += message.personUri

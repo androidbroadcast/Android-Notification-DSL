@@ -18,10 +18,7 @@ import androidx.annotation.*
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.action.Actions
-import com.kirich1409.androidnotificationdsl.annotations.NotificationCategory
-import com.kirich1409.androidnotificationdsl.annotations.NotificationDefaults
 import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
-import com.kirich1409.androidnotificationdsl.annotations.NotificationPriority
 import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadataBuilder
 import com.kirich1409.androidnotificationdsl.internal.toArray
 import kotlin.time.Duration
@@ -125,11 +122,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      *
      * May be used by the system for ranking and filtering.
      */
-    @NotificationCategory
     var category = DEFAULT_CATEGORY
         set(value) {
             field = value
-            notification.setCategory(category)
+            notification.setCategory(category?.stringValue)
         }
 
     /**
@@ -277,11 +273,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      *
      * For all default values, use [NotificationCompat.DEFAULT_ALL].
      */
-    @NotificationDefaults
-    var defaults = DEFAULT_DEFAULTS
+    var defaults: NotificationDefaults = DEFAULT_DEFAULTS
         set(value) {
             field = value
-            notification.setDefaults(value)
+            notification.setDefaults(value.intValue)
         }
 
     /**
@@ -477,11 +472,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * Must be one of the priority constants defined by [NotificationCompat].
      * Acceptable values range from [NotificationCompat.PRIORITY_MIN] (-2) to [NotificationCompat.PRIORITY_MAX] (2).
      */
-    @NotificationPriority
-    var priority: Int = DEFAULT_PRIORITY
+    var priority: NotificationPriority = DEFAULT_PRIORITY
         set(value) {
             field = value
-            notification.setPriority(priority)
+            notification.setPriority(priority.intValue)
         }
 
     /**
@@ -498,7 +492,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
 
     /**
      * Supply a replacement Notification whose contents should be shown in insecure contexts
-     * (i.e. atop the secure lockscreen). See [NotificationBuilder.visibility] and
+     * (i.e. atop the secure lockscreen). See [NotificationBuilder.notificationVisibility] and
      * [VISIBILITY_PUBLIC][NotificationCompat.VISIBILITY_PUBLIC].
      */
     var publicVersion: AndroidNotification? = null
@@ -562,8 +556,6 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * Set the small icon to use in the notification layouts. Different classes of devices
      * may return different sizes. See the UX guidelines for more information on how to
      * design these icons.
-     *
-     * @param icon A resource ID in the application's package of the drawable to use.
      */
     var smallIcon: NotificationIcon? = DEFAULT_SMALL_ICON
         set(value) {
@@ -689,11 +681,11 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         }
 
     /**
-     * Sets [NotificationBuilder.visibility].
+     * Sets [NotificationBuilder.notificationVisibility].
      *
-     * @see Visibility
+     * @see NotificationVisibility
      */
-    var visibility = Visibility.from(DEFAULT_VISIBILITY)
+    var notificationVisibility: NotificationVisibility = DEFAULT_VISIBILITY
         set(value) {
             field = value
             notification.setWhen(whenTime)
@@ -718,18 +710,18 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         const val DEFAULT_AUTO_CANCEL = true
         const val DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION = true
         const val DEFAULT_BADGE_ICON_TYPE = NotificationCompat.BADGE_ICON_NONE
-        val DEFAULT_CATEGORY: String? = null
+        val DEFAULT_CATEGORY: NotificationCategory? = null
         const val DEFAULT_COLOR = Color.TRANSPARENT
         const val DEFAULT_COLORIZED = false
         val DEFAULT_CONTENT_TEXT: CharSequence? = null
         val DEFAULT_CONTENT_TITLE: CharSequence? = null
         val DEFAULT_CONTENT_INFO: CharSequence? = null
         val DEFAULT_CONTENT_INTENT: PendingIntent? = null
-        const val DEFAULT_DEFAULTS = 0
+        val DEFAULT_DEFAULTS = NotificationDefaults.ALL
         val DEFAULT_LARGE_ICON: Bitmap? = null
         const val DEFAULT_ONLY_ALERT_ONCE = true
-        const val DEFAULT_PRIORITY = NotificationCompat.PRIORITY_DEFAULT
-        const val DEFAULT_VISIBILITY = NotificationCompat.VISIBILITY_PRIVATE
+        val DEFAULT_PRIORITY = NotificationPriority.DEFAULT
+        val DEFAULT_VISIBILITY = NotificationVisibility.PRIVATE
         val DEFAULT_VIBRATE: VibratePattern? = null
         val DEFAULT_DELETE_INTENT: PendingIntent? = null
         val DEFAULT_SHORTCUT_ID: String? = null
@@ -768,18 +760,18 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                     DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION
                 )
                 .setBadgeIconType(DEFAULT_BADGE_ICON_TYPE)
-                .setCategory(DEFAULT_CATEGORY)
+                .setCategory(DEFAULT_CATEGORY?.stringValue)
                 .setColor(DEFAULT_COLOR)
                 .setColorized(DEFAULT_COLORIZED)
                 .setContentText(DEFAULT_CONTENT_TEXT)
                 .setContentTitle(DEFAULT_CONTENT_TITLE)
                 .setContentInfo(DEFAULT_CONTENT_INFO)
                 .setContentIntent(DEFAULT_CONTENT_INTENT)
-                .setDefaults(DEFAULT_DEFAULTS)
+                .setDefaults(DEFAULT_DEFAULTS.intValue)
                 .setLargeIcon(DEFAULT_LARGE_ICON)
                 .setOnlyAlertOnce(DEFAULT_ONLY_ALERT_ONCE)
-                .setPriority(DEFAULT_PRIORITY)
-                .setVisibility(DEFAULT_VISIBILITY)
+                .setPriority(DEFAULT_PRIORITY.intValue)
+                .setVisibility(DEFAULT_VISIBILITY.intValue)
                 // Ignored .setVibrate(DEFAULT_VIBRATE)
                 .setDeleteIntent(DEFAULT_DELETE_INTENT)
                 .setShortcutId(DEFAULT_SHORTCUT_ID)
@@ -815,18 +807,18 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
             notificationBuilder.setAutoCancel(builder.autoCancel)
                 .setAllowSystemGeneratedContextualActions(builder.allowSystemGeneratedContextualAction)
                 .setBadgeIconType(builder.badgeIconType)
-                .setCategory(builder.category)
+                .setCategory(builder.category?.stringValue)
                 .setColor(builder.color)
                 .setColorized(builder.colorized)
                 .setContentText(builder.contentText)
                 .setContentTitle(builder.contentTitle)
                 .setContentInfo(builder.contentInfo)
                 .setContentIntent(builder.contentIntent)
-                .setDefaults(builder.defaults)
+                .setDefaults(builder.defaults.intValue)
                 .setLargeIcon(builder.largeIcon)
                 .setOnlyAlertOnce(builder.onlyAlertOnce)
-                .setPriority(builder.priority)
-                .setVisibility(builder.visibility.value)
+                .setPriority(builder.priority.intValue)
+                .setVisibility(builder.notificationVisibility.intValue)
                 .setDeleteIntent(builder.deleteIntent)
                 .setShortcutId(builder.shortcutId)
                 .setShowWhen(builder.showWhen)

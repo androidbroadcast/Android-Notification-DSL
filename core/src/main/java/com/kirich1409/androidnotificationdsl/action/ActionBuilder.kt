@@ -42,9 +42,7 @@ class ActionBuilder @PublishedApi internal constructor(private val action: Notif
      * [AndroidRemoteInput.getChoices]. If the [ActionBuilder] doesn't have a
      * [RemoteInputBuilder], this has no effect.
      *
-     * @param allowGeneratedReplies `true` to allow generated replies, `false` otherwise
-     *
-     * The default value is {@code true}
+     * The default value is `true`
      */
     var allowGeneratedReplies: Boolean = true
         set(value) {
@@ -73,28 +71,21 @@ class ActionBuilder @PublishedApi internal constructor(private val action: Notif
     }
 
     /**
-     * Sets the [SemanticAction][NotificationCompat.Action.SemanticAction] for this [ActionBuilder].
-     * A [SemanticAction][NotificationCompat.Action.SemanticAction] denotes what an {@link Action}'s
+     * Sets the [SemanticAction] for this [ActionBuilder].
+     * A [SemanticAction] denotes what an [Action][NotificationCompat.Action]'s
      * [PendingIntent] will do (eg. reply, mark as read, delete, etc).
-     *
-     * @param semanticAction a [SemanticAction][@NotificationCompat.Action.SemanticAction] defined within
-     * [ActionBuilder] with `SEMANTIC_ACTION_` prefixes
      */
-    @NotificationCompat.Action.SemanticAction
-    var semanticAction: Int = NotificationCompat.Action.SEMANTIC_ACTION_NONE
+    var semanticAction: SemanticAction = SemanticAction.NONE
         set(value) {
             field = value
-            action.setSemanticAction(semanticAction)
+            action.setSemanticAction(semanticAction.intValue)
         }
 
     /**
      * Set whether or not this [Action][NotificationCompat.Action]'s [PendingIntent] will open a user
      * interface.
      *
-     * @param showsUserInterface `true` if this [Action][NotificationCompat.Action]'s [PendingIntent]
-     * will open a user interface, otherwise `false`
-     *
-     * The default value is {@code true}
+     * The default value is `true`
      */
     var showsUserInterface = true
         set(value) {
