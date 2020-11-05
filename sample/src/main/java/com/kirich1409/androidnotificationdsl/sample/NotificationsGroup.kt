@@ -12,7 +12,7 @@ import com.kirich1409.androidnotificationdsl.group.NotificationsGroup
 import com.kirich1409.androidnotificationdsl.group.notificationsGroup
 
 fun buildNotificationsGroup(context: Context): NotificationsGroup {
-    return notificationsGroup(context, groupKey = GROUP_KEY, channelId = NOTIFICATION_CHANNEL_DEFAULT) {
+    return notificationsGroup(context, groupKey = GROUP_KEY, channelId = CHANNEL_DEFAULT) {
         summary(SUMMARY_NOTIFICATION_ID, smallIcon = R.drawable.ic_android_white_24dp) {
             contentTitle(R.string.notification_summary_title)
             contentText(R.string.notification_summary_text)
@@ -39,7 +39,7 @@ fun buildNotificationsGroup(context: Context): NotificationsGroup {
 fun buildNotificationsGroupOld(context: Context): List<Notification> {
     val notifications = mutableListOf<Notification>()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        notifications += NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DEFAULT)
+        notifications += NotificationCompat.Builder(context, CHANNEL_DEFAULT)
             .setContentTitle(context.getText(R.string.notification_summary_title))
             .setContentText(context.getText(R.string.notification_summary_text))
             .setSmallIcon(R.drawable.ic_android_white_24dp)

@@ -3,12 +3,12 @@ package com.kirich1409.androidnotificationdsl.sample.extentions
 import android.content.Context
 import com.kirich1409.androidnotificationdsl.expandable.bigTextNotification
 import com.kirich1409.androidnotificationdsl.sample.MainActivity
-import com.kirich1409.androidnotificationdsl.sample.NOTIFICATION_CHANNEL_DEFAULT
+import com.kirich1409.androidnotificationdsl.sample.CHANNEL_DEFAULT
 import com.kirich1409.androidnotificationdsl.sample.R
 import com.kirich1409.androidnotificationdsl.utils.activityPendingIntent
 
 fun bigTextExtensionSample(context: Context) =
-    bigTextNotification(context, NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
+    bigTextNotification(context, CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
         title = "Collapsed"
         text = context.getText(R.string.long_text)
 

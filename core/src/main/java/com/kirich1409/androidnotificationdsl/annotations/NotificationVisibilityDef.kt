@@ -10,4 +10,4 @@ import androidx.core.app.NotificationCompat
     NotificationCompat.VISIBILITY_SECRET
 )
 @Retention(AnnotationRetention.SOURCE)
-annotation class NotificationVisibility
+annotation class NotificationVisibilityDef

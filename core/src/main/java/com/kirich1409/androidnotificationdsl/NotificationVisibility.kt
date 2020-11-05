@@ -1,12 +1,12 @@
 package com.kirich1409.androidnotificationdsl
 
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.annotations.NotificationVisibility
+import com.kirich1409.androidnotificationdsl.annotations.NotificationVisibilityDef
 
 /**
  * The level of detail visible in the notification from the lock screen
  */
-enum class NotificationVisibility(@NotificationVisibility val intValue: Int) {
+enum class NotificationVisibility(@NotificationVisibilityDef val intValue: Int) {
 
     /**
      * Doesn't show any part of this notification on the lock screen.
@@ -27,7 +27,7 @@ enum class NotificationVisibility(@NotificationVisibility val intValue: Int) {
 
     companion object {
 
-        fun from(@NotificationVisibility notificationVisibility: Int): com.kirich1409.androidnotificationdsl.NotificationVisibility = when (notificationVisibility) {
+        fun from(@NotificationVisibilityDef notificationVisibility: Int): com.kirich1409.androidnotificationdsl.NotificationVisibility = when (notificationVisibility) {
             NotificationCompat.VISIBILITY_PRIVATE -> PRIVATE
             NotificationCompat.VISIBILITY_PUBLIC -> PUBLIC
             NotificationCompat.VISIBILITY_SECRET -> SECRET

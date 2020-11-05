@@ -1,16 +1,11 @@
 package com.kirich1409.androidnotificationdsl.sample
 
-import android.app.Notification
 import android.content.Context
-import android.graphics.BitmapFactory
-import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.notification
-import com.kirich1409.androidnotificationdsl.style.bigtext.bigTextStyle
 import com.kirich1409.androidnotificationdsl.utils.activityPendingIntent
-import com.kirich1409.androidnotificationdsl.wearable.wearable
 
 fun buildNotification(context: Context) =
-    notification(context, NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
+    notification(context, CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
         contentTitle = "Notification title"
         actions {
             action(

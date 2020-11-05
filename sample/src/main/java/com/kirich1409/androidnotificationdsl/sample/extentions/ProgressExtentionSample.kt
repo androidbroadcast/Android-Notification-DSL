@@ -3,11 +3,14 @@ package com.kirich1409.androidnotificationdsl.sample.extentions
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
+import com.kirich1409.androidnotificationdsl.NotificationCategory
+import com.kirich1409.androidnotificationdsl.NotificationDefaults
+import com.kirich1409.androidnotificationdsl.NotificationPriority
 import com.kirich1409.androidnotificationdsl.NotificationVisibility
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.progress.progressNotification
 import com.kirich1409.androidnotificationdsl.sample.MainActivity
-import com.kirich1409.androidnotificationdsl.sample.NOTIFICATION_CHANNEL_DEFAULT
+import com.kirich1409.androidnotificationdsl.sample.CHANNEL_DEFAULT
 import com.kirich1409.androidnotificationdsl.sample.R
 import com.kirich1409.androidnotificationdsl.style.bigtext.bigTextStyle
 import com.kirich1409.androidnotificationdsl.utils.activityPendingIntent
@@ -15,7 +18,7 @@ import com.kirich1409.androidnotificationdsl.wearable.wearable
 import java.util.*
 
 fun progressExtensionSample(context: Context) =
-    progressNotification(context, NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
+    progressNotification(context, CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
         title = "Downloading..."
         progressText = "6 seconds left"
         indeterminated = false
@@ -45,7 +48,7 @@ class Message(
 fun sampleNotification(context: Context, message: Message) {
     val markAsReadIntent = context.activityPendingIntent(1, MainActivity::class)
 
-    NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DEFAULT)
+    NotificationCompat.Builder(context, CHANNEL_DEFAULT)
         .setContentText(message.message)
         .addPerson(message.personUri)
         .setAutoCancel(true)
@@ -74,39 +77,4 @@ fun sampleNotification(context: Context, message: Message) {
                 .setContentIntentAvailableOffline(false)
         )
         .build()
-}
-
-
-fun sampleNotificationDsl(context: Context, message: Message) {
-    val markAsReadIntent = context.activityPendingIntent(1, MainActivity::class)
-
-    notification(context, NOTIFICATION_CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
-        contentText = message.message
-        autoCancel = true
-        contentTitle = message.from
-        defaults = NotificationCompat.DEFAULT_ALL
-        priority = NotificationCompat.PRIORITY_HIGH
-        whenTime = message.date.time
-        notificationVisibility = NotificationVisibility.PRIVATE
-        largeIcon = BitmapFactory.decodeFile(message.personIconPath)
-        category = NotificationCompat.CATEGORY_MESSAGE
-        persons += message.personUri
-        onlyAlertOnce = true
-
-        actions {
-            action("Mark as Read", markAsReadIntent) {
-                contextual = true
-                semanticAction = NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ
-                showsUserInterface = false
-            }
-        }
-
-        bigTextStyle {
-            text = message.message
-        }
-
-        wearable {
-            contentIntentAvailableOffline = false
-        }
-    }
 }

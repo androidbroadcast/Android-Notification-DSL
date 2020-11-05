@@ -1,4 +1,4 @@
 package com.kirich1409.androidnotificationdsl.sample
 
-const val NOTIFICATION_CHANNEL_DEFAULT = "default"
+const val CHANNEL_DEFAULT = "default"
 const val NOTIFICATION_CHANNEL_LOW = "low"

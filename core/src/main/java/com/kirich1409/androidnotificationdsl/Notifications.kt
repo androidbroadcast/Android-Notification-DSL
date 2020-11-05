@@ -717,7 +717,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         val DEFAULT_CONTENT_TITLE: CharSequence? = null
         val DEFAULT_CONTENT_INFO: CharSequence? = null
         val DEFAULT_CONTENT_INTENT: PendingIntent? = null
-        val DEFAULT_DEFAULTS = NotificationDefaults.ALL
+        val DEFAULT_DEFAULTS = NotificationDefaults.NONE
         val DEFAULT_LARGE_ICON: Bitmap? = null
         const val DEFAULT_ONLY_ALERT_ONCE = true
         val DEFAULT_PRIORITY = NotificationPriority.DEFAULT
@@ -753,8 +753,8 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
             channelId: String,
             @DrawableRes smallIcon: Int
         ): NotificationCompat.Builder {
-            return NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(smallIcon)
+            val builder = NotificationCompat.Builder(context, channelId)
+            builder.setSmallIcon(smallIcon)
                 .setAutoCancel(DEFAULT_AUTO_CANCEL)
                 .setAllowSystemGeneratedContextualActions(
                     DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION
@@ -789,13 +789,17 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setGroupSummary(DEFAULT_GROUP_SUMMARY)
                 .setGroupAlertBehavior(DEFAULT_GROUP_ALERT_BEHAVIOR)
                 .setGroup(DEFAULT_GROUP_KEY)
-                .setChronometerCountDown(DEFAULT_CHRONOMETER_COUNT_DOWN)
                 .setCustomBigContentView(DEFAULT_CUSTOM_BIG_CONTENT_VIEW)
                 .setCustomContentView(DEFAULT_CUSTOM_CONTENT_VIEW)
                 .setCustomHeadsUpContentView(DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                builder.setChronometerCountDown(DEFAULT_CHRONOMETER_COUNT_DOWN)
+            }
             // Ignored .setLights(DEFAULT_LIGHTS)
             // Ignored .setProgress(DEFAULT_PROGRESS)
             // Ignored .setSmallIcon(DEFAULT_SMALL_ICON)
+            return builder
         }
 
         internal fun createNotification(
@@ -834,10 +838,14 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setGroupSummary(builder.groupSummary)
                 .setGroupAlertBehavior(builder.groupAlertBehavior)
                 .setGroup(builder.group)
-                .setChronometerCountDown(builder.chronometerCountDown)
                 .setCustomBigContentView(builder.customBigContentView)
                 .setCustomContentView(builder.customContentView)
                 .setCustomHeadsUpContentView(builder.customHeadsUpContentView)
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                notificationBuilder.setChronometerCountDown(builder.chronometerCountDown)
+            }
 
             builder.sound?.apply {
                 notificationBuilder.setSound(sound, streamType.streamTypeInt)

@@ -9,7 +9,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.ColorInt
 import com.kirich1409.androidnotificationdsl.annotations.NotificationImportance
-import com.kirich1409.androidnotificationdsl.annotations.NotificationVisibility
+import com.kirich1409.androidnotificationdsl.annotations.NotificationVisibilityDef
 import com.kirich1409.androidnotificationdsl.channels.annotations.NotificationChannelMarker
 import android.app.NotificationChannel as AndroidNotificationChannel
 
@@ -90,8 +90,8 @@ class NotificationChannel @PublishedApi internal constructor(
      * Whether or not notifications posted to this channel are shown on the lockscreen in full or redacted form.
      */
     inline var lockscreenVisibility: Int
-        @NotificationVisibility get() = channel.lockscreenVisibility
-        set(@NotificationVisibility value) {
+        @NotificationVisibilityDef get() = channel.lockscreenVisibility
+        set(@NotificationVisibilityDef value) {
             channel.lockscreenVisibility = value
         }
 

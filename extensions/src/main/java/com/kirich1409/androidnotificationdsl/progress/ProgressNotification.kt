@@ -9,7 +9,9 @@ import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionsMarker
+import com.kirich1409.androidnotificationdsl.indeterminateProgress
 import com.kirich1409.androidnotificationdsl.notification
+import com.kirich1409.androidnotificationdsl.progress
 
 /**
  * Create new notification with displaying big text in expanded state
@@ -24,13 +26,11 @@ fun progressNotification(
     return notification(context, channelId, smallIcon) {
         contentTitle = builder.title
         contentText = builder.progressText
-        if (builder.indeterminated) {
-            builder.progress?.let { progress ->
-                progress(progress.max, progress.current, indeterminate = true)
-            } ?: progress(max = 0, progress = 0, indeterminate = true)
+        progress = if (builder.indeterminated) {
+            indeterminateProgress()
         } else {
-            val progress = check(builder.progress)
-            progress(progress.max, progress.current, indeterminate = false)
+            val builderProgress = checkNotNull(builder.progress)
+            progress(builderProgress.current, builderProgress.max)
         }
         builder.buildActions?.let(::actions)
         builder.extender?.invoke(this)

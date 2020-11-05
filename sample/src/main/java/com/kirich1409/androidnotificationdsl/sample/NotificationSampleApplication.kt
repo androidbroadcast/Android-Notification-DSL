@@ -13,7 +13,7 @@ class NotificationSampleApplication : Application() {
 
     private fun createNotificationChannels() {
         createNotificationChannels(this) {
-            channel(NOTIFICATION_CHANNEL_DEFAULT, "Default", importance = NotificationManagerCompat.IMPORTANCE_HIGH)
+            channel(CHANNEL_DEFAULT, "Default", importance = NotificationManagerCompat.IMPORTANCE_HIGH)
             channel(NOTIFICATION_CHANNEL_LOW, "Low", importance = NotificationManagerCompat.IMPORTANCE_LOW)
         }
     }
