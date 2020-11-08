@@ -324,6 +324,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      *
      * @see groupSummary
      */
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
     var group: String? = DEFAULT_GROUP_KEY
         set(groupKey) {
             field = groupKey
@@ -344,6 +345,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * The default value is [GROUP_ALERT_ALL][NotificationCompat.GROUP_ALERT_ALL]
      */
     @NotificationCompat.GroupAlertBehavior
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
     var groupAlertBehavior: Int = DEFAULT_GROUP_ALERT_BEHAVIOR
         set(groupAlertBehavior) {
             field = groupAlertBehavior
@@ -357,6 +359,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      *
      * @see group
      */
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
     var groupSummary: Boolean = false
         set(isGroupSummary) {
             field = isGroupSummary

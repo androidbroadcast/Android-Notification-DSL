@@ -11,7 +11,8 @@ import com.kirich1409.androidnotificationdsl.utils.forEach
 @Suppress("UndocumentedPublicClass")
 class NotificationsGroup @PublishedApi internal constructor(
     private val notifications: SparseArrayCompat<Notification>,
-    private val summary: Pair<Int, Notification>
+    private val summary: Pair<Int, Notification>,
+    private val groupAlertBehavior: NotificationGroupAlertBehavior
 ) {
 
     /**

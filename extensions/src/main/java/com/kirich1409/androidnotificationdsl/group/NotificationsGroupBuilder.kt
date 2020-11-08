@@ -25,13 +25,13 @@ inline fun notificationsGroup(
      * Don't build notification if all notifications for the app are disabled or notification channel is disabled
      */
     skipDisabledNotification: Boolean = true,
-    groupAlertBehavior: GroupAlertBehavior = GroupAlertBehavior.ALERT_ALL,
+    alertBehavior: NotificationGroupAlertBehavior = NotificationGroupAlertBehavior.ALERT_ALL,
     body: NotificationsGroupBuilder.() -> Unit
 ): NotificationsGroup {
-    val group = NotificationsGroupBuilder(context, groupKey, channelId, skipDisabledNotification, groupAlertBehavior)
+    val group = NotificationsGroupBuilder(context, groupKey, channelId, skipDisabledNotification, alertBehavior)
         .apply(body)
     val summaryNotification = requireNotNull(group.summary) { "Summary notification isn't set" }
-    return NotificationsGroup(group.notifications, group.summaryId to summaryNotification)
+    return NotificationsGroup(group.notifications, group.summaryId to summaryNotification, alertBehavior)
 }
 
 @NotificationsGroupMarker
@@ -41,7 +41,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
     private val groupKey: String,
     private val channelId: String,
     private val skipDisabledNotification: Boolean,
-    private val groupAlertBehavior: GroupAlertBehavior
+    private val groupAlertBehavior: NotificationGroupAlertBehavior
 ) {
     private val notificationManager = NotificationManagerCompat.from(context)
 
