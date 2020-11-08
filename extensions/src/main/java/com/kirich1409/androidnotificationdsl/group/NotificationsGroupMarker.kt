@@ -1,6 +1,4 @@
-package com.kirich1409.androidnotificationdsl.group.annotations
-
-import com.kirich1409.androidnotificationdsl.group.NotificationsGroupBuilder
+package com.kirich1409.androidnotificationdsl.group
 
 /**
  * @see NotificationsGroupBuilder
@@ -8,4 +6,3 @@ import com.kirich1409.androidnotificationdsl.group.NotificationsGroupBuilder
 @DslMarker
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)
 internal annotation class NotificationsGroupMarker
-

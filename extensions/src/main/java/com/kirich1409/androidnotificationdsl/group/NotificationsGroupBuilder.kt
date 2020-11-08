@@ -8,8 +8,6 @@ import androidx.collection.SparseArrayCompat
 import androidx.core.app.NotificationManagerCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.areNotificationsEnabled
-import com.kirich1409.androidnotificationdsl.group.annotations.NotificationsGroupMarker
-import com.kirich1409.androidnotificationdsl.internal.asMap
 import android.app.Notification as AndroidNotification
 
 /**
@@ -33,7 +31,7 @@ inline fun notificationsGroup(
     val group = NotificationsGroupBuilder(context, groupKey, channelId, skipDisabledNotification, groupAlertBehavior)
         .apply(body)
     val summaryNotification = requireNotNull(group.summary) { "Summary notification isn't set" }
-    return NotificationsGroup(group.notifications.asMap(), group.summaryId to summaryNotification)
+    return NotificationsGroup(group.notifications, group.summaryId to summaryNotification)
 }
 
 @NotificationsGroupMarker
@@ -73,7 +71,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
             this.summaryId = notificationId
             summary = com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
                 body()
-                group = group
+                group = this@NotificationsGroupBuilder.groupKey
                 groupAlertBehavior = this@NotificationsGroupBuilder.groupAlertBehavior.intValue
                 groupSummary = true
             }
@@ -107,7 +105,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
             notifications.put(notificationId,
                 com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
                     body()
-                    group = group
+                    group = this@NotificationsGroupBuilder.groupKey
                 }
             )
         }
@@ -125,7 +123,7 @@ class NotificationsGroupBuilder @PublishedApi internal constructor(
         if (needToBuildNotification(channelId)) {
             notifications.put(notificationId,
                 com.kirich1409.androidnotificationdsl.notification(context, channelId, smallIcon) {
-                    group = group
+                    group = this@NotificationsGroupBuilder.groupKey
                 }
             )
         }

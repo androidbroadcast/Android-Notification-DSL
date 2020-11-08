@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.kirich1409.androidnotificationdsl.channels
 
@@ -6,9 +6,8 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationManagerCompat
-import com.kirich1409.androidnotificationdsl.annotations.NotificationImportance
-import com.kirich1409.androidnotificationdsl.channels.annotations.NotificationChannelGroupMarker
+import com.kirich1409.androidnotificationdsl.Container
+import com.kirich1409.androidnotificationdsl.NotificationImportance
 import android.app.NotificationChannel as AndroidNotificationChannel
 
 @NotificationChannelGroupMarker
@@ -16,7 +15,7 @@ import android.app.NotificationChannel as AndroidNotificationChannel
 @Suppress("UndocumentedPublicClass")
 class NotificationChannelGroup @PublishedApi internal constructor(
     internal val channels: MutableList<AndroidNotificationChannel>
-) {
+) : Container<AndroidNotificationChannel> {
 
     /**
      * Create a channel and add into the group
@@ -25,10 +24,10 @@ class NotificationChannelGroup @PublishedApi internal constructor(
     fun channel(
         id: String,
         name: CharSequence,
-        @NotificationImportance importance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT,
+        importance: NotificationImportance = NotificationImportance.DEFAULT,
         build: @NotificationChannelGroupMarker NotificationChannel.() -> Unit
     ) {
-        channels += AndroidNotificationChannel(id, name, importance).also { NotificationChannel(it).build() }
+        channels += AndroidNotificationChannel(id, name, importance.intValue).also { NotificationChannel(it).build() }
     }
 
     /**
@@ -38,17 +37,20 @@ class NotificationChannelGroup @PublishedApi internal constructor(
     fun channel(
         id: String,
         name: CharSequence,
-        @NotificationImportance importance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT
+        importance: NotificationImportance = NotificationImportance.DEFAULT
     ) {
-        channels += AndroidNotificationChannel(id, name, importance)
+        channels += AndroidNotificationChannel(id, name, importance.intValue)
     }
 
     /**
      * Add the channel into the group
      */
     fun channel(channel: AndroidNotificationChannel) {
-        @SuppressLint("WrongConstant")
         channels += channel
+    }
+
+    override fun plusAssign(item: android.app.NotificationChannel) {
+        channel(item)
     }
 }
 

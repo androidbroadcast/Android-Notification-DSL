@@ -1,7 +1,6 @@
-package com.kirich1409.androidnotificationdsl.channels.annotations
+package com.kirich1409.androidnotificationdsl.channels
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.channels.NotificationChannels
 
 /**
  * @see NotificationChannels

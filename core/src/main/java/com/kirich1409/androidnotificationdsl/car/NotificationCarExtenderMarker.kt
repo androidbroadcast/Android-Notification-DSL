@@ -1,7 +1,6 @@
-package com.kirich1409.androidnotificationdsl.car.annotations
+package com.kirich1409.androidnotificationdsl.car
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.car.CarExtenderBuilder
 
 /**
  * @see CarExtenderBuilder

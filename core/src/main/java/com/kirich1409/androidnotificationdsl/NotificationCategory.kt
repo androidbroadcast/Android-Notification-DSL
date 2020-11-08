@@ -3,7 +3,7 @@ package com.kirich1409.androidnotificationdsl
 import androidx.core.app.NotificationCompat
 
 enum class NotificationCategory(val stringValue: String) {
-    NONE(NotificationCompat.CATEGORY_ALARM),
+    ALARM(NotificationCompat.CATEGORY_ALARM),
     CALL(NotificationCompat.CATEGORY_CALL),
     EMAIL(NotificationCompat.CATEGORY_EMAIL),
     ERROR(NotificationCompat.CATEGORY_ERROR),

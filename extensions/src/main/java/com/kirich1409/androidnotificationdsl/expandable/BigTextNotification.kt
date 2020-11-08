@@ -10,11 +10,10 @@ import com.ironsource.aura.dslint.annotations.DSLMandatory
 import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.Actions
-import com.kirich1409.androidnotificationdsl.expandable.annotations.BigTextNotificationBuilderMarker
+import com.kirich1409.androidnotificationdsl.internal.requiredNotificationProperty
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.style.bigtext.bigTextStyle
 import com.kirich1409.androidnotificationdsl.utils.internal.NOTHING
-import com.kirich1409.androidnotificationdsl.utils.internal.requiredNotificationProperty
 
 /**
  * Create new notification with displaying big text in expanded state

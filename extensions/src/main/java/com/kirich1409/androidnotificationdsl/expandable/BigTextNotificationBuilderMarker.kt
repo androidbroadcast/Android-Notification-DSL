@@ -1,7 +1,6 @@
-package com.kirich1409.androidnotificationdsl.expandable.annotations
+package com.kirich1409.androidnotificationdsl.expandable
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.expandable.BigPictureNotificationBuilder
 
 /**
  * @see BigPictureNotificationBuilder

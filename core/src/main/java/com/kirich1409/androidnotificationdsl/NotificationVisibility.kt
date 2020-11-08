@@ -27,13 +27,10 @@ enum class NotificationVisibility(@NotificationVisibilityDef val intValue: Int) 
 
     companion object {
 
-        fun from(@NotificationVisibilityDef notificationVisibility: Int): com.kirich1409.androidnotificationdsl.NotificationVisibility = when (notificationVisibility) {
-            NotificationCompat.VISIBILITY_PRIVATE -> PRIVATE
-            NotificationCompat.VISIBILITY_PUBLIC -> PUBLIC
-            NotificationCompat.VISIBILITY_SECRET -> SECRET
-            else -> throw IllegalArgumentException(
-                "Unknown notificationVisibility argument value = $notificationVisibility"
-            )
+        fun from(notificationVisibility: Int): NotificationVisibility {
+            return values().find { visibility ->
+                visibility.intValue == notificationVisibility
+            } ?: throw IllegalArgumentException("Unknown notificationVisibility argument value $notificationVisibility")
         }
     }
 }

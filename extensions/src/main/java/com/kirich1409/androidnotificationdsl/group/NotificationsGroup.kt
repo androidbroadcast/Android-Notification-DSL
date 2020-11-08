@@ -4,11 +4,13 @@ package com.kirich1409.androidnotificationdsl.group
 
 import android.app.Notification
 import android.app.NotificationManager
+import androidx.collection.SparseArrayCompat
 import androidx.core.app.NotificationManagerCompat
+import com.kirich1409.androidnotificationdsl.utils.forEach
 
 @Suppress("UndocumentedPublicClass")
 class NotificationsGroup @PublishedApi internal constructor(
-    private val notifications: Map<Int, Notification>,
+    private val notifications: SparseArrayCompat<Notification>,
     private val summary: Pair<Int, Notification>
 ) {
 
@@ -17,7 +19,7 @@ class NotificationsGroup @PublishedApi internal constructor(
      */
     fun notify(notificationManager: NotificationManagerCompat) {
         notificationManager.notify(summary.first, summary.second)
-        notifications.forEach { (notificationId, notification) ->
+        notifications.forEach { notificationId, notification ->
             notificationManager.notify(notificationId, notification)
         }
     }
@@ -27,7 +29,7 @@ class NotificationsGroup @PublishedApi internal constructor(
      */
     fun notify(notificationManager: NotificationManager) {
         notificationManager.notify(summary.first, summary.second)
-        notifications.forEach { (notificationId, notification) ->
+        notifications.forEach { notificationId, notification ->
             notificationManager.notify(notificationId, notification)
         }
     }

@@ -7,8 +7,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
-import com.kirich1409.androidnotificationdsl.annotations.NotificationImportance
-import com.kirich1409.androidnotificationdsl.channels.annotations.NotificationChannelsMarker
+import com.kirich1409.androidnotificationdsl.NotificationImportance
 import android.app.NotificationChannel as AndroidNotificationChannel
 import android.app.NotificationChannelGroup as AndroidNotificationChannelGroup
 
@@ -53,10 +52,9 @@ class NotificationChannels @PublishedApi internal constructor(
     fun channel(
         id: String,
         name: CharSequence,
-        @NotificationImportance importance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT
+        importance: NotificationImportance = NotificationImportance.DEFAULT
     ) {
-        @SuppressLint("WrongConstant")
-        channels += AndroidNotificationChannel(id, name, importance)
+        channels += AndroidNotificationChannel(id, name, importance.intValue)
     }
 
     /**
@@ -75,11 +73,11 @@ class NotificationChannels @PublishedApi internal constructor(
     inline fun channel(
         id: String,
         name: CharSequence,
-        @NotificationImportance importance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT,
+        importance: NotificationImportance = NotificationImportance.DEFAULT,
         build: @NotificationChannelsMarker NotificationChannel.() -> Unit
     ) {
         @SuppressLint("WrongConstant")
-        val channel = AndroidNotificationChannel(id, name, importance)
+        val channel = AndroidNotificationChannel(id, name, importance.intValue)
         NotificationChannel(channel).build()
         channels += channel
     }

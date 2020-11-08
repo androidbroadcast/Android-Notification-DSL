@@ -8,13 +8,12 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.ColorInt
-import com.kirich1409.androidnotificationdsl.annotations.NotificationImportance
-import com.kirich1409.androidnotificationdsl.annotations.NotificationVisibilityDef
-import com.kirich1409.androidnotificationdsl.channels.annotations.NotificationChannelMarker
+import com.kirich1409.androidnotificationdsl.NotificationImportance
+import com.kirich1409.androidnotificationdsl.NotificationVisibility
+import com.kirich1409.androidnotificationdsl.VibratePattern
 import android.app.NotificationChannel as AndroidNotificationChannel
 
 @TargetApi(Build.VERSION_CODES.O)
-@NotificationChannelMarker
 @Suppress("UndocumentedPublicClass")
 class NotificationChannel @PublishedApi internal constructor(
     @PublishedApi internal val channel: AndroidNotificationChannel
@@ -69,11 +68,10 @@ class NotificationChannel @PublishedApi internal constructor(
      * @see android.app.NotificationChannelGroup.isBlocked
      * @see android.app.NotificationManager.areNotificationsEnabled
      */
-    @NotificationImportance
-    inline var importance: Int
-        get() = channel.importance
+    inline var importance: NotificationImportance
+        get() = NotificationImportance.fromInt(channel.importance)
         set(value) {
-            channel.importance = value
+            channel.importance = value.intValue
         }
 
     /**
@@ -89,10 +87,10 @@ class NotificationChannel @PublishedApi internal constructor(
     /**
      * Whether or not notifications posted to this channel are shown on the lockscreen in full or redacted form.
      */
-    inline var lockscreenVisibility: Int
-        @NotificationVisibilityDef get() = channel.lockscreenVisibility
-        set(@NotificationVisibilityDef value) {
-            channel.lockscreenVisibility = value
+    inline var lockscreenVisibility: NotificationVisibility
+        get() = NotificationVisibility.from(channel.lockscreenVisibility)
+        set(value) {
+            channel.lockscreenVisibility = value.intValue
         }
 
     /**
@@ -106,10 +104,10 @@ class NotificationChannel @PublishedApi internal constructor(
      * The vibration pattern for notifications posted to this channel. Will be ignored if
      * vibration is not enabled ([NotificationChannel.vibrationEnabled]).
      */
-    inline var vibrationPattern: LongArray?
-        get() = channel.vibrationPattern
+    inline var vibrationPattern: VibratePattern?
+        get() = channel.vibrationPattern?.let { VibratePattern(it) }
         set(value) {
-            channel.vibrationPattern = value
+            channel.vibrationPattern = value?.asArray()
         }
 
     /**

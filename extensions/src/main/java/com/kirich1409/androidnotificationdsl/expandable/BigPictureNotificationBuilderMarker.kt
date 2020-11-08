@@ -1,11 +1,11 @@
-package com.kirich1409.androidnotificationdsl.wearable
+package com.kirich1409.androidnotificationdsl.expandable
 
 import androidx.annotation.RestrictTo
 
 /**
- * @see WearableExtender
+ * @see BigPictureNotificationBuilder
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-internal annotation class NotificationWearableExtenderMarker
+internal annotation class BigPictureNotificationBuilderMarker

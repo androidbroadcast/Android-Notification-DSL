@@ -4,7 +4,8 @@ package com.kirich1409.androidnotificationdsl.wearable
 
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.action.ActionBuilder
-import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionMarker
+import com.kirich1409.androidnotificationdsl.action.NotificationActionMarker
+import com.kirich1409.androidnotificationdsl.action.extend
 
 @NotificationWearableActionExtenderMarker
 @Suppress("UndocumentedPublicClass")

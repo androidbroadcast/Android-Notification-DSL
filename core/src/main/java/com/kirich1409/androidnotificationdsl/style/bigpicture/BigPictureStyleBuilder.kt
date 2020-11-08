@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
+import com.kirich1409.androidnotificationdsl.internal.requiredNotificationProperty
 
 @NotificationBigPictureStyleMarker
 @Suppress("UndocumentedPublicClass")
@@ -18,30 +19,16 @@ class BigPictureStyleBuilder @PublishedApi internal constructor(
     /**
      * Override the large icon when the big notification is shown.
      */
-    @Deprecated("Use largeIcon() instead", ReplaceWith("largeIcon(icon)"))
-    fun bigLargeIcon(icon: Bitmap) {
-        largeIcon(icon)
-    }
-
-    /**
-     * Override the large icon when the big notification is shown.
-     */
-    fun largeIcon(icon: Bitmap?) {
-        bigPictureStyle.bigLargeIcon(icon)
-    }
+    var largeIcon: Bitmap? = null
+        set(icon) {
+            field = icon
+            bigPictureStyle.bigLargeIcon(icon)
+        }
 
     /**
      * Provide the bitmap to be used as the payload for the BigPicture notification.
      */
-    @Deprecated("Use picture() instead", ReplaceWith("picture(icon)"))
-    fun bigPicture(icon: Bitmap) {
-        picture(icon)
-    }
-
-    /**
-     * Provide the bitmap to be used as the payload for the BigPicture notification.
-     */
-    fun picture(icon: Bitmap) {
+    var picture: Bitmap by requiredNotificationProperty("picture") { icon ->
         bigPictureStyle.bigPicture(icon)
     }
 
@@ -49,25 +36,22 @@ class BigPictureStyleBuilder @PublishedApi internal constructor(
      * Overrides ContentTitle in the big form of the template.
      * This defaults to the value passed to setContentTitle().
      */
-    @Deprecated("Use contentTitle() instead", ReplaceWith("contentTitle(title)"))
-    fun bigContentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
-        contentTitle(title)
-    }
-
-    /**
-     * Overrides ContentTitle in the big form of the template.
-     * This defaults to the value passed to setContentTitle().
-     */
-    fun contentTitle(@Size(max = MAX_CHARSEQUENCE_LENGTH) title: CharSequence?) {
-        bigPictureStyle.setBigContentTitle(title)
-    }
+    @Size(max = MAX_CHARSEQUENCE_LENGTH)
+    var contentTitle: CharSequence? = null
+        set(title) {
+            field = title
+            bigPictureStyle.setBigContentTitle(title)
+        }
 
     /**
      * Set the first line of text after the detail section in the big form of the template.
      */
-    fun summaryText(@Size(max = MAX_CHARSEQUENCE_LENGTH) summaryText: CharSequence?) {
-        bigPictureStyle.setSummaryText(summaryText)
-    }
+    @Size(max = MAX_CHARSEQUENCE_LENGTH)
+    var summaryText: CharSequence? = null
+        set(summaryText) {
+            field = summaryText
+            bigPictureStyle.setSummaryText(summaryText)
+        }
 }
 
 /**

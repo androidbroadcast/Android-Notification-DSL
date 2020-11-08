@@ -4,6 +4,7 @@ package com.kirich1409.androidnotificationdsl.sample
 
 import android.app.Notification
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.contentText
@@ -16,14 +17,8 @@ fun buildNotificationsGroup(context: Context): NotificationsGroup {
         summary(SUMMARY_NOTIFICATION_ID, smallIcon = R.drawable.ic_android_white_24dp) {
             contentTitle(R.string.notification_summary_title)
             contentText(R.string.notification_summary_text)
-        }
-
-        notification(
-            NOTIFICATION_1_ID,
-            smallIcon = R.drawable.ic_android_white_24dp,
-            channelId = NOTIFICATION_CHANNEL_LOW
-        ) {
-            contentTitle(R.string.notification_1_title)
+            color = Color.parseColor("#5AAC37")
+            colorized = true
         }
 
         notification(
@@ -31,7 +26,21 @@ fun buildNotificationsGroup(context: Context): NotificationsGroup {
             smallIcon = R.drawable.ic_android_white_24dp,
             channelId = NOTIFICATION_CHANNEL_LOW
         ) {
-            contentTitle(R.string.notification_2_title)
+            contentTitle = "Привет Android Broadcast"
+            whenTime = System.currentTimeMillis() - 5_000
+            color = Color.parseColor("#5AAC37")
+            colorized = true
+        }
+
+        notification(
+            NOTIFICATION_1_ID,
+            smallIcon = R.drawable.ic_android_white_24dp,
+            channelId = NOTIFICATION_CHANNEL_LOW
+        ) {
+            contentTitle = "Mobius 2020 Online"
+            whenTime = System.currentTimeMillis() - 1_000
+            color = Color.parseColor("#5AAC37")
+            colorized = true
         }
     }
 }

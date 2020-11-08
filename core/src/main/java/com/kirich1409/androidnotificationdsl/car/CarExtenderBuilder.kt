@@ -7,7 +7,7 @@ import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
-import com.kirich1409.androidnotificationdsl.car.annotations.NotificationCarExtenderMarker
+import com.kirich1409.androidnotificationdsl.extend
 
 @NotificationCarExtenderMarker
 @Suppress("UndocumentedPublicClass")
@@ -32,31 +32,6 @@ class CarExtenderBuilder @PublishedApi internal constructor(
         set(value) {
             carExtender.largeIcon = value
         }
-
-    /**
-     * The unread conversation conveyed by this notification.
-     */
-    @Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
-    inline var unreadConversation: NotificationCompat.CarExtender.UnreadConversation?
-        get() = carExtender.unreadConversation
-        set(unreadConversation) {
-            carExtender.unreadConversation = unreadConversation
-        }
-
-    /**
-     * Sets the unread conversation in a message notification.
-     *
-     * @param name The name of the other participant in the conversation.
-     */
-    @Deprecated("UnreadConversation is no longer supported. Use MessagingStyle instead")
-    inline fun unreadConversation(
-        name: String,
-        body: @NotificationCarExtenderMarker CarExtenderUnreadConversationBuilder.() -> Unit
-    ) {
-        val builder = NotificationCompat.CarExtender.UnreadConversation.Builder(name)
-        CarExtenderUnreadConversationBuilder(builder).apply(body)
-        carExtender.unreadConversation = builder.build()
-    }
 }
 
 

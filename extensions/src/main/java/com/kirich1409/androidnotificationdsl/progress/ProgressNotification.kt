@@ -8,7 +8,7 @@ import androidx.annotation.DrawableRes
 import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.Actions
-import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionsMarker
+import com.kirich1409.androidnotificationdsl.action.NotificationActionsMarker
 import com.kirich1409.androidnotificationdsl.indeterminateProgress
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.progress

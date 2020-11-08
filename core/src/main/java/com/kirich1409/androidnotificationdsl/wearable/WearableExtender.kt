@@ -5,6 +5,7 @@ package com.kirich1409.androidnotificationdsl.wearable
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
+import com.kirich1409.androidnotificationdsl.extend
 
 @NotificationWearableExtenderMarker
 @Suppress("UndocumentedPublicClass")
@@ -93,7 +94,7 @@ class WearableExtender @PublishedApi internal constructor(
     /**
      * Add a wearable [Action][NotificationCompat.Action]s to this notification.
      */
-    inline fun actions(body: WearableExtenderActions.() -> Unit) {
+    inline fun actions(body: @NotificationWearableExtenderMarker WearableExtenderActions.() -> Unit) {
         WearableExtenderActions(wearableExtender).body()
     }
 }

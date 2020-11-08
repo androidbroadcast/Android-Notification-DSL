@@ -41,14 +41,6 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
     internal constructor(context: Context, channelId: String, @DrawableRes smallIcon: Int)
             : this(context, channelId, defaultNotification(context, channelId, smallIcon))
 
-    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-    @PublishedApi
-    internal constructor(
-        context: Context,
-        builder: NotificationBuilder,
-        channelId: String = builder.channelId
-    ) : this(context, channelId, createNotification(context, channelId, builder))
-
     /**
      * Notification's actions
      */
@@ -273,10 +265,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      *
      * For all default values, use [NotificationCompat.DEFAULT_ALL].
      */
-    var defaults: NotificationDefaults = DEFAULT_DEFAULTS
+    var defaults: NotificationDefaults? = DEFAULT_DEFAULTS
         set(value) {
             field = value
-            notification.setDefaults(value.intValue)
+            notification.setDefaults(value?.intValue ?: 0)
         }
 
     /**
@@ -299,14 +291,6 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         set(value) {
             notification.extras = value
         }
-
-    /**
-     * Apply an extender to this notification builder.
-     * Extenders may be used to add metadata or change options on this builder.
-     */
-    fun extend(extender: NotificationCompat.Extender) {
-        notification.extend(extender)
-    }
 
     /**
      * An intent to launch instead of posting the notification to the status bar.
@@ -635,9 +619,15 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * sets the text that is displayed in the status bar when the notification first arrives,
      * and also a RemoteViews object that may be displayed instead on some devices.
      */
-    fun ticker(tickerText: CharSequence, views: RemoteViews? = null) {
-        notification.setTicker(tickerText, views)
-    }
+    var ticker: NotificationTicker? = null
+        set(value) {
+            field = value
+            if (value == null) {
+                notification.setTicker(null, null)
+            } else {
+                notification.setTicker(value.text, value.views)
+            }
+        }
 
     /**
      * Specifies the time at which this notification should be canceled, if it is not already canceled.
@@ -717,7 +707,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         val DEFAULT_CONTENT_TITLE: CharSequence? = null
         val DEFAULT_CONTENT_INFO: CharSequence? = null
         val DEFAULT_CONTENT_INTENT: PendingIntent? = null
-        val DEFAULT_DEFAULTS = NotificationDefaults.NONE
+        val DEFAULT_DEFAULTS: NotificationDefaults? = null
         val DEFAULT_LARGE_ICON: Bitmap? = null
         const val DEFAULT_ONLY_ALERT_ONCE = true
         val DEFAULT_PRIORITY = NotificationPriority.DEFAULT
@@ -767,7 +757,6 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setContentTitle(DEFAULT_CONTENT_TITLE)
                 .setContentInfo(DEFAULT_CONTENT_INFO)
                 .setContentIntent(DEFAULT_CONTENT_INTENT)
-                .setDefaults(DEFAULT_DEFAULTS.intValue)
                 .setLargeIcon(DEFAULT_LARGE_ICON)
                 .setOnlyAlertOnce(DEFAULT_ONLY_ALERT_ONCE)
                 .setPriority(DEFAULT_PRIORITY.intValue)
@@ -780,7 +769,6 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setTimeoutAfter(DEFAULT_TIMEOUT_AFTER)
                 .setSubText(DEFAULT_SUB_TEXT)
                 .setStyle(DEFAULT_STYLE)
-                .setSound(null, DEFAULT_SOUND_STREAM_TYPE)
                 .setSortKey(DEFAULT_SORT_KEY)
                 .setRemoteInputHistory(DEFAULT_REMOTE_INPUT_HISTORY)
                 .setOngoing(DEFAULT_ONGOING)
@@ -792,82 +780,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setCustomBigContentView(DEFAULT_CUSTOM_BIG_CONTENT_VIEW)
                 .setCustomContentView(DEFAULT_CUSTOM_CONTENT_VIEW)
                 .setCustomHeadsUpContentView(DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                builder.setChronometerCountDown(DEFAULT_CHRONOMETER_COUNT_DOWN)
-            }
             // Ignored .setLights(DEFAULT_LIGHTS)
             // Ignored .setProgress(DEFAULT_PROGRESS)
             // Ignored .setSmallIcon(DEFAULT_SMALL_ICON)
             return builder
-        }
-
-        internal fun createNotification(
-            context: Context,
-            channelId: String,
-            builder: NotificationBuilder
-        ): NotificationCompat.Builder {
-            val notificationBuilder = NotificationCompat.Builder(context, channelId)
-            notificationBuilder.setAutoCancel(builder.autoCancel)
-                .setAllowSystemGeneratedContextualActions(builder.allowSystemGeneratedContextualAction)
-                .setBadgeIconType(builder.badgeIconType)
-                .setCategory(builder.category?.stringValue)
-                .setColor(builder.color)
-                .setColorized(builder.colorized)
-                .setContentText(builder.contentText)
-                .setContentTitle(builder.contentTitle)
-                .setContentInfo(builder.contentInfo)
-                .setContentIntent(builder.contentIntent)
-                .setDefaults(builder.defaults.intValue)
-                .setLargeIcon(builder.largeIcon)
-                .setOnlyAlertOnce(builder.onlyAlertOnce)
-                .setPriority(builder.priority.intValue)
-                .setVisibility(builder.notificationVisibility.intValue)
-                .setDeleteIntent(builder.deleteIntent)
-                .setShortcutId(builder.shortcutId)
-                .setShowWhen(builder.showWhen)
-                .setUsesChronometer(builder.usesChronometer)
-                .setTimeoutAfter(builder.timeoutAfter)
-                .setSubText(builder.subText)
-                .setStyle(builder.style)
-                .setSortKey(builder.sortKey)
-                .setRemoteInputHistory(builder.remoteInputHistory)
-                .setOngoing(builder.ongoing)
-                .setNumber(builder.number)
-                .setLocalOnly(builder.localOnly)
-                .setGroupSummary(builder.groupSummary)
-                .setGroupAlertBehavior(builder.groupAlertBehavior)
-                .setGroup(builder.group)
-                .setCustomBigContentView(builder.customBigContentView)
-                .setCustomContentView(builder.customContentView)
-                .setCustomHeadsUpContentView(builder.customHeadsUpContentView)
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                notificationBuilder.setChronometerCountDown(builder.chronometerCountDown)
-            }
-
-            builder.sound?.apply {
-                notificationBuilder.setSound(sound, streamType.streamTypeInt)
-            }
-
-            builder.vibrate?.apply {
-                notificationBuilder.setVibrate(asArray())
-            }
-
-            builder.lights?.apply {
-                notificationBuilder.setLights(color, onMs, offMs)
-            }
-
-            builder.progress?.apply {
-                notificationBuilder.setProgress(max, progress, indeterminate)
-            }
-
-            builder.smallIcon?.apply {
-                notificationBuilder.setSmallIcon(icon, level)
-            }
-
-            return notificationBuilder
         }
     }
 }
@@ -998,4 +914,12 @@ fun NotificationBuilder.contentTitle(@StringRes titleRes: Int) {
  */
 fun NotificationBuilder.subText(@StringRes textRes: Int) {
     subText = context.getText(textRes)
+}
+
+/**
+ * Apply an extender to this notification builder.
+ * Extenders may be used to add metadata or change options on this builder.
+ */
+fun NotificationBuilder.extend(extender: NotificationCompat.Extender) {
+    notification.extend(extender)
 }

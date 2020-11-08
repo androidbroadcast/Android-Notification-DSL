@@ -7,7 +7,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.kirich1409.androidnotificationdsl.Container
-import com.kirich1409.androidnotificationdsl.action.annotations.NotificationActionsMarker
+import com.kirich1409.androidnotificationdsl.action.NotificationActionsMarker
 import com.kirich1409.androidnotificationdsl.internal.isInvisibleActionsSupported
 
 /**

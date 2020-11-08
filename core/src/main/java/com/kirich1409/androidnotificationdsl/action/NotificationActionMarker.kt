@@ -1,7 +1,6 @@
-package com.kirich1409.androidnotificationdsl.action.annotations
+package com.kirich1409.androidnotificationdsl.action
 
 import androidx.annotation.RestrictTo
-import com.kirich1409.androidnotificationdsl.action.ActionBuilder
 
 /**
  * @see ActionBuilder

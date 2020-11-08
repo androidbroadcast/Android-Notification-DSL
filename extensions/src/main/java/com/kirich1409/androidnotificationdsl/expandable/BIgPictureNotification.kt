@@ -11,11 +11,10 @@ import com.ironsource.aura.dslint.annotations.DSLMandatory
 import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.Actions
-import com.kirich1409.androidnotificationdsl.expandable.annotations.BigPictureNotificationBuilderMarker
+import com.kirich1409.androidnotificationdsl.internal.requiredNotificationProperty
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.style.bigpicture.bigPictureStyle
 import com.kirich1409.androidnotificationdsl.utils.internal.NOTHING
-import com.kirich1409.androidnotificationdsl.utils.internal.requiredNotificationProperty
 
 /**
  * Create new notification with displaying big picture in expanded state
@@ -32,18 +31,11 @@ fun bigPictureNotification(
         contentText = builder.text
         largeIcon = builder.largeIcon
         bigPictureStyle {
-            picture(builder.expanded.bigPicture)
-            largeIcon(builder.expanded.largeIcon)
+            picture = builder.expanded.bigPicture
+            largeIcon = builder.expanded.largeIcon
 
-            val title = builder.expanded._title
-            if (title is CharSequence?) {
-                contentTitle(title)
-            }
-
-            val text = builder.expanded._text
-            if (text is CharSequence?) {
-                summaryText(text)
-            }
+            contentTitle = builder.expanded._title as CharSequence?
+            summaryText = builder.expanded._text as CharSequence?
 
             builder.expanded.buildActions?.let(this@notification::actions)
         }
