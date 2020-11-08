@@ -99,65 +99,38 @@ inline fun <reified T : BroadcastReceiver> Context.broadcastPendingIntent(
 fun Context.servicePendingIntent(
     requestCode: Int,
     intent: Intent,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
+    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT,
+    foreground: Boolean = false
 ): PendingIntent {
-    return PendingIntent.getService(this, requestCode, intent, flags)
+    if (foreground && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        return PendingIntent.getForegroundService(this, requestCode, intent, flags)
+    } else {
+        return PendingIntent.getService(this, requestCode, intent, flags)
+    }
 }
 
 fun Context.servicePendingIntent(
     requestCode: Int,
     serviceClass: Class<out Service>,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
+    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT,
+    foreground: Boolean = false
 ): PendingIntent {
-    return servicePendingIntent(requestCode, Intent(this, serviceClass), flags)
+    return servicePendingIntent(requestCode, Intent(this, serviceClass), flags, foreground)
 }
 
 fun Context.servicePendingIntent(
     requestCode: Int,
     serviceClass: KClass<out Service>,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
+    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT,
+    foreground: Boolean = false
 ): PendingIntent {
-    return servicePendingIntent(requestCode, serviceClass.java, flags)
+    return servicePendingIntent(requestCode, serviceClass.java, flags, foreground)
 }
 
 inline fun <reified T : Service> Context.servicePendingIntent(
     requestCode: Int,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
+    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT,
+    foreground: Boolean = false
 ): PendingIntent {
-    return servicePendingIntent(requestCode, T::class, flags)
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun Context.foregroundServicePendingIntent(
-    requestCode: Int,
-    intent: Intent,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
-): PendingIntent {
-    return PendingIntent.getForegroundService(this, requestCode, intent, flags)
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun Context.foregroundServicePendingIntent(
-    requestCode: Int,
-    serviceClass: Class<out Service>,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
-): PendingIntent {
-    return foregroundServicePendingIntent(requestCode, Intent(this, serviceClass), flags)
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun Context.foregroundServicePendingIntent(
-    requestCode: Int,
-    serviceClass: KClass<out Service>,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
-): PendingIntent {
-    return foregroundServicePendingIntent(requestCode, serviceClass.java, flags)
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-inline fun <reified T : Service> Context.foregroundServicePendingIntent(
-    requestCode: Int,
-    flags: Int = PendingIntent.FLAG_CANCEL_CURRENT
-): PendingIntent {
-    return foregroundServicePendingIntent(requestCode, T::class, flags)
+    return servicePendingIntent(requestCode, T::class, flags, foreground)
 }
