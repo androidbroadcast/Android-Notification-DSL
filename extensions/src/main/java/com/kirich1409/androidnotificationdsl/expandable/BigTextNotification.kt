@@ -31,12 +31,7 @@ fun bigTextNotification(
         bigTextStyle {
             text = builder.text
             contentTitle = builder.expanded.title
-
-            val text = builder.expanded.text
-            if (text is CharSequence) {
-                summaryText = text
-            }
-
+            summaryText = builder.expanded.text as CharSequence?
             builder.expanded.buildActions?.let(this@notification::actions)
         }
         builder.extender?.invoke(this)

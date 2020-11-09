@@ -6,7 +6,7 @@ import android.graphics.Bitmap
 import androidx.annotation.Size
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
-import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.internal.MAX_CHARSEQUENCE_LENGTH
 import com.kirich1409.androidnotificationdsl.internal.requiredNotificationProperty
 

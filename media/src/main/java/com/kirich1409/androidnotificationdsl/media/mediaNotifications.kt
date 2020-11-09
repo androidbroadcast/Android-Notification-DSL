@@ -1,10 +1,11 @@
 @file:Suppress("unused")
 
+
 package com.kirich1409.androidnotificationdsl.media
 
 import androidx.media.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
-import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationMarker
 
 /**
  * Create an instance of [MediaStyle] and set it as style of the [notification][this]

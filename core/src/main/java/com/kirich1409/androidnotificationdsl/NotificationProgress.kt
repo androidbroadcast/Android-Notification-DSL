@@ -22,5 +22,8 @@ fun progress(
     @IntRange(from = 0) progress: Int,
     @IntRange(from = 0) max: Int
 ): NotificationProgress {
+    require(progress >= 0)
+    require(max >= 0)
+    require(max >= progress)
     return NotificationProgress(progress, max, indeterminate = false)
 }

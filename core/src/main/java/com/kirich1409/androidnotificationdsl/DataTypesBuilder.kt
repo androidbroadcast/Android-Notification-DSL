@@ -3,13 +3,11 @@
 package com.kirich1409.androidnotificationdsl
 
 import androidx.core.app.RemoteInput
-import com.kirich1409.androidnotificationdsl.annotations.NotificationDataTypesMarker
 
 
 /**
  * Data types builder
  */
-@NotificationDataTypesMarker
 class DataTypesBuilder @PublishedApi internal constructor(
     private val remoteInput: RemoteInput.Builder
 ) : Container<String> {

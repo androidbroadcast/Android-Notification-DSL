@@ -1,12 +1,13 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl
 
 import androidx.core.app.NotificationCompat
-import com.kirich1409.androidnotificationdsl.annotations.NotificationVisibilityDef
 
 /**
  * The level of detail visible in the notification from the lock screen
  */
-enum class NotificationVisibility(@NotificationVisibilityDef val intValue: Int) {
+enum class NotificationVisibility(val intValue: Int) {
 
     /**
      * Doesn't show any part of this notification on the lock screen.
@@ -27,10 +28,12 @@ enum class NotificationVisibility(@NotificationVisibilityDef val intValue: Int) 
 
     companion object {
 
-        fun from(notificationVisibility: Int): NotificationVisibility {
+        fun fromInt(intValue: Int): NotificationVisibility {
             return values().find { visibility ->
-                visibility.intValue == notificationVisibility
-            } ?: throw IllegalArgumentException("Unknown notificationVisibility argument value $notificationVisibility")
+                visibility.intValue == intValue
+            } ?: throw IllegalArgumentException(
+                "Unknown notificationVisibility argument value $intValue"
+            )
         }
     }
 }

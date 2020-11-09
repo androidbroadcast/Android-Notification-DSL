@@ -88,7 +88,7 @@ class NotificationChannel @PublishedApi internal constructor(
      * Whether or not notifications posted to this channel are shown on the lockscreen in full or redacted form.
      */
     inline var lockscreenVisibility: NotificationVisibility
-        get() = NotificationVisibility.from(channel.lockscreenVisibility)
+        get() = NotificationVisibility.fromInt(channel.lockscreenVisibility)
         set(value) {
             channel.lockscreenVisibility = value.intValue
         }

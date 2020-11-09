@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl
 
 import androidx.core.app.NotificationManagerCompat
@@ -15,9 +17,10 @@ enum class NotificationImportance(val intValue: Int) {
     companion object {
 
         fun fromInt(intValue: Int): NotificationImportance {
-            return values().find { importance ->
-                importance.intValue == intValue
-            } ?: throw IllegalArgumentException("NotificationImportance for value $intValue wasn't found")
+            return values().find { importance -> importance.intValue == intValue }
+                ?: throw IllegalArgumentException(
+                    "NotificationImportance for value $intValue wasn't found"
+                )
         }
     }
 }

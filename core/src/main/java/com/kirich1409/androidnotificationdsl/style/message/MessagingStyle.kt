@@ -5,7 +5,7 @@ package com.kirich1409.androidnotificationdsl.style.message
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
-import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationMarker
 
 @NotificationMessagingStyleMarker
 @Suppress("UndocumentedPublicClass")

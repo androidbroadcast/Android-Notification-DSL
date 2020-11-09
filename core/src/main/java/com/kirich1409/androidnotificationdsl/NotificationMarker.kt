@@ -1,4 +1,4 @@
-package com.kirich1409.androidnotificationdsl.annotations
+package com.kirich1409.androidnotificationdsl
 
 import androidx.annotation.RestrictTo
 

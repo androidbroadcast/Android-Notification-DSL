@@ -6,7 +6,7 @@ import android.graphics.Bitmap
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
-import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
+import com.kirich1409.androidnotificationdsl.NotificationMarker
 import com.kirich1409.androidnotificationdsl.extend
 
 @NotificationCarExtenderMarker
@@ -40,14 +40,18 @@ class CarExtenderBuilder @PublishedApi internal constructor(
  *
  * Extenders may be used to add metadata or change options on this builder.
  */
-inline fun NotificationBuilder.car(body: @NotificationMarker CarExtenderBuilder.() -> Unit) {
+inline fun NotificationBuilder.car(
+    body: @NotificationMarker CarExtenderBuilder.() -> Unit
+) {
     extend(carExtender(body))
 }
 
 /**
  * Create a [CarExtender][NotificationCompat.CarExtender].
  */
-inline fun carExtender(body: @NotificationMarker CarExtenderBuilder.() -> Unit): NotificationCompat.CarExtender {
+inline fun carExtender(
+    body: @NotificationMarker CarExtenderBuilder.() -> Unit
+): NotificationCompat.CarExtender {
     return NotificationCompat.CarExtender().apply { CarExtenderBuilder(this).body() }
 }
 

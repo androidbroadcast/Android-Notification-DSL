@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl
 
 import androidx.core.app.NotificationCompat
@@ -19,4 +21,13 @@ enum class NotificationCategory(val stringValue: String) {
     STATUS(NotificationCompat.CATEGORY_STATUS),
     SYSTEM(NotificationCompat.CATEGORY_SYSTEM),
     TRANSPORT(NotificationCompat.CATEGORY_TRANSPORT),
+    ;
+
+    companion object {
+
+        fun fromString(stringValue: String): NotificationCategory {
+            return values().find { category -> category.stringValue == stringValue }
+                ?: throw IllegalArgumentException("Cant find value for \"$stringValue\"")
+        }
+    }
 }

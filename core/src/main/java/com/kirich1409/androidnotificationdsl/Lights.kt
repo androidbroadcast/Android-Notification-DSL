@@ -19,12 +19,18 @@ data class Lights @PublishedApi internal constructor(
     }
 }
 
-inline fun lights(@ColorInt color: Int, @IntRange(from = 0) onMs: Int, @IntRange(from = 0) offMs: Int): Lights {
+fun lights(
+    @ColorInt color: Int,
+    @IntRange(from = 0) onMs: Int,
+    @IntRange(from = 0) offMs: Int
+): Lights {
+    require(onMs >= 0)
+    require(offMs >= 0)
     return Lights(color, onMs, offMs)
 }
 
 @ExperimentalTime
-inline fun lights(@ColorInt color: Int, on: Duration, off: Duration): Lights {
+fun lights(@ColorInt color: Int, on: Duration, off: Duration): Lights {
     require(on.isPositive() && on.isFinite()) { "`on` must be greater or equals than zero and finite" }
     require(off.isPositive() && off.isFinite()) { "`off` must be greater or equals than zero and finite" }
     return Lights(color, on.toInt(DurationUnit.MILLISECONDS), off.toInt(DurationUnit.MILLISECONDS))

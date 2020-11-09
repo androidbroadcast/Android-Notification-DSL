@@ -18,7 +18,6 @@ import androidx.annotation.*
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.action.Actions
-import com.kirich1409.androidnotificationdsl.annotations.NotificationMarker
 import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadataBuilder
 import com.kirich1409.androidnotificationdsl.internal.toArray
 import kotlin.time.Duration
