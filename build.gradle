@@ -39,7 +39,7 @@ ext.compileSdkVersion = 30
 
 ext.buildToolsVersion = "30.0.3"
 
-ext.androidXCore = "1.3.1"
+ext.androidXCore = "1.5.0-beta01"
 ext.dslint = "1.0.3"
 
 ext.androidNotificationDslVersion = "0.1.0"
