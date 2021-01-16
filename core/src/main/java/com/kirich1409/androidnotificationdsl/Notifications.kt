@@ -6,6 +6,7 @@
 package com.kirich1409.androidnotificationdsl
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -288,7 +289,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
     inline var extras: Bundle
         get() = notification.extras
         set(value) {
-            notification.extras = value
+            notification.setExtras(value)
         }
 
     /**
@@ -582,6 +583,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * @see NotificationCompat.STREAM_DEFAULT
      */
     var sound: Sound? = DEFAULT_SOUND
+        @SuppressLint("WrongConstant")
         set(value) {
             field = value
             if (value == null) {
