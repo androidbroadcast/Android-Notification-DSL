@@ -74,11 +74,11 @@ class NotificationChannels @PublishedApi internal constructor(
         id: String,
         name: CharSequence,
         importance: NotificationImportance = NotificationImportance.DEFAULT,
-        build: @NotificationChannelsMarker NotificationChannel.() -> Unit
+        build: @NotificationChannelsMarker NotificationChannelBuilder.() -> Unit
     ) {
         @SuppressLint("WrongConstant")
         val channel = AndroidNotificationChannel(id, name, importance.intValue)
-        NotificationChannel(channel).build()
+        NotificationChannelBuilder(channel).build()
         channels += channel
     }
 

@@ -25,9 +25,9 @@ class NotificationChannelGroup @PublishedApi internal constructor(
         id: String,
         name: CharSequence,
         importance: NotificationImportance = NotificationImportance.DEFAULT,
-        build: @NotificationChannelGroupMarker NotificationChannel.() -> Unit
+        build: @NotificationChannelGroupMarker NotificationChannelBuilder.() -> Unit
     ) {
-        channels += AndroidNotificationChannel(id, name, importance.intValue).also { NotificationChannel(it).build() }
+        channels += AndroidNotificationChannel(id, name, importance.intValue).also { NotificationChannelBuilder(it).build() }
     }
 
     /**
