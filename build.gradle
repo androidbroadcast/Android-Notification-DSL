@@ -17,7 +17,7 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.11.2"
+    id "io.gitlab.arturbosch.detekt" version "1.15.0"
     id 'maven-publish'
     id "com.jfrog.bintray" version "1.8.4"
 }
