@@ -7,8 +7,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
 import androidx.annotation.RestrictTo
-import com.ironsource.aura.dslint.annotations.DSLMandatory
-import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.internal.requiredNotificationProperty
@@ -43,7 +41,6 @@ fun bigPictureNotification(
     }
 }
 
-@DSLint
 @BigPictureNotificationBuilderMarker
 class BigPictureNotificationBuilder internal constructor() {
 
@@ -76,13 +73,11 @@ class BigPictureNotificationBuilder internal constructor() {
         extender = body
     }
 
-    @DSLint
     class Expanded internal constructor() {
 
         /**
          * Picture displayed in notification expanded state
          */
-        @set:DSLMandatory
         var bigPicture: Bitmap by requiredNotificationProperty("bigPicture")
 
         @RestrictTo(RestrictTo.Scope.LIBRARY)

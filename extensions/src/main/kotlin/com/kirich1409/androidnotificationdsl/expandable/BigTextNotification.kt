@@ -6,8 +6,6 @@ import android.app.Notification
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.RestrictTo
-import com.ironsource.aura.dslint.annotations.DSLMandatory
-import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.internal.requiredNotificationProperty
@@ -38,7 +36,6 @@ fun bigTextNotification(
     }
 }
 
-@DSLint
 @BigTextNotificationBuilderMarker
 class BigTextNotificationBuilder internal constructor() {
 
@@ -50,7 +47,6 @@ class BigTextNotificationBuilder internal constructor() {
     /**
      * Picture displayed in notification expanded state
      */
-    @set:DSLMandatory
     var text: CharSequence by requiredNotificationProperty("text")
 
     internal val expanded = Expanded()

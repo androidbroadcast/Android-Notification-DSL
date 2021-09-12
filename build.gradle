@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.5.30'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0-beta03'
+        classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -17,7 +17,7 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.15.0"
+    id "io.gitlab.arturbosch.detekt" version "1.18.0"
     id 'maven-publish'
     id "com.jfrog.bintray" version "1.8.4"
 }
@@ -25,7 +25,7 @@ plugins {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -34,12 +34,8 @@ task clean(type: Delete) {
 }
 
 ext.minSdkVersion = 16
-ext.targetSdkVersion = 28
-ext.compileSdkVersion = 30
-
-ext.buildToolsVersion = "30.0.3"
-
-ext.androidXCore = "1.5.0-beta01"
-ext.dslint = "1.0.3"
-
+ext.targetSdkVersion = 30
+ext.compileSdkVersion = 31
+ext.buildToolsVersion = "31.0.0"
+ext.androidXCore = "1.6.0"
 ext.androidNotificationDslVersion = "0.1.0"

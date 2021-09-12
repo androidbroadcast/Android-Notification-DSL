@@ -29,9 +29,5 @@ dependencies {
     implementation project(":core")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-ktx:$androidXCore"
-
-    implementation "com.ironsource.aura.dslint:dslint-annotations:$dslint"
-    lintPublish "com.ironsource.aura.dslint:dslint-checks:$dslint"
-
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
 }

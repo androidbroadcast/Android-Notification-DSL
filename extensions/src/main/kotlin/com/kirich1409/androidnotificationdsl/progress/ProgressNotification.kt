@@ -5,7 +5,6 @@ package com.kirich1409.androidnotificationdsl.progress
 import android.app.Notification
 import android.content.Context
 import androidx.annotation.DrawableRes
-import com.ironsource.aura.dslint.annotations.DSLint
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
 import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.action.NotificationActionsMarker
@@ -47,7 +46,6 @@ private fun check(p: ProgressNotificationBuilder.Progress?): ProgressNotificatio
     return progress
 }
 
-@DSLint
 @ProgressNotificationBuilderMarker
 class ProgressNotificationBuilder internal constructor() {
 
