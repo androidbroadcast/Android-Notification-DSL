@@ -7,8 +7,9 @@ import androidx.core.app.RemoteInput
 import com.kirich1409.androidnotificationdsl.Container
 import com.kirich1409.androidnotificationdsl.remoteinput.RemoteInputBuilder
 
+@JvmInline
 @RemoteInputMarker
-inline class RemoteInputs(private val action: NotificationCompat.Action.Builder) : Container<RemoteInput> {
+value class RemoteInputs(private val action: NotificationCompat.Action.Builder) : Container<RemoteInput> {
 
     /**
      * @see remoteInput

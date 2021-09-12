@@ -29,7 +29,7 @@ fun bigTextNotification(
         bigTextStyle {
             text = builder.text
             contentTitle = builder.expanded.title
-            summaryText = builder.expanded.text as CharSequence?
+            summaryText = builder.expanded.text
             builder.expanded.buildActions?.let(this@notification::actions)
         }
         builder.extender?.invoke(this)

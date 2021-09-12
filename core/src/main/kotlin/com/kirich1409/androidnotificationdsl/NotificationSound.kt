@@ -8,7 +8,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 
-data class Sound internal constructor(val sound: Uri, val streamType: StreamType = StreamType.DEFAULT)
+data class Sound internal constructor(
+    internal val sound: Uri,
+    internal val streamType: StreamType = StreamType.DEFAULT
+)
 
 fun sound(sound: Uri, streamType: StreamType) = Sound(sound, streamType)
 

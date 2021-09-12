@@ -2,9 +2,10 @@
 
 package com.kirich1409.androidnotificationdsl
 
+import androidx.annotation.RestrictTo
 import androidx.core.app.NotificationManagerCompat
 
-enum class NotificationImportance(val intValue: Int) {
+enum class NotificationImportance(@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) val intValue: Int) {
     DEFAULT(NotificationManagerCompat.IMPORTANCE_DEFAULT),
     HIGH(NotificationManagerCompat.IMPORTANCE_HIGH),
     LOW(NotificationManagerCompat.IMPORTANCE_LOW),

@@ -55,7 +55,7 @@ class Messages @PublishedApi internal constructor(
  */
 @ExperimentalTime
 inline fun Messages.message(text: CharSequence, timestamp: Duration, person: Person) {
-    message(text, timestamp.toLongMilliseconds(), person)
+    message(text, timestamp.inWholeMilliseconds, person)
 }
 
 /**
@@ -69,7 +69,7 @@ inline fun Messages.message(
     dataMimeType: String,
     dataUri: Uri
 ) {
-    message(text, timestamp.toLongMilliseconds(), person, dataMimeType, dataUri)
+    message(text, timestamp.inWholeMilliseconds, person, dataMimeType, dataUri)
 }
 
 /**

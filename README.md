@@ -16,17 +16,7 @@ implementation 'com.kirich1409.android-notification-dsl:media:0.1.0'
 ## Sample
 
 ### Simple Notification
-
-AndroidX.Core variant in Java:
-```java
-NotificationCompat.Builder(this, CHANNEL_ID)
-    .setSmallIcon(R.drawable.notification_icon)
-    .setContentTitle(textTitle)
-    .setContentText(textContent)
-    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-```
-
-Android Notification DSL variant:
+:
 ```kotlin
 notification(context, CHANNEL_ID, smallIcon = R.drawable.notification_icon) {
     contentTitle(textTitle)

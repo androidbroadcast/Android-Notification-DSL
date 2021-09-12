@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl.group
 
 import androidx.core.app.NotificationCompat

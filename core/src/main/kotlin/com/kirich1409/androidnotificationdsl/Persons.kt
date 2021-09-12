@@ -4,7 +4,10 @@ package com.kirich1409.androidnotificationdsl
 
 import androidx.core.app.NotificationCompat
 
-inline class Persons(private val notificationBuilder: NotificationCompat.Builder) : Container<String> {
+@JvmInline
+value class Persons(
+    private val notificationBuilder: NotificationCompat.Builder
+) : Container<String> {
 
     /**
      * Add a person that is relevant to this notification.

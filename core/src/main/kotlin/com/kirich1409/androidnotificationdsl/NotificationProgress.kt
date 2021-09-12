@@ -3,9 +3,9 @@ package com.kirich1409.androidnotificationdsl
 import androidx.annotation.IntRange
 
 data class NotificationProgress internal constructor(
-    @IntRange(from = 0) val progress: Int,
-    @IntRange(from = 0) val max: Int,
-    val indeterminate: Boolean = false
+    @IntRange(from = 0) internal val progress: Int,
+    @IntRange(from = 0) internal val max: Int,
+    internal val indeterminate: Boolean = false
 ) {
 
     companion object {

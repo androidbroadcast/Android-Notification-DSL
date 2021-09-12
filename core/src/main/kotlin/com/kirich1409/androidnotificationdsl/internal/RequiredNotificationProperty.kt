@@ -27,11 +27,11 @@ private class RequiredNotificationProperty<T : Any>(
 
     private var value: T? = null
 
-    public override fun getValue(thisRef: Any?, property: KProperty<*>): T {
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return value ?: throw IllegalStateException(errorMessage())
     }
 
-    public override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
         this.value = value
         onChanged(value)
     }

@@ -1,10 +1,10 @@
 package com.kirich1409.androidnotificationdsl.sample
 
 import android.app.Application
-import androidx.core.app.NotificationManagerCompat
 import com.kirich1409.androidnotificationdsl.NotificationImportance
 import com.kirich1409.androidnotificationdsl.channels.createNotificationChannels
 
+@Suppress("unused")
 class NotificationSampleApplication : Application() {
 
     override fun onCreate() {

@@ -3,6 +3,7 @@ package com.kirich1409.androidnotificationdsl.action
 import androidx.core.app.NotificationCompat
 import java.lang.IllegalArgumentException
 
+@Suppress("unused")
 enum class SemanticAction(@NotificationCompat.Action.SemanticAction val intValue: Int) {
     ARCHIVE(NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE),
     CALL(NotificationCompat.Action.SEMANTIC_ACTION_CALL),

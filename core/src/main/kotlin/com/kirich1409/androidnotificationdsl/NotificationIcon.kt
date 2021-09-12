@@ -1,14 +1,16 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntRange
 
 data class NotificationIcon internal constructor(
-    @DrawableRes val icon: Int,
-    val level: Int = 0
+    @DrawableRes internal val icon: Int,
+    internal val level: Int = 0
 ) {
 
-    companion object {
+    internal companion object {
 
         internal val NULL = NotificationIcon(0, -1)
     }

@@ -18,6 +18,7 @@ import android.widget.RemoteViews
 import androidx.annotation.*
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.bubble.BubbleMetadataBuilder
 import com.kirich1409.androidnotificationdsl.internal.toArray
@@ -30,7 +31,8 @@ import android.app.Notification as AndroidNotification
  */
 @NotificationMarker
 @Suppress("TooManyFunctions")
-class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @PublishedApi internal constructor(
+class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+@PublishedApi internal constructor(
     internal val context: Context,
     internal val channelId: String,
     @PublishedApi internal val notification: NotificationCompat.Builder
@@ -95,8 +97,27 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
     /**
      * Setup bubble metadata of the notification
      */
-    inline fun bubbleMetadata(body: @NotificationMarker BubbleMetadataBuilder.() -> Unit) {
-        notification.bubbleMetadata = NotificationCompat.BubbleMetadata.Builder()
+    @RequiresApi(Build.VERSION_CODES.R)
+    inline fun bubbleMetadata(
+        shortcutId: String,
+        body: @NotificationMarker BubbleMetadataBuilder.() -> Unit
+    ) {
+        notification.bubbleMetadata = NotificationCompat.BubbleMetadata.Builder(shortcutId)
+            .also { BubbleMetadataBuilder(it).body() }
+            .build()
+    }
+
+
+    /**
+     * Setup bubble metadata of the notification
+     */
+    @RequiresApi(Build.VERSION_CODES.R)
+    inline fun bubbleMetadata(
+        intent: PendingIntent,
+        icon: IconCompat,
+        body: @NotificationMarker BubbleMetadataBuilder.() -> Unit
+    ) {
+        notification.bubbleMetadata = NotificationCompat.BubbleMetadata.Builder(intent, icon)
             .also { BubbleMetadataBuilder(it).body() }
             .build()
     }
@@ -310,6 +331,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * @param highPriority Passing true will cause this notification to be sent even
      * if other notifications are suppressed.
      */
+    @SuppressLint("InlinedApi")
     @RequiresPermission(Manifest.permission.USE_FULL_SCREEN_INTENT)
     fun fullScreenIntent(intent: PendingIntent, highPriority: Boolean = false) {
         notification.setFullScreenIntent(intent, highPriority)
@@ -360,10 +382,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * @see group
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-    var groupSummary: Boolean = false
-        set(isGroupSummary) {
-            field = isGroupSummary
-            notification.setGroupSummary(isGroupSummary)
+    var groupSummary: Boolean = DEFAULT_GROUP_SUMMARY
+        set(value) {
+            field = value
+            notification.setGroupSummary(value)
         }
 
     /**
@@ -419,7 +441,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * * Ongoing notifications are sorted above the regular notifications in the notification panel.
      * * Ongoing notifications do not have an 'X' close button, and are not affected by the "Clear all" button.
      */
-    var ongoing: Boolean = false
+    var ongoing: Boolean = DEFAULT_ONGOING
         set(ongoing) {
             field = ongoing
             notification.setOngoing(ongoing)
@@ -535,9 +557,11 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * Silences this instance of the notification, regardless of the sounds or vibrations set
      * on the notification or notification channel.
      */
-    fun silent() {
-        notification.setNotificationSilent()
-    }
+    var silent: Boolean = DEFAULT_SILENT
+        set(value) {
+            field = value
+            notification.setSilent(value)
+        }
 
     /**
      * Set the small icon to use in the notification layouts. Different classes of devices
@@ -623,14 +647,10 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
      * sets the text that is displayed in the status bar when the notification first arrives,
      * and also a RemoteViews object that may be displayed instead on some devices.
      */
-    var ticker: NotificationTicker? = null
+    var ticker: CharSequence? = null
         set(value) {
             field = value
-            if (value == null) {
-                notification.setTicker(null, null)
-            } else {
-                notification.setTicker(value.text, value.views)
-            }
+            notification.setTicker(value)
         }
 
     /**
@@ -720,6 +740,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
         val DEFAULT_DELETE_INTENT: PendingIntent? = null
         val DEFAULT_SHORTCUT_ID: String? = null
         const val DEFAULT_SHOW_WHEN = true
+        const val DEFAULT_SILENT = false
         const val DEFAULT_USES_CHRONOMETER = false
         const val DEFAULT_TIMEOUT_AFTER: Long = 0
         val DEFAULT_SUB_TEXT: CharSequence? = null
@@ -769,6 +790,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) @Published
                 .setDeleteIntent(DEFAULT_DELETE_INTENT)
                 .setShortcutId(DEFAULT_SHORTCUT_ID)
                 .setShowWhen(DEFAULT_SHOW_WHEN)
+                .setSilent(DEFAULT_SILENT)
                 .setUsesChronometer(DEFAULT_USES_CHRONOMETER)
                 .setTimeoutAfter(DEFAULT_TIMEOUT_AFTER)
                 .setSubText(DEFAULT_SUB_TEXT)
@@ -871,7 +893,7 @@ inline fun NotificationBuilder.remoteInputHistory(text: Iterable<CharSequence>) 
  */
 @ExperimentalTime
 inline fun NotificationBuilder.timeoutAfter(duration: Duration) {
-    notification.setTimeoutAfter(duration.toLongMilliseconds())
+    notification.setTimeoutAfter(duration.inWholeMilliseconds)
 }
 
 /**

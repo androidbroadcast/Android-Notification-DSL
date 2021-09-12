@@ -1,6 +1,7 @@
 package com.kirich1409.androidnotificationdsl
 
-inline class VibratePattern(private val pattern: LongArray) {
+@JvmInline
+value class VibratePattern(private val pattern: LongArray) {
 
     fun asArray(): LongArray = pattern.copyOf()
 }

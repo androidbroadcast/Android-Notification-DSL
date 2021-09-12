@@ -2,12 +2,13 @@
 
 package com.kirich1409.androidnotificationdsl
 
+import androidx.annotation.RestrictTo
 import androidx.core.app.NotificationCompat
 
 /**
  * The level of detail visible in the notification from the lock screen
  */
-enum class NotificationVisibility(val intValue: Int) {
+enum class NotificationVisibility(@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP) val intValue: Int) {
 
     /**
      * Doesn't show any part of this notification on the lock screen.

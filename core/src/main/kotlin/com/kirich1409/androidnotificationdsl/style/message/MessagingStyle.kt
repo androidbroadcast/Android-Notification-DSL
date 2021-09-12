@@ -16,7 +16,7 @@ class MessagingStyle @PublishedApi internal constructor(
     /**
      * The title to be displayed on this conversation.
      */
-    public inline var conversationTitle: CharSequence?
+    inline var conversationTitle: CharSequence?
         get() = messagingStyle.conversationTitle
         set(value) {
             messagingStyle.conversationTitle = value
@@ -25,7 +25,7 @@ class MessagingStyle @PublishedApi internal constructor(
     /**
      * Whether this conversation notification represents a group
      */
-    public inline var groupConversation: Boolean
+    inline var groupConversation: Boolean
         get() = messagingStyle.isGroupConversation
         set(value) {
             messagingStyle.isGroupConversation = value
@@ -34,11 +34,11 @@ class MessagingStyle @PublishedApi internal constructor(
     /**
      * Returns the person to be used for any replies sent by the user.
      */
-    public inline val user: Person get() = messagingStyle.user
+    inline val user: Person get() = messagingStyle.user
 
-    public val messages = Messages(messagingStyle)
+    val messages = Messages(messagingStyle)
 
-    public inline fun messages(body: Messages.() -> Unit) {
+    inline fun messages(body: Messages.() -> Unit) {
         messages.apply(body)
     }
 }

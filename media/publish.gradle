@@ -1,11 +1,10 @@
 group = 'com.kirich1409.android-notification-dsl'
 version = rootProject.ext.androidNotificationDslVersion
 
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
-def siteUrl = 'https://github.com/kirich1409/Android-Notification-DSL'
-def gitRepoUrl = 'https://github.com/kirich1409/Android-Notification-DSL.git'
+def siteUrl = 'https://github.com/androidbroadcast/Android-Notification-DSL'
+def gitRepoUrl = 'https://github.com/androidbroadcast/Android-Notification-DSL.git'
 
 tasks.register('sourceJar', Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -48,33 +47,3 @@ afterEvaluate {
         }
     }
 }
-
-bintray {
-    user = project.hasProperty('user') ? project.property('user') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('apiKey') ? project.property('apiKey') : System.getenv('BINTRAY_API_KEY')
-
-    publications = ["releaseAar"]
-
-    pkg {
-        repo = 'maven'
-        name = 'android-notification-dsl-media'
-        desc = 'Media extentions for Android Notifcation DSL'
-        websiteUrl = siteUrl
-        issueTrackerUrl = 'https://github.com/kirich1409/Android-Notification-DSL/issues'
-        vcsUrl = gitRepoUrl
-        licenses = ['Apache-2.0']
-        labels = ['android', 'notification', 'kotlin dsl', 'declarative']
-//        publish true
-        publicDownloadNumbers = true
-
-        githubRepo = 'kirich1409/Android-Notification-DSL' //Optional Github repository
-        githubReleaseNotesFile = 'README.md' //Optional Github readme file
-
-        version {
-            name = project.version
-            desc = 'Media extentions for Android Notifcation DSL'
-            released = new Date()
-        }
-    }
-}
-

@@ -1,4 +1,5 @@
 @file:JvmMultifileClass
+@file:Suppress("unused")
 
 package com.kirich1409.androidnotificationdsl.internal
 

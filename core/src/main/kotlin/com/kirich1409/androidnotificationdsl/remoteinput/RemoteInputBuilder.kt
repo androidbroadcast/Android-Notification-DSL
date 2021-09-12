@@ -37,11 +37,10 @@ class RemoteInputBuilder @PublishedApi internal constructor(
     }
 
     /**
-     * Specifies whether the user can provide arbitrary text values.
-     *
-     * @param allowFreeFormTextInput The default is `true`. If you specify `false`, you must either provide a non-null
-     *         and non-empty array to [RemoteInput.choices], or enable a data result
-     *         in [DataTypes.allow]. Otherwise an [IllegalArgumentException] is thrown
+     * Specifies whether the user can provide arbitrary text values. The default is `true`.
+     * If you specify `false`, you must either provide a non-null  and non-empty array
+     * to [RemoteInput.choices], or enable a data result in [DataTypes.allow].
+     * Otherwise an [IllegalArgumentException] is thrown
      *
      * @see AndroidRemoteInput.Builder.setAllowFreeFormInput
      */
@@ -72,7 +71,8 @@ class RemoteInputBuilder @PublishedApi internal constructor(
      * It cannot be used if [RemoteInputBuilder.allowFreeFormInput] has been set to false.
      */
     @EditChoicesBeforeSending
-    var editChoicesBeforeSending: Int = androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO
+    var editChoicesBeforeSending: Int =
+        androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO
         set(editChoicesBeforeSending) {
             field = editChoicesBeforeSending
             remoteInput.setEditChoicesBeforeSending(editChoicesBeforeSending)

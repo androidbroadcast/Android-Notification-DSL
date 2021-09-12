@@ -5,7 +5,8 @@ package com.kirich1409.androidnotificationdsl.style.inbox
 import androidx.core.app.NotificationCompat
 import com.kirich1409.androidnotificationdsl.Container
 
-inline class Lines(private val inboxStyle: NotificationCompat.InboxStyle) : Container<CharSequence> {
+@JvmInline
+value class Lines(private val inboxStyle: NotificationCompat.InboxStyle) : Container<CharSequence> {
 
     /**
      * Append a line to the digest section of the Inbox notification.

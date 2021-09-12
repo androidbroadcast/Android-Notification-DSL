@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "unused")
 
 package com.kirich1409.androidnotificationdsl.sample
 

@@ -47,7 +47,7 @@ class BubbleMetadataBuilder @PublishedApi internal constructor(
      * [intent], this height may not be respected if there is not
      * enough space on the screen or if the provided height is too small to be useful.
      *
-     * If [desiredHeightResId] was previously called on this builder, the
+     * If [desiredHeight] was previously called on this builder, the
      * previous value set will be cleared after calling this method, and this value will
      * be used instead.
      */

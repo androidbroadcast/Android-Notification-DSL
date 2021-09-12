@@ -7,14 +7,16 @@ import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.kirich1409.androidnotificationdsl.Container
-import com.kirich1409.androidnotificationdsl.action.NotificationActionsMarker
 import com.kirich1409.androidnotificationdsl.internal.isInvisibleActionsSupported
 
 /**
  * Builder of notification's actions
  */
+@JvmInline
 @NotificationActionsMarker
-inline class Actions(private val builder: NotificationCompat.Builder) : Container<NotificationCompat.Action> {
+value class Actions(
+    private val builder: NotificationCompat.Builder
+) : Container<NotificationCompat.Action> {
 
     /**
      * Add an action to this notification. Actions are typically displayed by
@@ -64,7 +66,8 @@ inline class Actions(private val builder: NotificationCompat.Builder) : Containe
         crossinline body: @NotificationActionsMarker ActionBuilder.() -> Unit
     ) {
         action(visible) {
-            NotificationCompat.Action.Builder(icon, title, intent).apply { ActionBuilder(this).body() }
+            NotificationCompat.Action.Builder(icon, title, intent)
+                .apply { ActionBuilder(this).body() }
         }
     }
 
@@ -82,7 +85,8 @@ inline class Actions(private val builder: NotificationCompat.Builder) : Containe
         crossinline body: @NotificationActionsMarker ActionBuilder.() -> Unit
     ) {
         action(visible) {
-            NotificationCompat.Action.Builder(icon, title, intent).apply { ActionBuilder(this).body() }
+            NotificationCompat.Action.Builder(icon, title, intent)
+                .apply { ActionBuilder(this).body() }
         }
     }
 

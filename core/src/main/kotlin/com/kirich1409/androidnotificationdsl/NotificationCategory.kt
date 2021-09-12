@@ -4,7 +4,7 @@ package com.kirich1409.androidnotificationdsl
 
 import androidx.core.app.NotificationCompat
 
-enum class NotificationCategory(val stringValue: String) {
+enum class NotificationCategory(internal val stringValue: String) {
     ALARM(NotificationCompat.CATEGORY_ALARM),
     CALL(NotificationCompat.CATEGORY_CALL),
     EMAIL(NotificationCompat.CATEGORY_EMAIL),

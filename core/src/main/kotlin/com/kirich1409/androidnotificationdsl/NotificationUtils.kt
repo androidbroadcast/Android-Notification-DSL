@@ -34,7 +34,8 @@ inline fun notify(
 
 /**
  * Build new notification and post it. If notifications aren't enabled for the channel
- * than the notification will not be shown.
+ * that the notification belongs to, than the notification will not be shown and [body] will not be
+ * called.
  *
  * @param context application context
  * @param notificationId the ID of the notification

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.kirich1409.androidnotificationdsl
 
 import android.graphics.Color
@@ -8,12 +10,12 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 
 data class Lights @PublishedApi internal constructor(
-    @ColorInt val color: Int,
-    @IntRange(from = 0) val onMs: Int,
-    @IntRange(from = 0) val offMs: Int
+    @ColorInt internal val color: Int,
+    @IntRange(from = 0) internal val onMs: Int,
+    @IntRange(from = 0) internal val offMs: Int
 ) {
 
-    companion object {
+    internal companion object {
 
         internal val NULL = Lights(color = Color.TRANSPARENT, onMs = 0, offMs = 0)
     }
