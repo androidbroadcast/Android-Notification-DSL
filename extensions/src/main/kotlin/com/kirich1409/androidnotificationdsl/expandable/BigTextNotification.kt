@@ -7,6 +7,7 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.RestrictTo
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.NotificationDsl
 import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.internal.requiredNotificationProperty
 import com.kirich1409.androidnotificationdsl.notification
@@ -16,6 +17,7 @@ import com.kirich1409.androidnotificationdsl.utils.internal.NOTHING
 /**
  * Create new notification with displaying big text in expanded state
  */
+@NotificationDsl
 fun bigTextNotification(
     context: Context,
     channelId: String,
@@ -36,31 +38,37 @@ fun bigTextNotification(
     }
 }
 
+@NotificationDsl
 @BigTextNotificationBuilderMarker
 class BigTextNotificationBuilder internal constructor() {
 
     /**
      * Notification title
      */
+    @NotificationDsl
     var title: CharSequence? = null
 
     /**
      * Picture displayed in notification expanded state
      */
+    @NotificationDsl
     var text: CharSequence by requiredNotificationProperty("text")
 
     internal val expanded = Expanded()
 
     internal var extender: (NotificationBuilder.() -> Unit)? = null
 
+    @NotificationDsl
     fun expanded(body: @BigTextNotificationBuilderMarker Expanded.() -> Unit) {
         expanded.body()
     }
 
+    @NotificationDsl
     fun extend(body: NotificationBuilder.() -> Unit) {
         extender = body
     }
 
+    @NotificationDsl
     class Expanded internal constructor() {
 
         @RestrictTo(RestrictTo.Scope.LIBRARY)
@@ -76,6 +84,7 @@ class BigTextNotificationBuilder internal constructor() {
          *
          * @see BigTextNotificationBuilder.title
          */
+        @NotificationDsl
         var title: CharSequence?
             get() = _title as? CharSequence?
             set(value) {
@@ -87,6 +96,7 @@ class BigTextNotificationBuilder internal constructor() {
          *
          * @see BigTextNotificationBuilder.text
          */
+        @NotificationDsl
         var text: CharSequence?
             get() = _text as? CharSequence?
             set(value) {
@@ -98,6 +108,7 @@ class BigTextNotificationBuilder internal constructor() {
          *
          * Actions will not be showed on Android before 4.1
          */
+        @NotificationDsl
         fun actions(body: Actions.() -> Unit) {
             buildActions = body
         }

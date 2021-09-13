@@ -6,6 +6,7 @@ import android.app.Notification
 import android.content.Context
 import androidx.annotation.DrawableRes
 import com.kirich1409.androidnotificationdsl.NotificationBuilder
+import com.kirich1409.androidnotificationdsl.NotificationDsl
 import com.kirich1409.androidnotificationdsl.action.Actions
 import com.kirich1409.androidnotificationdsl.action.NotificationActionsMarker
 import com.kirich1409.androidnotificationdsl.indeterminateProgress
@@ -15,6 +16,7 @@ import com.kirich1409.androidnotificationdsl.progress
 /**
  * Create new notification with displaying big text in expanded state
  */
+@NotificationDsl
 fun progressNotification(
     context: Context,
     channelId: String,
@@ -36,6 +38,7 @@ fun progressNotification(
     }
 }
 
+@NotificationDsl
 private fun check(p: ProgressNotificationBuilder.Progress?): ProgressNotificationBuilder.Progress {
     val progress: ProgressNotificationBuilder.Progress = requireNotNull(p) {
         "progress wasn't setup. Call indeterminate = true or set progress"
@@ -47,22 +50,26 @@ private fun check(p: ProgressNotificationBuilder.Progress?): ProgressNotificatio
 }
 
 @ProgressNotificationBuilderMarker
+@NotificationDsl
 class ProgressNotificationBuilder internal constructor() {
 
     /**
      * Notification title
      */
+    @NotificationDsl
     var title: CharSequence? = null
 
     /**
      * Text that will be used to describe progress like "6 seconds left". When progress is hidden looks
      * like notification content text.
      */
+    @NotificationDsl
     var progressText: CharSequence? = null
 
     /**
      * Is progress is indeterminate
      */
+    @NotificationDsl
     var indeterminated: Boolean = false
 
     internal var extender: (NotificationBuilder.() -> Unit)? = null
@@ -71,6 +78,7 @@ class ProgressNotificationBuilder internal constructor() {
 
     internal var buildActions: (Actions.() -> Unit)? = null
 
+    @NotificationDsl
     fun progress(body: @ProgressMarker Progress.() -> Unit) {
         (this.progress ?: Progress().also { this.progress = it }).apply(body)
     }
@@ -78,6 +86,7 @@ class ProgressNotificationBuilder internal constructor() {
     /**
      * Move ProgressBar to finished state
      */
+    @NotificationDsl
     fun finished() {
         progress = Progress(1, 1)
     }
@@ -85,6 +94,7 @@ class ProgressNotificationBuilder internal constructor() {
     /**
      * Hide ProgressBar from the notification. Don't forget to update content of the notification.
      */
+    @NotificationDsl
     fun hideProgress() {
         progress = Progress(0, 0)
     }
@@ -94,18 +104,21 @@ class ProgressNotificationBuilder internal constructor() {
      *
      * Actions will not be showed on Android before 4.1
      */
+    @NotificationDsl
     fun actions(body: @NotificationActionsMarker Actions.() -> Unit) {
         buildActions = body
     }
 
+    @NotificationDsl
     fun extend(body: NotificationBuilder.() -> Unit) {
         extender = body
     }
 
     @ProgressMarker
+    @NotificationDsl
     class Progress internal constructor(
-        var current: Int = DEFAULT_CURRENT,
-        var max: Int = DEFAULT_MAX
+        @NotificationDsl var current: Int = DEFAULT_CURRENT,
+        @NotificationDsl var max: Int = DEFAULT_MAX
     ) {
 
         private companion object {
