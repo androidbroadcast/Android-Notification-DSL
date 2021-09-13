@@ -3,6 +3,7 @@
 package com.kirich1409.androidnotificationdsl.sample.extentions
 
 import android.content.Context
+import com.kirich1409.androidnotificationdsl.NotificationDsl
 import com.kirich1409.androidnotificationdsl.expandable.bigPictureNotification
 import com.kirich1409.androidnotificationdsl.notification
 import com.kirich1409.androidnotificationdsl.sample.CHANNEL_DEFAULT
@@ -10,6 +11,7 @@ import com.kirich1409.androidnotificationdsl.sample.R
 import com.kirich1409.androidnotificationdsl.style.bigpicture.bigPictureStyle
 import com.kirich1409.androidnotificationdsl.utils.asBitmap
 
+@OptIn(NotificationDsl::class)
 fun bigPictureExtensionSample(context: Context) =
     bigPictureNotification(context, CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
         title = "Collapsed"

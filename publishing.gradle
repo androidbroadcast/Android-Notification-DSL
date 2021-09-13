@@ -1,0 +1,90 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+tasks.register("sourceJar", Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
+}
+
+Properties localProps = new Properties()
+File localProperties = new File(rootProject.rootDir, "local.properties")
+if (localProperties.exists() && localProperties.isFile()) {
+    localProperties.withInputStream { localProps.load(it) }
+}
+
+project.ext["signing.keyId"] = localProps.getProperty("signing.keyId")
+project.ext["signing.secretKeyRingFile"] = localProps.getProperty("signing.secretKeyRingFile")
+project.ext["signing.password"] = localProps.getProperty("signing.password")
+
+afterEvaluate {
+    publishing {
+        publications {
+            releaseAar(MavenPublication) {
+                from components.release
+                artifact sourceJar
+
+                groupId = project.ext.groupId
+                artifactId = project.ext.artifactId
+                version = rootProject.ext.androidNotificationDslVersion
+
+                pom {
+                    name = project.ext.name
+                    description = project.ext.description
+                    url = 'https://github.com/androidbroadcast/Android-Notification-DSL'
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'kirich1409'
+                            name = 'Kirill Rozov'
+                            email = 'kirill@androidbroadcast.dev'
+                        }
+                    }
+
+                    scm {
+                        url = 'https://github.com/androidbroadcast/Android-Notification-DSL.git'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "sonatypeStaging"
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = localProps.getProperty("ossrhUsername")
+                    password = localProps.getProperty("ossrhPassword")
+                }
+            }
+
+            maven {
+                name = "sonatypeSnapshots"
+                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                credentials {
+                    username = localProps.getProperty("ossrhUsername")
+                    password = localProps.getProperty("ossrhPassword")
+                }
+            }
+
+            maven {
+                name = "githubPackages"
+                url = uri("https://maven.pkg.github.com/androidbroadcast/Android-Notification-DSL")
+                credentials {
+                    username = localProps.getProperty("githubUsername")
+                    password = localProps.getProperty("githubToken")
+                }
+            }
+        }
+    }
+
+    signing {
+        sign(publishing.publications)
+    }
+}

@@ -5,6 +5,7 @@ package com.kirich1409.androidnotificationdsl.sample.extentions
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
+import com.kirich1409.androidnotificationdsl.NotificationDsl
 import com.kirich1409.androidnotificationdsl.progress.progressNotification
 import com.kirich1409.androidnotificationdsl.sample.CHANNEL_DEFAULT
 import com.kirich1409.androidnotificationdsl.sample.MainActivity
@@ -12,6 +13,7 @@ import com.kirich1409.androidnotificationdsl.sample.R
 import com.kirich1409.androidnotificationdsl.utils.activityPendingIntent
 import java.util.Date
 
+@OptIn(NotificationDsl::class)
 fun progressExtensionSample(context: Context) =
     progressNotification(context, CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
         title = "Downloading..."

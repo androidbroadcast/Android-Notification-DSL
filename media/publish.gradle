@@ -1,49 +1,9 @@
-group = 'com.kirich1409.android-notification-dsl'
+group = 'com.github.kirich1409'
 version = rootProject.ext.androidNotificationDslVersion
 
-apply plugin: 'maven-publish'
+ext.groupId = 'com.github.kirich1409'
+ext.artifactId = 'android-notidification-dsl-media'
+ext.name = 'Media Android Notifcation DSL'
+ext.description = 'Media extentions for Android Notifcation DSL'
 
-def siteUrl = 'https://github.com/androidbroadcast/Android-Notification-DSL'
-def gitRepoUrl = 'https://github.com/androidbroadcast/Android-Notification-DSL.git'
-
-tasks.register('sourceJar', Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier "sources"
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            releaseAar(MavenPublication) {
-                from components.release
-                artifact(sourceJar)
-
-                groupId = 'com.kirich1409.android-notification-dsl'
-                artifactId = 'media'
-                version = project.version
-
-                pom {
-                    name = 'Media Android Notifcation DSL'
-                    description = 'Media extentions for Android Notifcation DSL'
-                    url = siteUrl
-                    licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'kirich1409'
-                            name = 'Kirill Rozov'
-                            email = 'krl.rozov@gmail.com'
-                        }
-                    }
-                    scm {
-                        url = gitRepoUrl
-                    }
-                }
-            }
-        }
-    }
-}
+apply from: '../publishing.gradle'
