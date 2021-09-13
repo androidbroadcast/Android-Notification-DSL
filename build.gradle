@@ -37,4 +37,4 @@ ext.targetSdkVersion = 30
 ext.compileSdkVersion = 31
 ext.buildToolsVersion = "31.0.0"
 ext.androidXCore = "1.6.0"
-ext.androidNotificationDslVersion = "0.1.0"
+ext.androidNotificationDslVersion = "0.2.0"
