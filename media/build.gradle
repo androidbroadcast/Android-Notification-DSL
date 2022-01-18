@@ -4,7 +4,7 @@ apply plugin: "io.gitlab.arturbosch.detekt"
 apply from: 'publish.gradle'
 
 detekt {
-    failFast = true
+    allRules = true
     buildUponDefaultConfig = true
     config = files("$rootDir/config/detekt.yml")
 

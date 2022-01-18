@@ -26,7 +26,7 @@ dependencies {
     implementation project(":extensions")
     implementation project(":media")
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation "androidx.core:core-ktx:$androidXCore"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
 }
