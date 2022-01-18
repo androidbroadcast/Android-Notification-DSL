@@ -2,7 +2,7 @@ group = 'com.github.kirich1409'
 version = rootProject.ext.androidNotificationDslVersion
 
 ext.groupId = 'com.github.kirich1409'
-ext.artifactId = 'android-notidification-dsl-core'
+ext.artifactId = 'android-notification-dsl-core'
 ext.name = 'Android Notifcation DSL'
 ext.description = 'API for declarative Notification creation'
 

@@ -2,7 +2,7 @@ group = 'com.github.kirich1409'
 version = rootProject.ext.androidNotificationDslVersion
 
 ext.groupId = 'com.github.kirich1409'
-ext.artifactId = 'android-notidification-dsl-media'
+ext.artifactId = 'android-notification-dsl-media'
 ext.name = 'Media Android Notifcation DSL'
 ext.description = 'Media extentions for Android Notifcation DSL'
 
