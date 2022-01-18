@@ -32,7 +32,7 @@ fun bigPictureExtensionSample(context: Context) =
         }
     }
 
-fun bigPicturуNotificationSample(context: Context) =
+fun bigPictureNotificationSample(context: Context) =
     notification(context, CHANNEL_DEFAULT, R.drawable.ic_android_white_24dp) {
         contentTitle = "Collapsed"
         contentText = "Sample notification"
