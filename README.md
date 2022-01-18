@@ -4,13 +4,13 @@ Kotlin DSL for creating Android Notification using [NotificationCompat](https://
 
 ```gradle
 // Core functionality
-implementation 'com.github.kirich1409:android-notification-dsl-core:0.2.0'
+implementation 'com.github.kirich1409:android-notification-dsl-core:0.2.1'
 
 // Extentions to simoplify work
-implementation 'com.github.kirich1409:android-notification-dsl-extensions:0.2.0'
+implementation 'com.github.kirich1409:android-notification-dsl-extensions:0.2.1'
 
 // Media Notification DSL
-implementation 'com.github.kirich1409:android-notification-dsl-media:0.2.0'
+implementation 'com.github.kirich1409:android-notification-dsl-media:0.2.1'
 ```
 
 ## Sample
