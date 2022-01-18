@@ -34,14 +34,8 @@ import android.app.Notification as AndroidNotification
 class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 @PublishedApi internal constructor(
     internal val context: Context,
-    internal val channelId: String,
     @PublishedApi internal val notification: NotificationCompat.Builder
 ) {
-
-    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-    @PublishedApi
-    internal constructor(context: Context, channelId: String, @DrawableRes smallIcon: Int)
-            : this(context, channelId, defaultNotification(context, channelId, smallIcon))
 
     /**
      * Notification's actions
@@ -719,8 +713,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
         whenTime = System.currentTimeMillis()
     }
 
-    private companion object {
-
+    internal companion object {
         const val DEFAULT_AUTO_CANCEL = true
         const val DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION = true
         const val DEFAULT_BADGE_ICON_TYPE = NotificationCompat.BADGE_ICON_NONE
@@ -762,56 +755,57 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
         val DEFAULT_LIGHTS: Lights? = null
         val DEFAULT_PROGRESS: NotificationProgress? = null
         var DEFAULT_SMALL_ICON: NotificationIcon? = null
-
-        fun defaultNotification(
-            context: Context,
-            channelId: String,
-            @DrawableRes smallIcon: Int
-        ): NotificationCompat.Builder {
-            val builder = NotificationCompat.Builder(context, channelId)
-            builder.setSmallIcon(smallIcon)
-                .setAutoCancel(DEFAULT_AUTO_CANCEL)
-                .setAllowSystemGeneratedContextualActions(
-                    DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION
-                )
-                .setBadgeIconType(DEFAULT_BADGE_ICON_TYPE)
-                .setCategory(DEFAULT_CATEGORY?.stringValue)
-                .setColor(DEFAULT_COLOR)
-                .setColorized(DEFAULT_COLORIZED)
-                .setContentText(DEFAULT_CONTENT_TEXT)
-                .setContentTitle(DEFAULT_CONTENT_TITLE)
-                .setContentInfo(DEFAULT_CONTENT_INFO)
-                .setContentIntent(DEFAULT_CONTENT_INTENT)
-                .setLargeIcon(DEFAULT_LARGE_ICON)
-                .setOnlyAlertOnce(DEFAULT_ONLY_ALERT_ONCE)
-                .setPriority(DEFAULT_PRIORITY.intValue)
-                .setVisibility(DEFAULT_VISIBILITY.intValue)
-                // Ignored .setVibrate(DEFAULT_VIBRATE)
-                .setDeleteIntent(DEFAULT_DELETE_INTENT)
-                .setShortcutId(DEFAULT_SHORTCUT_ID)
-                .setShowWhen(DEFAULT_SHOW_WHEN)
-                .setSilent(DEFAULT_SILENT)
-                .setUsesChronometer(DEFAULT_USES_CHRONOMETER)
-                .setTimeoutAfter(DEFAULT_TIMEOUT_AFTER)
-                .setSubText(DEFAULT_SUB_TEXT)
-                .setStyle(DEFAULT_STYLE)
-                .setSortKey(DEFAULT_SORT_KEY)
-                .setRemoteInputHistory(DEFAULT_REMOTE_INPUT_HISTORY)
-                .setOngoing(DEFAULT_ONGOING)
-                .setNumber(DEFAULT_NUMBER)
-                .setLocalOnly(DEFAULT_LOCAL_ONLY)
-                .setGroupSummary(DEFAULT_GROUP_SUMMARY)
-                .setGroupAlertBehavior(DEFAULT_GROUP_ALERT_BEHAVIOR)
-                .setGroup(DEFAULT_GROUP_KEY)
-                .setCustomBigContentView(DEFAULT_CUSTOM_BIG_CONTENT_VIEW)
-                .setCustomContentView(DEFAULT_CUSTOM_CONTENT_VIEW)
-                .setCustomHeadsUpContentView(DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW)
-            // Ignored .setLights(DEFAULT_LIGHTS)
-            // Ignored .setProgress(DEFAULT_PROGRESS)
-            // Ignored .setSmallIcon(DEFAULT_SMALL_ICON)
-            return builder
-        }
     }
+}
+
+@PublishedApi
+internal fun defaultNotification(
+    context: Context,
+    channelId: String,
+    @DrawableRes smallIcon: Int
+): NotificationCompat.Builder {
+    val builder = NotificationCompat.Builder(context, channelId)
+    builder.setSmallIcon(smallIcon)
+        .setAutoCancel(NotificationBuilder.DEFAULT_AUTO_CANCEL)
+        .setAllowSystemGeneratedContextualActions(
+            NotificationBuilder.DEFAULT_ALLOW_SYSTEM_GENERATED_CONTEXTUAL_ACTION
+        )
+        .setBadgeIconType(NotificationBuilder.DEFAULT_BADGE_ICON_TYPE)
+        .setCategory(NotificationBuilder.DEFAULT_CATEGORY?.stringValue)
+        .setColor(NotificationBuilder.DEFAULT_COLOR)
+        .setColorized(NotificationBuilder.DEFAULT_COLORIZED)
+        .setContentText(NotificationBuilder.DEFAULT_CONTENT_TEXT)
+        .setContentTitle(NotificationBuilder.DEFAULT_CONTENT_TITLE)
+        .setContentInfo(NotificationBuilder.DEFAULT_CONTENT_INFO)
+        .setContentIntent(NotificationBuilder.DEFAULT_CONTENT_INTENT)
+        .setLargeIcon(NotificationBuilder.DEFAULT_LARGE_ICON)
+        .setOnlyAlertOnce(NotificationBuilder.DEFAULT_ONLY_ALERT_ONCE)
+        .setPriority(NotificationBuilder.DEFAULT_PRIORITY.intValue)
+        .setVisibility(NotificationBuilder.DEFAULT_VISIBILITY.intValue)
+        // Ignored .setVibrate(DEFAULT_VIBRATE)
+        .setDeleteIntent(NotificationBuilder.DEFAULT_DELETE_INTENT)
+        .setShortcutId(NotificationBuilder.DEFAULT_SHORTCUT_ID)
+        .setShowWhen(NotificationBuilder.DEFAULT_SHOW_WHEN)
+        .setSilent(NotificationBuilder.DEFAULT_SILENT)
+        .setUsesChronometer(NotificationBuilder.DEFAULT_USES_CHRONOMETER)
+        .setTimeoutAfter(NotificationBuilder.DEFAULT_TIMEOUT_AFTER)
+        .setSubText(NotificationBuilder.DEFAULT_SUB_TEXT)
+        .setStyle(NotificationBuilder.DEFAULT_STYLE)
+        .setSortKey(NotificationBuilder.DEFAULT_SORT_KEY)
+        .setRemoteInputHistory(NotificationBuilder.DEFAULT_REMOTE_INPUT_HISTORY)
+        .setOngoing(NotificationBuilder.DEFAULT_ONGOING)
+        .setNumber(NotificationBuilder.DEFAULT_NUMBER)
+        .setLocalOnly(NotificationBuilder.DEFAULT_LOCAL_ONLY)
+        .setGroupSummary(NotificationBuilder.DEFAULT_GROUP_SUMMARY)
+        .setGroupAlertBehavior(NotificationBuilder.DEFAULT_GROUP_ALERT_BEHAVIOR)
+        .setGroup(NotificationBuilder.DEFAULT_GROUP_KEY)
+        .setCustomBigContentView(NotificationBuilder.DEFAULT_CUSTOM_BIG_CONTENT_VIEW)
+        .setCustomContentView(NotificationBuilder.DEFAULT_CUSTOM_CONTENT_VIEW)
+        .setCustomHeadsUpContentView(NotificationBuilder.DEFAULT_CUSTOM_HEADS_UP_CONTENT_VIEW)
+    // Ignored .setLights(DEFAULT_LIGHTS)
+    // Ignored .setProgress(DEFAULT_PROGRESS)
+    // Ignored .setSmallIcon(DEFAULT_SMALL_ICON)
+    return builder
 }
 
 /**
@@ -819,7 +813,7 @@ class NotificationBuilder @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
  *
  * @param channelId The constructed Notification will be posted on this NotificationChannel
  *
- * @return A new [NotificationBuilder] object.
+ * @return New [AndroidNotification] instance
  */
 inline fun notification(
     context: Context,
@@ -835,14 +829,29 @@ inline fun notification(
  *
  * @param channelId The constructed Notification will be posted on this NotificationChannel
  *
- * @return A new [NotificationBuilder] object.
+ * @return New [AndroidNotification] instance
  */
 fun notification(
     context: Context,
     channelId: String,
     @DrawableRes smallIcon: Int
 ): AndroidNotification {
-    return NotificationBuilder(context, channelId, smallIcon).build()
+    return NotificationBuilder(context, defaultNotification(context, channelId, smallIcon)).build()
+}
+
+/**
+ * Create new notification based on [notification]
+ *
+ * @param notification Base notification
+ *
+ * @return New [AndroidNotification] instance
+ */
+@RequiresApi(Build.VERSION_CODES.KITKAT)
+fun notification(
+    context: Context,
+    notification: AndroidNotification
+): AndroidNotification {
+    return NotificationBuilder(context, NotificationCompat.Builder(context, notification)).build()
 }
 
 inline fun buildNotification(
@@ -851,7 +860,8 @@ inline fun buildNotification(
     @DrawableRes smallIcon: Int,
     body: NotificationBuilder.() -> Unit
 ): NotificationBuilder {
-    return NotificationBuilder(context, channelId, smallIcon).apply(body)
+    return NotificationBuilder(context, defaultNotification(context, channelId, smallIcon))
+        .apply(body)
 }
 
 /**
